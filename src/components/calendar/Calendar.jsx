@@ -4,20 +4,21 @@ import GlobalContext from "../../context/GlobalContext";
 import EventModal from "./eventModal/EventModal";
 import { DayView } from "./dayView/DayView";
 import utils from "../../utils/utils";
+import './calendar.scss';
 
 export const Calendar = () => {
-    const [currentMonth, setCurrentMonth] = useState(utils.getMonth());
+    const [currentMonth, setCurrentMonth] = useState(utils.getCalendarMonth());
     const { monthIndex, showEventModal, showDayView} = useContext(GlobalContext);
     useEffect(() => {
-      setCurrentMonth(utils.getMonth(monthIndex));
+      setCurrentMonth(utils.getCalendarMonth(monthIndex));
     }, [monthIndex]);
 
   return (
-    <div>
+    <div className="calendar-body__wrapper">
       {showDayView && <DayView />}
       {showEventModal && <EventModal />}
-      <div className="app__body-wrapper flex flex-col">
-        <div className="body__div flex flex-1">
+      <div className="calendar-body flex flex-col">
+        <div className="calendar__div flex flex-1">
           <Month month={currentMonth} />
         </div>
       </div>

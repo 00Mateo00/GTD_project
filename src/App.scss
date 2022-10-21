@@ -1,12 +1,5 @@
 @import './utils/utils.scss';
 
-.app__body-wrapper{
-    height: calc(100vh - 72px);
-
-    .body__div{
-        height: 100%;
-    }
-}
 
 .indigo{
     background-color: $Indigo-500;

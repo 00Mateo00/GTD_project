@@ -11,10 +11,9 @@ function checkLeapYear(year) {
   }
 }
 
-function getMonth(month = dayjs().month()) {
-
-  month = Math.floor(month);
+function getCalendarMonth(month = dayjs().month()) {
   const year = dayjs().year();
+
   const firstDayOfTheMonth = dayjs(new Date(year, month, 1)).day();
 
   //console.log(`${year} ${month} ${firstDayOfTheMonth}`);
@@ -70,6 +69,7 @@ function getMonth(month = dayjs().month()) {
       }
     }
   }
+
   const daysMatrix = new Array(numberOfRow).fill([]).map(() => {
     return new Array(7).fill(null).map(() => {
       currentMonthCount++;
@@ -79,8 +79,20 @@ function getMonth(month = dayjs().month()) {
   return daysMatrix;
 }
 
+
+function getTicklerMonth(month = dayjs().month()) {
+  const year = dayjs().year();
+  let dayCount = 0;
+  const daysTicklerMatrix = new Array(dayjs().endOf("M").$D).fill([]).map(() => {
+    dayCount++
+    return dayjs(new Date(year, month, dayCount));
+  });
+  return daysTicklerMatrix;
+}
+
 const utils = {
-  getMonth,
+  getCalendarMonth,
+  getTicklerMonth
 };
 
 export default utils;

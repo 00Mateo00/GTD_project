@@ -26,13 +26,13 @@ export const TicklerFileHeader = () => {
   function handlePrev() {
     showDayView
       ? setDaySelected(dayjs(daySelected).subtract(1, "day"))
-      : setMonthIndex(monthIndex - 1);
+      : setMonthIndex(monthIndex - 12);
   }
 
   function handleNext() {
     showDayView
       ? setDaySelected(dayjs(daySelected).add(1, "day"))
-      : setMonthIndex(monthIndex + 1);
+      : setMonthIndex(monthIndex + 12);
   }
   return (
     <>
@@ -60,7 +60,7 @@ export const TicklerFileHeader = () => {
           </button>
 
           <div className="">
-            {showDayView && dayjs(daySelected).format("DD")}
+            {showDayView? dayjs(daySelected).format( "DD"): dayjs(new Date(dayjs().year(), monthIndex)).format( "YYYY")}
           </div>
 
           <button onClick={handleNext}>
@@ -68,7 +68,7 @@ export const TicklerFileHeader = () => {
           </button>
         </div>
         <h2>
-          {dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
+          {showDayView && dayjs(new Date(dayjs().year(), monthIndex)).format( "MMMM YYYY")}
         </h2>
       </div>
       <TicklerFileLabels />

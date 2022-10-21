@@ -1,3 +1,39 @@
 .ticklerFile_wrapper{
     position: relative;
+
+    .ticklerFile__body-wrapper{
+        height: calc(100vh - 72px);
+        display: grid;
+        grid-template-columns: 1fr 7fr;
+        grid-gap: 0.5rem;
+
+        .ticklerFile_months-wrapper{
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-rows: repeat(12,1fr);
+            align-items: center;
+            padding: 1rem 2rem 10rem;
+            .month{
+                width: max-content;
+            }
+
+            .monthSelected{
+                background-color: lightskyblue;
+            }
+
+            .thisMonth{
+                color: palevioletred;
+            }
+        }
+
+        .ticklerFile_days-wrapper{
+            height: 100%;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(7,1fr);
+            grid-auto-flow: row;
+            grid-gap: 1rem;
+        }
+    }
 }

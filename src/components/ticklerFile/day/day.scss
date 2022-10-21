@@ -1,12 +1,13 @@
 @import '../../../utils/utils.scss';
 
-.day-wrapper{
+.tickler-day-wrapper{
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow-y: hidden;
     border-right: $calendar-lines;
     border-bottom: $calendar-lines;
+    width: 100%;
     header{
         width: 100%;
         display: flex;

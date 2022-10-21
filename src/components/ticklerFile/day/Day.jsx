@@ -48,7 +48,7 @@ export const Day = ({ day }) => {
   );
 
   return (
-    <div onClick={() => handleClick(day)} className="day-wrapper">
+    <div onClick={() => handleClick(day)} className="tickler-day-wrapper">
       <header className="day-wrapper__header">
         <p
           onClick={(e) => {
