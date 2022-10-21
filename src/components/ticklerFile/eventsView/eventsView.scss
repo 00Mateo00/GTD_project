@@ -1,0 +1,49 @@
+.eventsView-wrapper{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .eventsView{
+        background-color: black;
+        width: 25rem;
+        height: 40rem;
+        border-radius: 1rem;
+        .form__header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgb(243 244 246);
+            padding: 0.5rem 1rem;
+            border-radius: 1rem 1rem 0 0;
+            div{
+                cursor: pointer;
+            }
+        }
+
+        .eventsView_body{
+            padding: 1.5rem 0.5rem;
+            overflow-x: auto;
+
+            .addButton-wrapper{
+                margin-top: 1rem;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                button{
+                    border-radius: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: whitesmoke;
+                }
+            }
+        }
+    }
+}

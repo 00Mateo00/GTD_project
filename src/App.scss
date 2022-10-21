@@ -1,0 +1,28 @@
+@import './utils/utils.scss';
+
+.app__body-wrapper{
+    height: calc(100vh - 72px);
+
+    .body__div{
+        height: 100%;
+    }
+}
+
+.indigo{
+    background-color: $Indigo-500;
+}
+.gray{
+    background-color: $Gray-500;
+}
+.green{
+    background-color: $Green-500;
+}
+.blue{
+    background-color: $Blue-500;
+}
+.red{
+    background-color: $Red-500;
+}
+.purple{
+    background-color: $Purple-500;
+}
