@@ -8,16 +8,15 @@ import { CalendarHeader } from "./CalendarHeader";
 import { TicklerFileHeader } from "./TicklerFileHeader";
 
 export const Header = () => {
-  const [showMenu, setShowMenu] = useState(false);
-  const { resetAll } = useContext(GlobalContext);
+  const { resetAll, showMenu, setShowMenu } = useContext(GlobalContext);
 
   return (
     <header className="header">
-      <div onClick={() => setShowMenu(!showMenu)} className="menu-wrapper">
+      <div onClick={() => showMenu==="mainMenu" ? setShowMenu(false) : setShowMenu("mainMenu")} className="menu-wrapper">
         <button className="menu-button">
           <span className="material-icons-outlined">menu</span>
         </button>
-        <ul className={`list-wrapper${showMenu ? " onShow" : ""}`}>
+        <ul className={`list-wrapper${showMenu==="mainMenu" ? " onShow" : ""}`}>
           <li onClick={resetAll}>
             <Link to="/">inbox</Link>
           </li>

@@ -93,9 +93,17 @@
 
         .navigation-arrows__container{
             display: flex;
-            .arrow{
-                cursor: pointer;
-                color: rgb(75 85 99);
+            justify-content: center;
+            align-items: center;
+            
+            button{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                .arrow{
+                    cursor: pointer;
+                    color: rgb(75 85 99);
+                }
             }
         }
 

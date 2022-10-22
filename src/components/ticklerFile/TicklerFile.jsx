@@ -11,7 +11,7 @@ export const TicklerFile = () => {
   const [currentMonth, setCurrentMonth] = useState(utils.getTicklerMonth());
   const [monthSelected, setMonthSelected] = useState(false);
   const [thisMonth, setThisMonth] = useState(false);
-  const { monthIndex, setMonthIndex, showEventModal, showDayView } =
+  const { monthIndex, setMonthIndex, onShowModal, showDayView } =
     useContext(GlobalContext);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export const TicklerFile = () => {
   return (
     <div className="ticklerFile_wrapper">
       {showDayView && <EventsView />}
-      {showEventModal && <EventModal />}
+      {onShowModal && <EventModal />}
       <div className="ticklerFile__body-wrapper">
         <div className="ticklerFile_months-wrapper">
           {Array(12)

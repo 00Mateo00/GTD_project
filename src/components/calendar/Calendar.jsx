@@ -8,7 +8,7 @@ import './calendar.scss';
 
 export const Calendar = () => {
     const [currentMonth, setCurrentMonth] = useState(utils.getCalendarMonth());
-    const { monthIndex, showEventModal, showDayView} = useContext(GlobalContext);
+    const { monthIndex, onShowModal, showDayView} = useContext(GlobalContext);
     useEffect(() => {
       setCurrentMonth(utils.getCalendarMonth(monthIndex));
     }, [monthIndex]);
@@ -16,7 +16,7 @@ export const Calendar = () => {
   return (
     <div className="calendar-body__wrapper">
       {showDayView && <DayView />}
-      {showEventModal && <EventModal />}
+      {onShowModal && <EventModal />}
       <div className="calendar-body flex flex-col">
         <div className="calendar__div flex flex-1">
           <Month month={currentMonth} />

@@ -4,20 +4,18 @@ import { useState } from "react";
 import GlobalContext from "../../context/GlobalContext";
 import { DumperEventModal } from "./DumperEventModal";
 import "./somedayDumper.scss";
-import { TodoModal } from "./TodoModal";
+import { MenuModal } from "../modals/MenuModal";
 
 export const SomdayDumper = () => {
-  const [showEditor, setShowEditor] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
-  const { savedDumperTODO, setSelectedTODO, onShowTodoModal, setOnShowTodoModal } = useContext(GlobalContext);
+  const { savedDumperTODOS, setSelectedDumperTODO, onShowModal, setOnShowModal, showMenu, setShowMenu } = useContext(GlobalContext);
 
-  const todos = savedDumperTODO
+  const todos = savedDumperTODOS
     .map((e, i) => {
       return (
         <div
           onClick={() => {
-            setSelectedTODO(e);
-            setShowEditor(true);
+            setSelectedDumperTODO(e);
+            setOnShowModal("default");
           }}
           className="TODO-card"
           key={i}
@@ -29,10 +27,10 @@ export const SomdayDumper = () => {
                 <span
                   onClick={(prop) => {
                     prop.stopPropagation();
-                    setSelectedTODO(e)
+                    setSelectedDumperTODO(e)
                     setShowMenu(i);
                   }}
-                  class="material-icons-outlined"
+                  className="material-icons-outlined"
                 >
                   menu
                 </span>
@@ -62,7 +60,7 @@ export const SomdayDumper = () => {
                   <li>INBOX</li>
                   <li>CALENDAR</li>
                   <li>TICKLER FILE</li>
-                  <li onClick={()=>setOnShowTodoModal("ACTIONABLE LIST")}>ACTIONABLE</li>
+                  <li onClick={()=>setOnShowModal("ACTIONABLE LIST")}>ACTIONABLE</li>
                 </ul>
               </div>
             </div>
@@ -85,7 +83,7 @@ export const SomdayDumper = () => {
         <div className="add-button">
           <div className="button-wrapper">
             <button
-              onClick={() => setShowEditor(true)}
+              onClick={() => setOnShowModal("default")}
               className="dumper-add-button"
             >
               <span className="material-icons-outlined">add</span>
@@ -93,8 +91,8 @@ export const SomdayDumper = () => {
           </div>
         </div>
       </div>
-      {onShowTodoModal && <TodoModal/>}
-      {showEditor && <DumperEventModal setShowEditor={setShowEditor} />}
+      {onShowModal && onShowModal!=="default" && <MenuModal/>}
+      {onShowModal==="default" && <DumperEventModal />}
     </div>
   );
 };

@@ -7,7 +7,7 @@ export const Day = ({ day }) => {
   const [dayEvents, setDayEvents] = useState([]);
   const {
     setDaySelected,
-    setShowEventModal,
+    setOnShowModal,
     setShowDayView,
     filteredCalendarEvents,
     setSelectedCalendarEvent,
@@ -36,7 +36,7 @@ export const Day = ({ day }) => {
 
   function handleClick(day) {
     setDaySelected(day);
-    setShowEventModal(true);
+    setOnShowModal(true);
   }
 
   const events = dayEvents.map(

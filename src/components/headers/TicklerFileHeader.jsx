@@ -2,16 +2,18 @@ import React, { useContext } from "react";
 import GlobalContext from "../../context/GlobalContext";
 import dayjs from "dayjs";
 import TicklerFileLabels from "../ticklerFile/ticklerFileLabels/TicklerFileLabels";
+import { useEffect } from "react";
 
 export const TicklerFileHeader = () => {
   const {
     monthIndex,
     setMonthIndex,
-    setShowEventModal,
+    setOnShowModal,
     showDayView,
     daySelected,
     setDaySelected,
   } = useContext(GlobalContext);
+  
 
   function handleReset() {
     setMonthIndex(
@@ -44,7 +46,7 @@ export const TicklerFileHeader = () => {
           Today
         </button>
         <button
-          onClick={() => setShowEventModal(true)}
+          onClick={() => setOnShowModal(true)}
           alt="create_event"
           className="CreateEventButton-button shadow-md hover:shadow-2xl" //tailwind
         >
@@ -68,7 +70,7 @@ export const TicklerFileHeader = () => {
           </button>
         </div>
         <h2>
-          {showDayView && dayjs(new Date(dayjs().year(), monthIndex)).format( "MMMM YYYY")}
+          {showDayView && daySelected.format( "MMMM YYYY")}
         </h2>
       </div>
       <TicklerFileLabels />

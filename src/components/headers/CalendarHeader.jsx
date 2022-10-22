@@ -7,7 +7,7 @@ export const CalendarHeader = () => {
   const {
     monthIndex,
     setMonthIndex,
-    setShowEventModal,
+    setOnShowModal,
     showDayView,
     setShowDayView,
     daySelected,
@@ -44,7 +44,7 @@ export const CalendarHeader = () => {
             className={"go-back"}
             alt="go back"
           >
-            <span class="material-icons-outlined">arrow_back</span>
+            <span className="material-icons-outlined">arrow_back</span>
           </button>
         )}
         <button
@@ -54,7 +54,7 @@ export const CalendarHeader = () => {
           Today
         </button>
         <button
-          onClick={() => setShowEventModal(true)}
+          onClick={() => setOnShowModal(true)}
           alt="create_event"
           className="CreateEventButton-button shadow-md hover:shadow-2xl" //tailwind
         >

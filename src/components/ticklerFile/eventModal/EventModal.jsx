@@ -7,7 +7,7 @@ const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
 
 const EventModal = () => {
   const {
-    setShowEventModal,
+    setOnShowModal,
     daySelected,
     dispatchCallTicklerFileEvent,
     selectedTicklerFileEvent,
@@ -28,7 +28,7 @@ const EventModal = () => {
   const [isMouseDown, setIsMouseDown] = useState(false);
 
   function clear() {
-    setShowEventModal(false);
+    setOnShowModal(false);
     setSelectedTicklerFileEvent(null);
   }
 
@@ -75,7 +75,7 @@ const EventModal = () => {
         onMouseUp={(e) => {
           e.stopPropagation();
         }}
-        className="EventModal-wrapper__form shadow-2xl w-1/4" // tailwind
+        className="TicklerFile-EventModal-wrapper__form shadow-2xl w-1/4" // tailwind
       >
         <header className="form__header">
           <span className="material-icons-outlined">drag_handle</span>

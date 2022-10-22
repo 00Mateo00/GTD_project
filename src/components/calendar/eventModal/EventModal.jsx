@@ -7,9 +7,9 @@ const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
 
 const EventModal = () => {
   const {
-    setShowEventModal,
+    setOnShowModal,
     daySelected,
-    dispatchCallEvent,
+    dispatchCallCalendarEvent,
     selectedCalendarEvent,
     setSelectedCalendarEvent,
     savedCalendarEvents,
@@ -35,7 +35,7 @@ const EventModal = () => {
   const [inputError, setInputError] = useState(false);
 
   function clear() {
-    setShowEventModal(false);
+    setOnShowModal(false);
     setSelectedCalendarEvent(null);
   }
 
@@ -120,9 +120,9 @@ const EventModal = () => {
       setInputError("there is another appointment at this time");
     } else {
       if (selectedCalendarEvent) {
-        dispatchCallEvent({ type: "update", payload: calendarEvent });
+        dispatchCallCalendarEvent({ type: "update", payload: calendarEvent });
       } else {
-        dispatchCallEvent({ type: "push", payload: calendarEvent });
+        dispatchCallCalendarEvent({ type: "push", payload: calendarEvent });
       }
       setInputError(false);
       clear();
@@ -162,7 +162,7 @@ const EventModal = () => {
             {selectedCalendarEvent && (
               <span
                 onClick={() => {
-                  dispatchCallEvent({ type: "delete", payload: selectedCalendarEvent });
+                  dispatchCallCalendarEvent({ type: "delete", payload: selectedCalendarEvent });
                   clear();
                 }}
                 className="material-icons-outlined cursor-pointer"

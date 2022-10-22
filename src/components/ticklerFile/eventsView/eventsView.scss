@@ -20,9 +20,32 @@
             background-color: rgb(243 244 246);
             padding: 0.5rem 1rem;
             border-radius: 1rem 1rem 0 0;
-            div{
-                cursor: pointer;
+            
+            .navigation-arrows{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+        
+                .navigation-arrows__container{
+                    display: flex;
+
+                    button{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    .arrow{
+                        cursor: pointer;
+                        color: rgb(75 85 99);
+                    }
+                }
+        
+                h2{
+                    font-weight: 700;
+                    color: rgb(107 114 128)
+                }
             }
+
         }
 
         .eventsView_body{

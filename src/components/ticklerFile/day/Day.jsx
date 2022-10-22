@@ -7,11 +7,12 @@ export const Day = ({ day }) => {
   const [dayEvents, setDayEvents] = useState([]);
   const {
     setDaySelected,
-    setShowEventModal,
+    setOnShowModal,
     setShowDayView,
     filteredTicklerFileEvents,
     setSelectedTicklerFileEvent,
   } = useContext(GlobalContext);
+  
 
   useEffect(() => {
     const events = filteredTicklerFileEvents.filter(
@@ -29,7 +30,7 @@ export const Day = ({ day }) => {
 
   function handleClick(day) {
     setDaySelected(day);
-    setShowEventModal(true);
+    setOnShowModal(true);
   }
 
   const events = dayEvents.map(
@@ -40,7 +41,7 @@ export const Day = ({ day }) => {
           onClick={() => {
             setSelectedTicklerFileEvent(e);
           }}
-          className={`${e.label} day-event`}
+          className={`${e.label} Tickler-day-event`}
         >
           <span>{e.title}</span>
         </div>

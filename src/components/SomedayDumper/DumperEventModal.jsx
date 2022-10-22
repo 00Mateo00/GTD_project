@@ -4,33 +4,39 @@ import { useState } from "react";
 import GlobalContext from "../../context/GlobalContext";
 import "./dumperEventModal.scss";
 
-export const DumperEventModal = ({ setShowEditor }) => {
-  const { selectedTODO, setSelectedTODO, dispatchCallDumperTODO } =
+export const DumperEventModal = () => {
+  const { selectedDumperTODO, setSelectedDumperTODO, dispatchCallDumperTODO, setOnShowModal } =
     useContext(GlobalContext);
-  const [title, setTitle] = useState(selectedTODO ? selectedTODO.title : "");
+  const [title, setTitle] = useState(selectedDumperTODO ? selectedDumperTODO.title : "");
   const [description, setDescription] = useState(
-    selectedTODO ? selectedTODO.description : ""
+    selectedDumperTODO ? selectedDumperTODO.description : ""
   );
 
   function handleSubmit() {
     const DumperTODO = {
       title,
       description,
-      id: selectedTODO ? selectedTODO.id : Date.now(),
+      id: selectedDumperTODO ? selectedDumperTODO.id : Date.now(),
     };
 
-    if (selectedTODO) {
+    if (selectedDumperTODO) {
       dispatchCallDumperTODO({ type: "update", payload: DumperTODO });
     } else {
       dispatchCallDumperTODO({ type: "push", payload: DumperTODO });
     }
 
-    setShowEditor(false);
-    setSelectedTODO(false);
+    setOnShowModal(false);
+    setSelectedDumperTODO(false);
   }
 
   return (
-    <div onClick={() => setShowEditor(false)} className="DumperEvent-Wrapper">
+    <div
+      onClick={() => {
+        setOnShowModal(false);
+        setSelectedDumperTODO(false);
+      }}
+      className="DumperEvent-Wrapper"
+    >
       <div
         onClick={(e) => {
           e.stopPropagation();
@@ -41,21 +47,25 @@ export const DumperEventModal = ({ setShowEditor }) => {
           <header className="DumperEvent__header">
             <span className="material-icons-outlined">drag_handle</span>
             <div>
+              {selectedDumperTODO && (
+                <button
+                  onClick={() => {
+                    dispatchCallDumperTODO({
+                      type: "delete",
+                      payload: selectedDumperTODO,
+                    });
+                    setOnShowModal(false);
+                    setSelectedDumperTODO(false);
+                  }}
+                >
+                  <span className="material-icons-outlined">delete</span>
+                </button>
+              )}
 
               <button
                 onClick={() => {
-                  dispatchCallDumperTODO({ type: "delete", payload: selectedTODO })
-                  setShowEditor(false);
-                  setSelectedTODO(false);
-                }}
-              >
-                <span className="material-icons-outlined">delete</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setShowEditor(false);
-                  setSelectedTODO(false);
+                  setOnShowModal(false);
+                  setSelectedDumperTODO(false);
                 }}
               >
                 <span className="material-icons-outlined">close</span>

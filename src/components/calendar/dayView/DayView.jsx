@@ -6,7 +6,7 @@ import "./dayView.scss";
 export const DayView = () => {
   const {
     daySelected,
-    setShowEventModal,
+    setOnShowModal,
     filteredCalendarEvents,
     setSelectedCalendarEvent,
   } = useContext(GlobalContext);
@@ -57,7 +57,7 @@ export const DayView = () => {
         >
           <div className="line line-pointer" style={styles}></div>
         </div>
-        <div onClick={() => setShowEventModal(true)} className="events-wrapper on-top-displays">
+        <div onClick={() => setOnShowModal(true)} className="events-wrapper on-top-displays">
           {dayEvents.map((e, i) => {
             const styles ={
               gridRowStart: position(e.time.timeStart),
@@ -69,7 +69,7 @@ export const DayView = () => {
                 key={i}
                 onClick={() => {
                   setSelectedCalendarEvent(e);
-                  setShowEventModal(true);
+                  setOnShowModal(true);
                 }}
                 className={`${e.label} day-event`}
               >
