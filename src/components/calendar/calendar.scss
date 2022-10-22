@@ -1,0 +1,12 @@
+.calendar-body__wrapper{
+    position: relative;    
+    
+    .calendar-body{
+        height: calc(100vh - 72px);
+        
+        .calendar__div{
+            height: 100%;
+        }   
+    }
+}
+
