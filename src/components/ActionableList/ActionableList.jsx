@@ -71,7 +71,7 @@ export const ActionableList = () => {
                     }}
                     key={i}
                   >
-                    <p>- {el.action}</p>
+                    <p className={`${el.checked===1?"done":"due"}`}>- {el.action}</p>
                   </button>
                 ))}
               </div>

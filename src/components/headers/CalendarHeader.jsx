@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import GlobalContext from "../../context/GlobalContext";
 import dayjs from "dayjs";
-import CalendarLabels from "../calendar/calendarLabels/CalendarLabels";
 
 export const CalendarHeader = () => {
   const {

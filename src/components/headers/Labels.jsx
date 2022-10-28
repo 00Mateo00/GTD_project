@@ -61,7 +61,7 @@ export const Labels = ({ labels, updateLabel, setState }) => {
             <span className={`checkMark text-${lbl}`}></span> {lbl}
           </label>
         ))}
-        <div>
+        <div className="state-filter">
           <button onClick={() => setTicklerFileState(false)}>All</button>
           <button onClick={() => setTicklerFileState(1)}>Done</button>
           <button onClick={() => setTicklerFileState(0)}>Due</button>

@@ -2,7 +2,7 @@
 
 .header{
     display: grid;
-    grid-template-columns: 1fr 3fr 6fr 15fr 2fr;
+    grid-template-columns: 1fr 3fr 6fr;
     align-items: center;
     height: 72px;
 
@@ -12,7 +12,7 @@
         margin:0;
         padding:0;
 
-        .list-wrapper{
+        .list-wrapper-menu{
             display: none;
             position:absolute;
             z-index: 100;
@@ -23,21 +23,25 @@
             padding:0;
             transition: height 2s, display 2s;
 
-            li{
-                display: flex;
-                justify-content: flex-start;
-                position:relative;
-                float:left;
-                margin: 0.5rem 0;
-                padding:0;
-                a{
-                    display:block;
-                    text-transform:uppercase;
-                    letter-spacing:1px;
-                    border-bottom: 1px solid transparent;
-
-                    &:hover{
-                        border-bottom-color: black;
+            ul{
+                display: grid;
+                grid-template-rows: repeat(5, 1fr);
+                li{
+                    display: flex;
+                    justify-content: flex-start;
+                    position:relative;
+                    float:left;
+                    margin: 0.5rem 0;
+                    padding:0;
+                    a{
+                        display:block;
+                        text-transform:uppercase;
+                        letter-spacing:1px;
+                        border-bottom: 1px solid transparent;
+    
+                        &:hover{
+                            border-bottom-color: black;
+                        }
                     }
                 }
             }
@@ -46,7 +50,7 @@
         .onShow{
             display: grid;
             padding: 0.5rem;
-            grid-template-rows: repeat(5,1fr);
+            grid-template-rows: repeat(2,1fr);
         }
 
     }
@@ -115,130 +119,4 @@
         }
     }
 
-    .label-wrapper{
-        p{
-            font-weight: 700;
-            color: rgb(107 114 128);
-        }
-        
-        .list-wrapper{
-            label{
-                align-items: center;
-                margin-top: 0.75rem;
-                display: block;
-                position: relative;
-                padding-left: 1.5rem;
-                margin-bottom: 0.75rem;
-                cursor: pointer;
-                user-select: none;
-                text-transform: capitalize;
-        
-                input{
-                    opacity: 0;
-                    cursor: pointer;
-                    height: 0;
-                    width: 0;
-                    &:checked ~ .checkMark {
-                        &:after{
-                            display: block;
-                        }
-                    }
-                }
-                
-                .checkMark{
-                    position: absolute;
-                    bottom: calc(50% - 0.625rem);
-                    left: 0;
-                    height: 1.25rem;
-                    width: 1.25rem;
-                    border-width: 2px;
-                    border-style: solid;
-                    border-radius:0.25rem;
-        
-                    &:after{
-                        content: "";
-                        position: absolute;
-                        display: none;
-                        left: 6px;
-                        top: 3px;
-                        width: 5px;
-                        height: 10px;
-                        border: solid white;
-                        border-width: 0 3px 3px 0;
-                        transform: rotate(45deg);
-                    }
-                } 
-        
-                &:hover{
-                    input{
-                        &:checked{
-                            & ~ .checkMark {
-                                &:after{
-                                    display: block;
-                                }
-                            }    
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-
-input{
-    &:checked ~ .text-indigo{
-        background-color:$Indigo-500;
-    }
-}
-
-input{
-    &:checked ~ .text-gray{
-        background-color:$Gray-500;
-    }
-}
-
-input{
-    &:checked ~ .text-green{
-        background-color:$Green-500;
-    }
-}
-
-input{
-    &:checked ~ .text-blue{
-        background-color:$Blue-500;
-    }
-}
-
-input{
-    &:checked ~ .text-red{
-        background-color:$Red-500;
-    }
-}
-
-input{
-    &:checked ~ .text-purple{
-        background-color:$Purple-500;
-    }
-}
-
-
-.text-indigo{
-    border-color:$Indigo-500;
-}
-.text-gray{
-    border-color:$Gray-500;
-}
-.text-green{
-    border-color:$Green-500;
-}
-.text-blue{
-    border-color:$Blue-500
-}
-.text-red{
-    border-color:$Red-500
-}
-.text-purple{
-    border-color:$Purple-500
 }

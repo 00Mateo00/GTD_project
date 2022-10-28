@@ -2,7 +2,6 @@ import React from "react";
 import { useContext } from "react";
 import { useState } from "react";
 import GlobalContext from "../../context/GlobalContext";
-import { DumperEventModal } from "./DumperEventModal";
 import "./somedayDumper.scss";
 import { MenuModal } from "../modals/MenuModal";
 

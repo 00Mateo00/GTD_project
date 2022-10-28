@@ -1,3 +1,5 @@
+@import '../../utils/utils.scss';
+
 .menuModal_wrapper{
     position: absolute;
     top: 0;
@@ -105,6 +107,16 @@
                     display: flex;
                     column-gap: 0.5rem;
 
+                    .color{
+                        width: 1.5rem;
+                        height: 1.5rem;
+                        border-radius: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        cursor: pointer;
+                    }
+
                     span{
                         color: rgb(255 255 255);
                         font-size: 0.875rem;
@@ -134,5 +146,58 @@
                 }
             }
         }
+    }
+}
+
+.indigo{
+    background-color:$Indigo-500;
+}
+.gray{
+    background-color:$Gray-500;
+}
+.green{
+    background-color:$Green-500;
+}
+.blue{
+    background-color:$Blue-500
+}
+.red{
+    background-color:$Red-500
+}
+.purple{
+    background-color:$Purple-500
+}
+
+.date-selector{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    .time{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 8rem;
+    
+        input{
+            margin: 0 0.5rem 0 0.5rem;
+            width: 2.5rem;
+            &:focus{
+                border: none;
+                outline: none;
+            }
+            &:hover{
+                cursor: pointer;
+                background-color: darkgray;
+                outline: 1px solid rgb(102, 102, 102);
+                border-radius: 10%;
+            }
+            
+        }
+        
+    }
+    .error{
+        color: red;
+        font-size: small ;
     }
 }

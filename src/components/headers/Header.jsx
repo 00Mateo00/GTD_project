@@ -31,25 +31,33 @@ export const Header = () => {
         <button className="menu-button">
           <span className="material-symbols-outlined">menu</span>
         </button>
-        <ul
-          className={`list-wrapper${showMenu === "mainMenu" ? " onShow" : ""}`}
+        <div
+          className={`list-wrapper-menu${showMenu === "mainMenu" ? " onShow" : ""}`}
         >
-          <li onClick={resetAll}>
-            <Link to="/">inbox</Link>
-          </li>
-          <li onClick={resetAll}>
-            <Link to="/Calendar">Calendar</Link>
-          </li>
-          <li onClick={resetAll}>
-            <Link to="/Tickler-File">tickler file</Link>
-          </li>
-          <li onClick={resetAll}>
-            <Link to="/Actionable-List">Actionable list</Link>
-          </li>
-          <li onClick={resetAll}>
-            <Link to="/Someday-Dumper">Someday / dumper</Link>
-          </li>
-        </ul>
+          <ul>
+            <li onClick={resetAll}>
+              <Link to="/">inbox</Link>
+            </li>
+            <li onClick={resetAll}>
+              <Link to="/Calendar">Calendar</Link>
+            </li>
+            <li onClick={resetAll}>
+              <Link to="/Tickler-File">tickler file</Link>
+            </li>
+            <li onClick={resetAll}>
+              <Link to="/Actionable-List">Actionable list</Link>
+            </li>
+            <li onClick={resetAll}>
+              <Link to="/Someday-Dumper">Someday / dumper</Link>
+            </li>
+          </ul>
+          <div>
+            <h3>filters</h3>
+            <div className="filters-wrapper">
+              {window.location.pathname!=="/"&&<Labels/>}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="buttons">
@@ -87,8 +95,6 @@ export const Header = () => {
         <Route path="/Calendar" element={<CalendarHeader />} />
         <Route path="/Tickler-File" element={<TicklerFileHeader />} />
       </Routes>
-
-      {window.location.pathname!=="/"&&<Labels/>}
     </header>
   );
 };

@@ -7,7 +7,8 @@
     }
     
     .list-wrapper{
-        display: flex;
+        display: grid;
+
         label{
             align-items: center;
             margin-top: 0.75rem;
@@ -68,6 +69,11 @@
                     }
                 }
             }
+        }
+
+        .state-filter{
+            display: flex;
+            justify-content: space-around;
         }
     }
 }
