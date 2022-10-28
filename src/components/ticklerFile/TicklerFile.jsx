@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import GlobalContext from "../../context/GlobalContext";
 import { Day } from "./day/Day";
-import EventModal from "./eventModal/EventModal";
+import { MenuModal } from "../modals/MenuModal";
 import { EventsView } from "./eventsView/EventsView";
 import utils from "../../utils/utils";
 import "./ticklerFile.scss";
@@ -11,8 +11,16 @@ export const TicklerFile = () => {
   const [currentMonth, setCurrentMonth] = useState(utils.getTicklerMonth());
   const [monthSelected, setMonthSelected] = useState(false);
   const [thisMonth, setThisMonth] = useState(false);
-  const { monthIndex, setMonthIndex, onShowModal, showDayView } =
-    useContext(GlobalContext);
+
+  const {
+    monthIndex,
+    setMonthIndex,
+    onShowModal,
+    showDayView,
+    selectedTicklerFileEvent,
+    setSelectedTicklerFileEvent,
+    dispatchCallTicklerFileEvent,
+  } = useContext(GlobalContext);
 
   useEffect(() => {
     setCurrentMonth(utils.getTicklerMonth(monthIndex));
@@ -29,8 +37,6 @@ export const TicklerFile = () => {
 
   return (
     <div className="ticklerFile_wrapper">
-      {showDayView && <EventsView />}
-      {onShowModal && <EventModal />}
       <div className="ticklerFile__body-wrapper">
         <div className="ticklerFile_months-wrapper">
           {Array(12)
@@ -57,6 +63,14 @@ export const TicklerFile = () => {
           ))}
         </div>
       </div>
+      {showDayView && <EventsView />}
+      {onShowModal && (
+        <MenuModal
+          selected={selectedTicklerFileEvent}
+          setSelected={setSelectedTicklerFileEvent}
+          dispatchCall={dispatchCallTicklerFileEvent}
+        />
+      )}
     </div>
   );
 };

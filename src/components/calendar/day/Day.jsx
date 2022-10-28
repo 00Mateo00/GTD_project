@@ -36,7 +36,7 @@ export const Day = ({ day }) => {
 
   function handleClick(day) {
     setDaySelected(day);
-    setOnShowModal(true);
+    setOnShowModal("/Calendar");
   }
 
   const events = dayEvents.map(

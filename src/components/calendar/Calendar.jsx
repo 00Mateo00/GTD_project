@@ -7,8 +7,8 @@ import utils from "../../utils/utils";
 import './calendar.scss';
 
 export const Calendar = () => {
-    const [currentMonth, setCurrentMonth] = useState(utils.getCalendarMonth());
-    const { monthIndex, onShowModal, showDayView} = useContext(GlobalContext);
+  const { monthIndex, onShowModal, showDayView} = useContext(GlobalContext);
+  const [currentMonth, setCurrentMonth] = useState(utils.getCalendarMonth());
     useEffect(() => {
       setCurrentMonth(utils.getCalendarMonth(monthIndex));
     }, [monthIndex]);

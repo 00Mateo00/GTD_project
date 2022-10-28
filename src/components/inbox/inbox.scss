@@ -11,27 +11,27 @@
         grid-template-columns: repeat(7, 1fr);
         grid-auto-columns:auto;
 
-        div{
+        .inbox-card{
             border: 1px solid black;
             height: 20rem;
+        }
 
-            .button-wrapper{
+        .button-wrapper{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 1rem;
+
+            .inbox-add-button{
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                padding-top: 1rem;
+                background-color: azure;
+                width: 35px;
+                height: 35px;
+                border-radius: 100%;
 
-                .inbox-add-button{
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    background-color: azure;
-                    width: 35px;
-                    height: 35px;
-                    border-radius: 100%;
-
-                    span{
-                    }
+                span{
                 }
             }
         }

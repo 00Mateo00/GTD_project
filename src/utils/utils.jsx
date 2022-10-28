@@ -90,9 +90,11 @@ function getTicklerMonth(month = dayjs().month()) {
   return daysTicklerMatrix;
 }
 
+
+
 const utils = {
   getCalendarMonth,
-  getTicklerMonth
+  getTicklerMonth,
 };
 
 export default utils;

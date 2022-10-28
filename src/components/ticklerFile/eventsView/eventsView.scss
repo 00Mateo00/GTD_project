@@ -50,7 +50,22 @@
 
         .eventsView_body{
             padding: 1.5rem 0.5rem;
-            overflow-x: auto;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            display: grid;
+            justify-items: center;
+            height: calc(100% - 40px - 1.5rem);
+            grid-template-columns: 1fr 1fr;
+            
+            &::-webkit-scrollbar{
+                display: none;
+            }
+
+            .tickler-day-event{
+                height: 12rem;
+                width: 11rem;
+            }
 
             .addButton-wrapper{
                 margin-top: 1rem;

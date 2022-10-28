@@ -15,7 +15,9 @@ const EventModal = () => {
     savedCalendarEvents,
   } = useContext(GlobalContext);
 
-  const [title, setTitle] = useState(selectedCalendarEvent ? selectedCalendarEvent.title : "");
+  const [title, setTitle] = useState(
+    selectedCalendarEvent ? selectedCalendarEvent.title : ""
+  );
   const [description, setDescription] = useState(
     selectedCalendarEvent ? selectedCalendarEvent.description : ""
   );
@@ -45,18 +47,19 @@ const EventModal = () => {
     let minute = 0;
     if (formated.length > 1) {
       if (formated.slice(0, 2) < 24) {
-        hour = formated.slice(0, 2)
-      } else{
-        return
+        hour = formated.slice(0, 2);
+      } else {
+        return;
       }
       console.log(hour);
       if (formated.length > 2) {
         if (formated.slice(2) < 60) {
-          minute = formated.slice(2).length < 2
-          ? `${formated.slice(2)}0`
-          : formated.slice(2)
-        }else{
-          return
+          minute =
+            formated.slice(2).length < 2
+              ? `${formated.slice(2)}0`
+              : formated.slice(2);
+        } else {
+          return;
         }
       }
     }
@@ -72,15 +75,16 @@ const EventModal = () => {
       title,
       description,
       label: selectedLabel,
-      day: daySelected? daySelected.valueOf() : dayjs().valueOf(),
+      day: daySelected ? daySelected.valueOf() : dayjs().valueOf(),
       time: { timeStart, timeEnd },
       id: selectedCalendarEvent ? selectedCalendarEvent.id : Date.now(),
     };
 
-    
     if (!timeStart || !timeEnd) {
-      setInputError("hours must be smaller than 24 and minutes smaller than 60");
-      return
+      setInputError(
+        "hours must be smaller than 24 and minutes smaller than 60"
+      );
+      return;
     }
 
     const thisTimeStart = parseInt(
@@ -90,9 +94,7 @@ const EventModal = () => {
       timeEnd.match(/\d/g).toString().replace(/,/g, "")
     );
 
-
-
-    if ((thisTimeStart > thisTimeEnd) || thisTimeStart === thisTimeEnd) {
+    if (thisTimeStart > thisTimeEnd || thisTimeStart === thisTimeEnd) {
       setInputError("starting time must be smaller than ending time");
       return;
     }
@@ -104,12 +106,14 @@ const EventModal = () => {
       ) {
         return true;
       }
+
       const savedTimeStart = parseInt(
         i.time.timeStart.match(/\d/g).toString().replace(/,/g, "")
       );
       const savedTimeEnd = parseInt(
         i.time.timeEnd.match(/\d/g).toString().replace(/,/g, "")
       );
+
       return (
         (thisTimeStart < savedTimeStart && thisTimeEnd < savedTimeStart) ||
         thisTimeStart > savedTimeEnd
@@ -157,21 +161,24 @@ const EventModal = () => {
         className="EventModal-wrapper__form shadow-2xl w-1/4" // tailwind
       >
         <header className="form__header">
-          <span className="material-icons-outlined">drag_handle</span>
+          <span className="material-symbols-outlined">drag_handle</span>
           <div>
             {selectedCalendarEvent && (
               <span
                 onClick={() => {
-                  dispatchCallCalendarEvent({ type: "delete", payload: selectedCalendarEvent });
+                  dispatchCallCalendarEvent({
+                    type: "delete",
+                    payload: selectedCalendarEvent,
+                  });
                   clear();
                 }}
-                className="material-icons-outlined cursor-pointer"
+                className="material-symbols-outlined cursor-pointer"
               >
                 delete
               </span>
             )}
-            <button onClick={() => clear()}>
-              <span className="material-icons-outlined">close</span>
+            <button onClick={clear}>
+              <span className="material-symbols-outlined">close</span>
             </button>
           </div>
         </header>
@@ -187,9 +194,11 @@ const EventModal = () => {
               className="title-input"
               onChange={(e) => setTitle(e.target.value)}
             />
-            <span className="material-icons-outlined">schedule</span>
+            <span className="material-symbols-outlined">schedule</span>
             <div className="date-selector">
-              {daySelected? daySelected.format("dddd,MMMM,DD") : dayjs().format("dddd,MMMM,DD")}
+              {daySelected
+                ? daySelected.format("dddd,MMMM,DD")
+                : dayjs().format("dddd,MMMM,DD")}
               <div className="time" onClick={() => setInputError(false)}>
                 <input
                   type="text"
@@ -213,7 +222,7 @@ const EventModal = () => {
               </div>
               {inputError && <p className="error">{inputError}</p>}
             </div>
-            <span className="material-icons-outlined">segment</span>
+            <span className="material-symbols-outlined">segment</span>
             <input
               type="text"
               name="description"
@@ -223,14 +232,14 @@ const EventModal = () => {
               className="description-input"
               onChange={(e) => setDescription(e.target.value)}
             />
-            <span className="material-icons-outlined">bookmark_border</span>
+            <span className="material-symbols-outlined">bookmark_border</span>
             <div className="colors-input">
               {labelsClasses.map((lblClass, i) => (
                 <span
                   key={i}
                   onClick={() => setSelectedLabel(lblClass)}
                   className={`${lblClass} color ${
-                    selectedLabel === lblClass && "material-icons-outlined"
+                    selectedLabel === lblClass && "material-symbols-outlined"
                   }`}
                 >
                   {selectedLabel === lblClass && "check"}

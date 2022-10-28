@@ -1,80 +1,113 @@
-import React from 'react'
-import { useContext } from 'react';
-import GlobalContext from '../../context/GlobalContext';
-import { MenuModal } from '../modals/MenuModal';
-import { ActionableListEventModal } from './ActionableListEventModal';
-import './actionableList.scss';
+import React from "react";
+import { useContext } from "react";
+import GlobalContext from "../../context/GlobalContext";
+import { MenuModal } from "../modals/MenuModal";
+import "./actionableList.scss";
 
 export const ActionableList = () => {
+  const {
+    filteredActionableTODOS,
+    onShowModal,
+    setOnShowModal,
+    showMenu,
+    setShowMenu,
+    selectedActionableTODO,
+    setSelectedActionableTODO,
+    dispatchCallActionableTODO,
+    handleChecked,
+  } = useContext(GlobalContext);
 
-  const {savedActionableTODOS, setSelectedActionableTODO, onShowModal, setOnShowModal, showMenu, setShowMenu} = useContext(GlobalContext)
-
-  const actionables = savedActionableTODOS
-    .map((e, i) => {
-      return (
-        <div
-          onClick={() => {
-            setSelectedActionableTODO(e);
-            setOnShowModal("default");
-          }}
-          className="actionable-card"
-          key={i}
-        >
-          {showMenu !== i && (
-            <>
-              <div onClick={()=>{
-              }} className="actionable-card__menu">
+  const AllActionables = filteredActionableTODOS
+    .sort((a, b) => b.id - a.id)
+    .map((e, i) => (
+      <div
+        onClick={() => {
+          setSelectedActionableTODO(e);
+          setOnShowModal("/Actionable-List");
+        }}
+        className={"actionable-card" + ` ${e.label}`}
+        key={i}
+      >
+        {showMenu !== i && (
+          <>
+            <div onClick={() => {}} className="actionable-card__menu">
+              <button className="actionable-card__button">
                 <span
                   onClick={(prop) => {
                     prop.stopPropagation();
-                    setSelectedActionableTODO(e)
+                    setSelectedActionableTODO(e);
                     setShowMenu(i);
                   }}
-                  className="material-icons-outlined"
+                  className="material-symbols-outlined"
                 >
                   menu
                 </span>
-              </div>
-              <div className="actionable-card__title">
-                <div>{e.title}</div>
-              </div>
-              <div className='actions-wrapper'>
-                <h3>ACTIONS:</h3>
-                <div className="actions">
-                  {e.subtasks.map((e, i) => <p key={i}>- {e}</p>)}
-                </div>
-              </div>
-              
-            </>
-          )}
-
-          {showMenu === i && (
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowMenu(false);
-              }}
-              className="menu-wrapper"
-            >
-              <div className="menu">
-                <header className="header-wrapper">
-                  <button onClick={() => setShowMenu(false)}>
-                    <span className="material-icons-outlined">arrow_back</span>
+              </button>
+              <button
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleChecked(e, dispatchCallActionableTODO);
+                }}
+                className="actionable-card__check"
+              >
+                <span className="material-symbols-outlined">
+                  {e.checked === 0
+                    ? "check_box_outline_blank"
+                    : "select_check_box"}
+                </span>
+              </button>
+            </div>
+            <div className="actionable-card__title">
+              <div>{e.title}</div>
+            </div>
+            <div className="actions-wrapper">
+              <h3>ACTIONS:</h3>
+              <div className="actions">
+                {e.subtasks.map((el, i) => (
+                  <button
+                    onClick={(prop) => {
+                      prop.stopPropagation();
+                      handleChecked(e,i, dispatchCallActionableTODO)
+                    }}
+                    key={i}
+                  >
+                    <p>- {el.action}</p>
                   </button>
-                </header>
-                <ul className="menu-body">
-                  <li>INBOX</li>
-                  <li>CALENDAR</li>
-                  <li>TICKLER FILE</li>
-                  <li onClick={()=>setOnShowModal("DUMPER")}>Dumper</li>
-                </ul>
+                ))}
               </div>
             </div>
-          )}
-        </div>
-      );
-    })
-    .reverse();
+          </>
+        )}
+
+        {showMenu === i && (
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowMenu(false);
+            }}
+            className="menu-wrapper"
+          >
+            <div className="menu">
+              <header className="header-wrapper">
+                <button onClick={() => setShowMenu(false)}>
+                  <span className="material-symbols-outlined">arrow_back</span>
+                </button>
+              </header>
+              <ul className="menu-body">
+                <li onClick={() => setOnShowModal("/")}>INBOX</li>
+                <li onClick={() => setOnShowModal("/Calendar")}>CALENDAR</li>
+                <li onClick={() => setOnShowModal("/Tickler-File")}>
+                  TICKLER FILE
+                </li>
+                <li onClick={() => setOnShowModal("/Someday-Dumper")}>
+                  Dumper
+                </li>
+              </ul>
+            </div>
+          </div>
+        )}
+      </div>
+    ));
 
   return (
     <div
@@ -84,20 +117,26 @@ export const ActionableList = () => {
       className="actionable-wrapper"
     >
       <div className="grid-container">
-        {actionables}
+        {AllActionables}
         <div className="add-button">
           <div className="button-wrapper">
             <button
-              onClick={() => setOnShowModal("default")}
+              onClick={() => setOnShowModal("/Actionable-List")}
               className="actionable-add-button"
             >
-              <span className="material-icons-outlined">add</span>
+              <span className="material-symbols-outlined">add</span>
             </button>
           </div>
         </div>
       </div>
-      {onShowModal && onShowModal !=="default" && <MenuModal/>}
-      {onShowModal === "default" && <ActionableListEventModal/>}
+      {/* {onShowModal && onShowModal !=="default" && <MenuModal/>} */}
+      {onShowModal && (
+        <MenuModal
+          selected={selectedActionableTODO}
+          setSelected={setSelectedActionableTODO}
+          dispatchCall={dispatchCallActionableTODO}
+        />
+      )}
     </div>
-  )
-}
+  );
+};

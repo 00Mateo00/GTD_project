@@ -5,14 +5,14 @@ import "./eventsView.scss";
 
 export const EventsView = () => {
   const {
-    monthIndex,
-    setMonthIndex,
     setDaySelected,
     daySelected,
     setShowDayView,
     filteredTicklerFileEvents,
     setSelectedTicklerFileEvent,
-    setOnShowModal
+    setOnShowModal,
+    dispatchCallTicklerFileEvent,
+    handleChecked
   } = useContext(GlobalContext);
 
 
@@ -38,11 +38,11 @@ export const EventsView = () => {
     <div onClick={() => setShowDayView(false)} className="eventsView-wrapper">
       <div onClick={(e) => e.stopPropagation()} className="eventsView">
         <header className="form__header">
-          <span className="material-icons-outlined">drag_handle</span>
+          <span className="material-symbols-outlined">drag_handle</span>
           <div className="navigation-arrows">
             <div className="navigation-arrows__container">
               <button onClick={handlePrev}>
-                <span className="arrow material-icons-outlined">chevron_left</span>
+                <span className="arrow material-symbols-outlined">chevron_left</span>
               </button>
 
               <div className="">
@@ -50,7 +50,7 @@ export const EventsView = () => {
               </div>
 
               <button onClick={handleNext}>
-                <span className="arrow material-icons-outlined">chevron_right</span>
+                <span className="arrow material-symbols-outlined">chevron_right</span>
               </button>
             </div>
             <h2>
@@ -59,25 +59,36 @@ export const EventsView = () => {
             </div>
           <div>
             <button onClick={() => setShowDayView(false)}>
-              <span className="material-icons-outlined">close</span>
+              <span className="material-symbols-outlined">close</span>
             </button>
           </div>
         </header>
         <div className="eventsView_body">
-          {dayEvents.map((e, i) => {
+          {dayEvents.sort((a,b)=> a.id - b.id).sort((a,b)=> a.checked - b.checked).map((e, i) => {
             return (
               <div
                 key={i}
                 onClick={() => {
                   setSelectedTicklerFileEvent(e);
-                  setOnShowModal(true);
+                  setOnShowModal("/Tickler-File");
                 }}
-                className={`${e.label} Tickler-day-event`}
+                className={`${e.label} tickler-day-event`}
               >
-                <div className="times">
-                  <div>
+                <div className="tickler-day__header">
+                  <div className="title">
                     <p>{e.title}</p>
                   </div>
+                  <button
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleChecked(e,dispatchCallTicklerFileEvent);
+                  }}
+                  className="actionable-card__check"
+                >
+                  <span className="material-symbols-outlined">
+                    {e.checked === 0? "check_box_outline_blank" : "select_check_box"}
+                  </span>
+                </button>
                 </div>
                 <div className="info">
                   <p>{e.description}</p>
@@ -85,7 +96,7 @@ export const EventsView = () => {
               </div>
             );
           })}
-          <div className="addButton-wrapper"><button onClick={()=> setOnShowModal(true)}><span className="material-icons-outlined">add</span></button></div>
+          <div className="addButton-wrapper"><button onClick={()=> setOnShowModal("/Tickler-File")}><span className="material-symbols-outlined">add</span></button></div>
         </div>
       </div>
     </div>

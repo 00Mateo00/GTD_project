@@ -1,4 +1,5 @@
 import React from "react";
+import utils from "../utils/utils";
 
 const GlobalContext = React.createContext({
   monthIndex: 0,
@@ -13,34 +14,56 @@ const GlobalContext = React.createContext({
   setShowDayView: (bool) => {},
   isClicked: false,
   setIsClicked: () => {},
+
   savedCalendarEvents: [],
-  dispatchCallCalendarEvent: ({type, payload}) => {},
-  savedDumperTODOS: [],
-  dispatchCallDumperTODO: ({type, payload}) => {},
   savedTicklerFileEvents: [],
-  dispatchCallTicklerFileEvent: ({type, payload}) => {},
   savedActionableTODOS: [],
+  savedDumperTODOS: [],
+  dispatchCallCalendarEvent: ({type, payload}) => {},
+  dispatchCallTicklerFileEvent: ({type, payload}) => {},
   dispatchCallActionableTODO: ({type, payload}) => {},
+  dispatchCallDumperTODO: ({type, payload}) => {},
+
+
   selectedCalendarEvent: null,
-  setSelectedCalendarEvent: () => {},
   selectedTicklerFileEvent: null,
-  setSelectedTicklerFileEvent: () => {},
-  selectedDumperTODO: null,
-  setSelectedDumperTODO: () => {},
   selectedActionableTODO: null, 
+  selectedDumperTODO: null,
+  setSelectedCalendarEvent: () => {},
+  setSelectedTicklerFileEvent: () => {},
   setSelectedActionableTODO: () => {},
+  setSelectedDumperTODO: () => {},
+
   calendarLabels: [],
-  setCalendarLabels: ()=>{},
-  updateCalendarLabel: () =>{},
-  filteredCalendarEvents: [],
   ticklerFileLabels: [],
+  dumperLabels: [],
+  actionableLabels: [],
+  setCalendarLabels: ()=>{},
   setTicklerFileLabels: ()=>{},
+  setActionableLabels: ()=>{},
+  setDumperLabels: ()=>{},
+
+  updateCalendarLabel: () =>{},
   updateTicklerFileLabel: () =>{},
+  updateActionableLabels: () =>{},
+  updateDumperLabels: () =>{},
+
+  filteredCalendarEvents: [],
+  filteredTicklerFileEvents: [],
+  filteredDumperTODOS: [],
+  filteredActionableTODOS: [],
+
+  setTicklerFileState: ()=>{},
+  setCalendarState: ()=>{},
+  setDumperState: ()=>{},
+  setActionableState: ()=>{},
+  
   onShowModal: false,
   setOnShowModal: () =>{},
   showMenu: false,
   setShowMenu: () =>{},
-  resetAll: ()=>{}
+  resetAll: ()=>{},
+  handleChecked: ()=>{},
 });
 
 export default GlobalContext;

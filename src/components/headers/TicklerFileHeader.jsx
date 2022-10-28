@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import GlobalContext from "../../context/GlobalContext";
 import dayjs from "dayjs";
-import TicklerFileLabels from "../ticklerFile/ticklerFileLabels/TicklerFileLabels";
 import { useEffect } from "react";
+import { Labels } from "./Labels";
 
 export const TicklerFileHeader = () => {
   const {
@@ -12,8 +12,8 @@ export const TicklerFileHeader = () => {
     showDayView,
     daySelected,
     setDaySelected,
+    setTicklerFileState
   } = useContext(GlobalContext);
-  
 
   function handleReset() {
     setMonthIndex(
@@ -22,7 +22,7 @@ export const TicklerFileHeader = () => {
         : dayjs().month()
     );
 
-    showDayView && setDaySelected(dayjs())
+    showDayView && setDaySelected(dayjs());
   }
 
   function handlePrev() {
@@ -38,42 +38,32 @@ export const TicklerFileHeader = () => {
   }
   return (
     <>
-      <div className="buttons">
-        <button
-          onClick={handleReset}
-          className="header__button shadow-md hover:shadow-2xl"
-        >
-          Today
-        </button>
-        <button
-          onClick={() => setOnShowModal(true)}
-          alt="create_event"
-          className="CreateEventButton-button shadow-md hover:shadow-2xl" //tailwind
-        >
-          <span className="add material-icons-outlined">add</span>
-          <span className="create">Create</span>
-        </button>
-      </div>
+
 
       <div className="navigation-arrows">
         <div className="navigation-arrows__container">
           <button onClick={handlePrev}>
-            <span className="arrow material-icons-outlined">chevron_left</span>
+            <span className="arrow material-symbols-outlined">
+              chevron_left
+            </span>
           </button>
 
           <div className="">
-            {showDayView? dayjs(daySelected).format( "DD"): dayjs(new Date(dayjs().year(), monthIndex)).format( "YYYY")}
+            {showDayView
+              ? dayjs(daySelected).format("DD")
+              : dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY")}
           </div>
 
           <button onClick={handleNext}>
-            <span className="arrow material-icons-outlined">chevron_right</span>
+            <span className="arrow material-symbols-outlined">
+              chevron_right
+            </span>
           </button>
         </div>
-        <h2>
-          {showDayView && daySelected.format( "MMMM YYYY")}
-        </h2>
+        <h2>{showDayView && daySelected.format("MMMM YYYY")}</h2>
       </div>
-      <TicklerFileLabels />
+      
+
     </>
   );
 };

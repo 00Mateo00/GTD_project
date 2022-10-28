@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import "./day.scss";
 import GlobalContext from "../../../context/GlobalContext";
@@ -11,8 +11,9 @@ export const Day = ({ day }) => {
     setShowDayView,
     filteredTicklerFileEvents,
     setSelectedTicklerFileEvent,
+    dispatchCallTicklerFileEvent,
+    handleChecked
   } = useContext(GlobalContext);
-  
 
   useEffect(() => {
     const events = filteredTicklerFileEvents.filter(
@@ -30,10 +31,10 @@ export const Day = ({ day }) => {
 
   function handleClick(day) {
     setDaySelected(day);
-    setOnShowModal(true);
+    setOnShowModal("/Tickler-File");
   }
 
-  const events = dayEvents.map(
+  const events = dayEvents.sort((a,b)=> a.id - b.id).map(
     (e, i) =>
       i < 3 && (
         <div
@@ -41,9 +42,20 @@ export const Day = ({ day }) => {
           onClick={() => {
             setSelectedTicklerFileEvent(e);
           }}
-          className={`${e.label} Tickler-day-event`}
+          className={`${e.label} tickler-day-event`}
         >
           <span>{e.title}</span>
+          <button
+            onClick={(event) => {
+              event.stopPropagation();
+              handleChecked(e,dispatchCallTicklerFileEvent);
+            }}
+            className="tickler-event__check"
+          >
+            <span className="material-symbols-outlined">
+              {e.checked === 0? "check_box_outline_blank" : "select_check_box"}
+            </span>
+          </button>
         </div>
       )
   );
@@ -63,11 +75,9 @@ export const Day = ({ day }) => {
         </p>
       </header>
       <div className="dayEvents-wrapper">
-        {events.length < 4 ? (
-          events
-        ) : (
+        {events}
+        {events.length > 3 && (
           <>
-            {events}
             <div
               className="more"
               onClick={(e) => {

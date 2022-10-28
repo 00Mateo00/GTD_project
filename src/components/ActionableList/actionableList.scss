@@ -16,7 +16,6 @@
             position: relative;
             border: 1px solid black;
             height: 25rem;
-            background-color: brown;
             padding: 0.5rem;
 
             .actionable-card__menu{
@@ -86,6 +85,9 @@
                 .actions{
                     width: 100%;
                     padding-left: 0.5rem;
+                    display: flex;
+                    align-items: flex-start;
+                    flex-direction: column;
                 }
             }
         }

@@ -5,9 +5,16 @@ import GlobalContext from "../../context/GlobalContext";
 import "./dumperEventModal.scss";
 
 export const DumperEventModal = () => {
-  const { selectedDumperTODO, setSelectedDumperTODO, dispatchCallDumperTODO, setOnShowModal } =
-    useContext(GlobalContext);
-  const [title, setTitle] = useState(selectedDumperTODO ? selectedDumperTODO.title : "");
+  const {
+    selectedDumperTODO,
+    setSelectedDumperTODO,
+    dispatchCallDumperTODO,
+    setOnShowModal,
+  } = useContext(GlobalContext);
+
+  const [title, setTitle] = useState(
+    selectedDumperTODO ? selectedDumperTODO.title : ""
+  );
   const [description, setDescription] = useState(
     selectedDumperTODO ? selectedDumperTODO.description : ""
   );
@@ -45,7 +52,7 @@ export const DumperEventModal = () => {
       >
         <form>
           <header className="DumperEvent__header">
-            <span className="material-icons-outlined">drag_handle</span>
+            <span className="material-symbols-outlined">drag_handle</span>
             <div>
               {selectedDumperTODO && (
                 <button
@@ -58,7 +65,7 @@ export const DumperEventModal = () => {
                     setSelectedDumperTODO(false);
                   }}
                 >
-                  <span className="material-icons-outlined">delete</span>
+                  <span className="material-symbols-outlined">delete</span>
                 </button>
               )}
 
@@ -68,7 +75,7 @@ export const DumperEventModal = () => {
                   setSelectedDumperTODO(false);
                 }}
               >
-                <span className="material-icons-outlined">close</span>
+                <span className="material-symbols-outlined">close</span>
               </button>
             </div>
           </header>

@@ -6,7 +6,7 @@
     background-color: plum;
     overflow-y: auto;
 
-    .grid-container{
+    .grid-container-wrapper{
         display: grid;
         gap: 0.5rem;
         grid-template-columns: repeat(7, 1fr);
@@ -16,11 +16,13 @@
             position: relative;
             border: 1px solid black;
             height: 20rem;
-            background-color: brown;
             padding: 0.5rem;
 
-            .TODO-card__menu{
+            .TODO-card__header{
                 height: 1.5rem;
+                .TODO-card__menu{
+                    height: 100%;
+                }
 
                 span{
                     cursor: pointer;

@@ -68,7 +68,7 @@ export const ActionableListEventModal = () => {
       >
         <form>
           <header className="actionableEvent__header">
-            <span className="material-icons-outlined">drag_handle</span>
+            <span className="material-symbols-outlined">drag_handle</span>
             <div>
               {selectedActionableTODO && (
                 <button
@@ -81,7 +81,7 @@ export const ActionableListEventModal = () => {
                     setSelectedActionableTODO(false);
                   }}
                 >
-                  <span className="material-icons-outlined">delete</span>
+                  <span className="material-symbols-outlined">delete</span>
                 </button>
               )}
 
@@ -91,7 +91,7 @@ export const ActionableListEventModal = () => {
                   setSelectedActionableTODO(false);
                 }}
               >
-                <span className="material-icons-outlined">close</span>
+                <span className="material-symbols-outlined">close</span>
               </button>
             </div>
           </header>
@@ -141,7 +141,7 @@ export const ActionableListEventModal = () => {
                             ),
                           ]): setError("there should be at least 1 action")
                       }}>
-                        <span className="material-icons-outlined">delete</span>
+                        <span className="material-symbols-outlined">delete</span>
                       </button>
                     </div>
                   );
@@ -153,7 +153,7 @@ export const ActionableListEventModal = () => {
                     }}
                     className="add-action"
                   >
-                    <span className="material-icons-outlined">add</span>
+                    <span className="material-symbols-outlined">add</span>
                   </button>
                 </div>
               </div>

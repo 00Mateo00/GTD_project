@@ -37,6 +37,11 @@ export default function ContextWrapper(props) {
   const [ticklerFileLabels, setTicklerFileLabels] = useState([]);
   const [dumperLabels, setDumperLabels] = useState([]);
   const [actionableLabels, setActionableLabels] = useState([]);
+
+  const [calendarState, setCalendarState] = useState(false);
+  const [ticklerFileState, setTicklerFileState] = useState(false);
+  const [dumperState, setDumperState] = useState(false);
+  const [actionableState, setActionableState] = useState(false)
   
   const [onShowModal, setOnShowModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -51,6 +56,8 @@ export default function ContextWrapper(props) {
     setOnShowModal(false);
     setShowMenu(false);
   }
+
+
 
 
 
@@ -79,7 +86,7 @@ export default function ContextWrapper(props) {
 
 
   const filteredCalendarEvents = useMemo(() => {
-    return savedCalendarEvents.filter((e) =>
+    return savedCalendarEvents.filter((e) => e.checked === (calendarState===false? e.checked : calendarState)&&
       calendarLabels
         .filter((lbl) => lbl.checked)
         .map((lbl) => lbl.label)
@@ -88,7 +95,7 @@ export default function ContextWrapper(props) {
   });
 
   const filteredTicklerFileEvents = useMemo(() => {
-    return savedTicklerFileEvents.filter((e) =>
+    return savedTicklerFileEvents.filter((e) => e.checked === (ticklerFileState===false? e.checked : ticklerFileState)&&
       ticklerFileLabels
         .filter((lbl) => lbl.checked)
         .map((lbl) => lbl.label)
@@ -97,7 +104,7 @@ export default function ContextWrapper(props) {
   });
 
   const filteredDumperTODOS = useMemo(() => {
-    return savedDumperTODOS.filter((e) =>
+    return savedDumperTODOS.filter((e) =>  e.checked === (dumperState===false? e.checked : dumperState)&&
       dumperLabels
         .filter((lbl) => lbl.checked)
         .map((lbl) => lbl.label)
@@ -106,7 +113,7 @@ export default function ContextWrapper(props) {
   });
 
   const filteredActionableTODOS = useMemo(() => {
-    return savedActionableTODOS.filter((e) =>
+    return savedActionableTODOS.filter((e) =>  e.checked === (actionableState===false? e.checked : actionableState)&&
       actionableLabels
         .filter((lbl) => lbl.checked)
         .map((lbl) => lbl.label)
@@ -229,6 +236,25 @@ export default function ContextWrapper(props) {
     );
   }
 
+  function updateActionableLabels(label) {
+    setActionableLabels(
+      actionableLabels.map((lbl) => (lbl.label === label.label ? label : lbl))
+    );
+  }
+
+  function handleChecked(e,i,fun) {
+    if (i!==undefined) {
+      e.subtasks[i].checked = e.subtasks[i].checked!==0? 0 : 1;
+    }else{
+      e.checked = e.checked!==0? 0: 1;
+    }
+    fun({
+      type:"update",
+      payload: e,
+    })
+  }
+  
+
   return (
     <GlobalContext.Provider
       value={{
@@ -242,35 +268,55 @@ export default function ContextWrapper(props) {
         setShowDayView,
         onShowModal,
         setOnShowModal,
+
         savedCalendarEvents,
-        dispatchCallCalendarEvent,
         savedTicklerFileEvents,
-        dispatchCallTicklerFileEvent,
-        savedDumperTODOS,
-        dispatchCallDumperTODO,
         savedActionableTODOS,
+        savedDumperTODOS,
+        dispatchCallCalendarEvent,
+        dispatchCallTicklerFileEvent,
         dispatchCallActionableTODO,
+        dispatchCallDumperTODO,
+
         selectedCalendarEvent,
-        setSelectedCalendarEvent,
         selectedTicklerFileEvent,
-        setSelectedTicklerFileEvent,
-        selectedDumperTODO,
-        setSelectedDumperTODO,
         selectedActionableTODO, 
+        selectedDumperTODO,
+        setSelectedCalendarEvent,
+        setSelectedTicklerFileEvent,
         setSelectedActionableTODO,
+        setSelectedDumperTODO,
+
         calendarLabels,
+        ticklerFileLabels,
+        actionableLabels,
+        dumperLabels,
         setCalendarLabels,
+        setTicklerFileLabels,
+        setActionableLabels,
+        setDumperLabels,
+
         updateCalendarLabel,
+        updateTicklerFileLabel,
+        updateActionableLabels,
+        updateDumperLabels,
+
         filteredCalendarEvents,
         filteredTicklerFileEvents,
-        ticklerFileLabels,
-        setTicklerFileLabels,
-        updateTicklerFileLabel,
+        filteredDumperTODOS,
+        filteredActionableTODOS,
+
+        setCalendarState,
+        setTicklerFileState,
+        setActionableState,
+        setDumperState,
+
         onShowModal,
         setOnShowModal,
         showMenu,
         setShowMenu,
         resetAll,
+        handleChecked
       }}
     >
       {props.children}
