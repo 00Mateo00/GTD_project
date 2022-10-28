@@ -62,10 +62,10 @@ export const Labels = ({ labels, updateLabel, setState }) => {
           </label>
         ))}
         <div>
-          <button onClick={() => setState(false)}>All</button>
-          <button onClick={() => setState(1)}>Done</button>
-          <button onClick={() => setState(0)}>Due</button>
-          <button onClick={() => setState(2)}>Missed</button>
+          <button onClick={() => setTicklerFileState(false)}>All</button>
+          <button onClick={() => setTicklerFileState(1)}>Done</button>
+          <button onClick={() => setTicklerFileState(0)}>Due</button>
+          <button onClick={() => setTicklerFileState(2)}>Missed</button>
         </div>
       </div>
     </div>
