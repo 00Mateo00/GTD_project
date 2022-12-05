@@ -79,7 +79,7 @@ export const SomdayDumper = () => {
               </button>
             </header>
             <ul className="menu-body">
-              <li onClick={() => setOnShowModal("/")}>INBOX</li>
+              <li onClick={() => setOnShowModal("/inbox")}>INBOX</li>
               <li onClick={() => setOnShowModal("/Calendar")}>CALENDAR</li>
               <li onClick={() => setOnShowModal("/Tickler-File")}>
                 TICKLER FILE
@@ -116,13 +116,6 @@ export const SomdayDumper = () => {
           </div>
         </div>
       </div>
-      {/* {onShowModal && onShowModal !== "default" && (
-        <MenuModal
-          selected={selectedDumperTODO}
-          setSelected={setSelectedDumperTODO}
-          dispatchCall={dispatchCallDumperTODO}
-        />
-      )} */}
       {onShowModal && (
         <MenuModal
           selected={selectedDumperTODO}

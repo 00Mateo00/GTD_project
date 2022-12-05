@@ -24,7 +24,6 @@ function initEvents(name) {
 
 export default function ContextWrapper(props) {
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
-  const [smallCalendarMonth, setSmallCalendarMonth] = useState(null);
   const [daySelected, setDaySelected] = useState(null);
   const [showDayView, setShowDayView] = useState(false);
 
@@ -211,11 +210,6 @@ export default function ContextWrapper(props) {
 
 
 
-  useEffect(() => {
-    if (smallCalendarMonth !== null) {
-      setMonthIndex(smallCalendarMonth);
-    }
-  }, [smallCalendarMonth]);
 
 
   function updateCalendarLabel(label) {
@@ -242,7 +236,7 @@ export default function ContextWrapper(props) {
     );
   }
 
-  function handleChecked(e,i,fun) {
+  function handleChecked(e,fun,i) {
     if (i!==undefined) {
       e.subtasks[i].checked = e.subtasks[i].checked!==0? 0 : 1;
     }else{
@@ -260,8 +254,6 @@ export default function ContextWrapper(props) {
       value={{
         monthIndex,
         setMonthIndex,
-        smallCalendarMonth,
-        setSmallCalendarMonth,
         daySelected,
         setDaySelected,
         showDayView,

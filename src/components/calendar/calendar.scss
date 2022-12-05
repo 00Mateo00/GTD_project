@@ -1,3 +1,5 @@
+@import '../../utils/utils.scss';
+
 .calendar-body__wrapper{
     position: relative;    
     
@@ -6,6 +8,25 @@
         
         .calendar__div{
             height: 100%;
+            
+            .days-month-wrapper{
+                width: 100%;
+                height: calc(100%);
+                background: $background;
+                .days-names-wrapper{
+                    display: grid;
+                    grid-template-columns: repeat(7,1fr);
+                    height: fit-content;
+                    .days-names{
+                        text-align: center;
+                    }
+                }
+                .month-wrapper{
+                    height: calc(100% - 24px);
+                    border-left: $calendar-lines;
+                    border-top: $calendar-lines;
+                }
+            }
         }   
     }
 }

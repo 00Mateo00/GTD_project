@@ -23,6 +23,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
   const [description, setDescription] = useState(
     selected ? selected.description : ""
   );
+  const [date, setDate] = useState((selected && selected.day)? selected.day:  dayjs().valueOf())
 
   const [selectedLabel, setSelectedLabel] = useState(
     selected
@@ -38,7 +39,9 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
   );
 
   const [subTasks, setSubTasks] = useState(
-    selected && selected.subtasks ? selected.subtasks : [{action:"",checked:0}]
+    selected && selected.subtasks
+      ? selected.subtasks
+      : [{ action: "", checked: 0 }]
   );
 
   const [error, setError] = useState(false);
@@ -93,7 +96,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
 
     switch (onShowModal) {
       case "/Calendar":
-        EVENT.day = daySelected ? daySelected.valueOf() : dayjs().valueOf();
+        EVENT.day = daySelected ? daySelected.valueOf() : date;
         EVENT.time = { timeStart, timeEnd };
         if (!timeStart || !timeEnd) {
           tempError =
@@ -116,6 +119,8 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
         }
 
         let available = savedCalendarEvents.every((i) => {
+          console.log(`saved days: ${i.day}`);
+          console.log(`this event day: ${EVENT.day}`);
           if (i.day !== EVENT.day || (selected && i.id === selected.id)) {
             return true;
           }
@@ -149,11 +154,11 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
         break;
 
       case "/Actionable-List":
-        EVENT.subtasks = subTasks.filter((e) => Boolean(e));
+        EVENT.subtasks = subTasks.filter((e) => Boolean(e.action));
         if (EVENT.subtasks.length < 1) {
           tempError = "there should be at least 1 action";
           setError(tempError);
-        } else {
+        }else {
           dispatchCallActionableTODO({
             type:
               selected && window.location.pathname === onShowModal
@@ -165,7 +170,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
         break;
 
       case "/Tickler-File":
-        EVENT.day = daySelected ? daySelected.valueOf() : dayjs().valueOf();
+        EVENT.day = date;
         dispatchCallTicklerFileEvent({
           type:
             selected && window.location.pathname === onShowModal
@@ -189,7 +194,6 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
     }
 
     if (!tempError) {
-      /* dispatchCall({ type: "delete", payload: selected }); */
       if (window.location.pathname != onShowModal) {
         selected &&
           dispatchCall({
@@ -270,7 +274,9 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
                             onChange={(e) =>
                               setSubTasks([
                                 ...subTasks.map((el, indx) =>
-                                  indx === i ? {action:e.target.value, checked:0} : el
+                                  indx === i
+                                    ? { action: e.target.value, checked: 0 }
+                                    : el
                                 ),
                               ])
                             }
@@ -299,7 +305,10 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
                       <button
                         type="button"
                         onClick={() => {
-                          setSubTasks([...subTasks, {action:"",checked:0}]);
+                          setSubTasks([
+                            ...subTasks,
+                            { action: "", checked: 0 },
+                          ]);
                         }}
                         className="add-action"
                       >
@@ -310,12 +319,18 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
                 </div>
               )}
 
+              {onShowModal === "/Tickler-File" && (
+                <div className="date-selector">
+                  <div className="miniCalendar-section">
+                    <input type="date" value={dayjs(date).format("YYYY-MM-DD")} onChange={(e)=>setDate(dayjs(e.target.value).valueOf())}/>
+                  </div>
+                </div>
+              )}
+
               {onShowModal === "/Calendar" && (
                 <>
                   <div className="date-selector">
-                    {daySelected
-                      ? daySelected.format("dddd,MMMM,DD")
-                      : dayjs().format("dddd,MMMM,DD")}
+                    <input type="date" value={dayjs(date).format("YYYY-MM-DD")} onChange={(e)=>setDate(dayjs(e.target.value).valueOf())}/>
                     <div className="time" onClick={() => setError(false)}>
                       <input
                         type="text"

@@ -67,7 +67,7 @@ export const ActionableList = () => {
                   <button
                     onClick={(prop) => {
                       prop.stopPropagation();
-                      handleChecked(e,i, dispatchCallActionableTODO)
+                      handleChecked(e,dispatchCallActionableTODO,i)
                     }}
                     key={i}
                   >

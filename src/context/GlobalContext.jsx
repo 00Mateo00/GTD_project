@@ -1,11 +1,8 @@
 import React from "react";
-import utils from "../utils/utils";
 
 const GlobalContext = React.createContext({
   monthIndex: 0,
   setMonthIndex: (index) => {},
-  smallCalendarMonth: 0,
-  setSmallCalendarMonth: (index) => {},
   daySelected: null,
   setDaySelected: (day) => {},
   onShowModal: false,

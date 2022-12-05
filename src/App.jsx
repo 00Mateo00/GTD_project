@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Router, Routes } from "react-router-dom";
+import { Route, Router, Routes, Navigate } from "react-router-dom";
 import "./App.scss";
 import { Inbox } from "./components/inbox/Inbox";
 import { Calendar } from "./components/calendar/Calendar";
@@ -17,7 +17,8 @@ function App() {
     <div className="App">
       <Header/>
       <Routes>
-        <Route path='/' element={<Inbox/>}/>
+        <Route path='/' element={ <Navigate to="/inbox" /> }/>
+        <Route path='/inbox' element={<Inbox/>}/>
         <Route path='/Calendar' element={<Calendar/>}/>
         <Route path='/Tickler-File' element={<TicklerFile/>}/>
         <Route path='/Actionable-List' element={<ActionableList/>}/>

@@ -149,30 +149,21 @@
     }
 }
 
-.indigo{
-    background-color:$Indigo-500;
-}
-.gray{
-    background-color:$Gray-500;
-}
-.green{
-    background-color:$Green-500;
-}
-.blue{
-    background-color:$Blue-500
-}
-.red{
-    background-color:$Red-500
-}
-.purple{
-    background-color:$Purple-500
-}
 
 .date-selector{
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+
+    .miniCalendar-section{
+        position: relative;
+        .miniCalendar-wrapper{
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    }
     .time{
         display: flex;
         justify-content: center;

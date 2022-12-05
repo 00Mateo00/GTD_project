@@ -20,6 +20,7 @@ export const Labels = ({ labels, updateLabel, setState }) => {
     setDumperState,
   } = useContext(GlobalContext);
 
+  console.log(window.location.pathname);
   switch (window.location.pathname) {
     case "/Calendar":
       labels = calendarLabels;

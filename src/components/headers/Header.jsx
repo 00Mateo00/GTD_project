@@ -1,10 +1,10 @@
 import React from "react";
-import { useContext } from "react";
-import { useState } from "react";
+import { useContext,  useState, useEffect } from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import GlobalContext from "../../context/GlobalContext";
 import "./calendar.scss";
 import { CalendarHeader } from "./CalendarHeader";
+import { InboxHeader } from "./InboxHeader";
 import { Labels } from "./Labels";
 import { TicklerFileHeader } from "./TicklerFileHeader";
 
@@ -17,7 +17,11 @@ export const Header = () => {
     setOnShowModal,
     setTicklerFileState,
     showDayView,
-    setShowDayView 
+    setShowDayView,
+    calendarLabels,
+    ticklerFileLabels,
+    actionableLabels,
+    dumperLabels,
   } = useContext(GlobalContext);
 
   return (
@@ -36,7 +40,7 @@ export const Header = () => {
         >
           <ul>
             <li onClick={resetAll}>
-              <Link to="/">inbox</Link>
+              <Link to="/inbox">inbox</Link>
             </li>
             <li onClick={resetAll}>
               <Link to="/Calendar">Calendar</Link>
@@ -54,7 +58,7 @@ export const Header = () => {
           <div>
             <h3>filters</h3>
             <div className="filters-wrapper">
-              {window.location.pathname!=="/"&&<Labels/>}
+              {(window.location.pathname===("/Calendar"||"/Tickler-File"||"/Actionable-List"||"/Someday-Dumper"))&&<Labels/>}
             </div>
           </div>
         </div>
@@ -75,26 +79,32 @@ export const Header = () => {
           )}
           />
 
-         </Routes>
-        <button
-          onClick={handleReset}
-          className="header__button shadow-md hover:shadow-2xl"
-        >
-          Today
-        </button>
-        <button
-          onClick={() => setOnShowModal(true)}
-          alt="create_event"
-          className="CreateEventButton-button shadow-md hover:shadow-2xl" //tailwind
-        >
-          <span className="add material-symbols-outlined">add</span>
-          <span className="create">Create</span>
-        </button>
+        </Routes>
+        
+        {(window.location.pathname!=="/inbox"&&<>
+          <button
+            onClick={handleReset}
+            className="header__button shadow-md hover:shadow-2xl"
+          >
+            Today
+          </button>
+          <button
+            onClick={() => setOnShowModal(true)}
+            alt="create_event"
+            className="CreateEventButton-button shadow-md hover:shadow-2xl" //tailwind
+          >
+            <span className="add material-symbols-outlined">add</span>
+            <span className="create">Create</span>
+          </button>
+        </>)}
       </div>
+
       <Routes>
         <Route path="/Calendar" element={<CalendarHeader />} />
         <Route path="/Tickler-File" element={<TicklerFileHeader />} />
+        <Route path="/inbox" element={<InboxHeader />} />
       </Routes>
+
     </header>
   );
 };

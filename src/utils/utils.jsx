@@ -83,7 +83,7 @@ function getCalendarMonth(month = dayjs().month()) {
 function getTicklerMonth(month = dayjs().month()) {
   const year = dayjs().year();
   let dayCount = 0;
-  const daysTicklerMatrix = new Array(dayjs().endOf("M").$D).fill([]).map(() => {
+  const daysTicklerMatrix = new Array(dayjs().month(month).endOf("M").$D).fill([]).map(() => {
     dayCount++
     return dayjs(new Date(year, month, dayCount));
   });
