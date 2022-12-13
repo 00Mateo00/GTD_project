@@ -5,15 +5,18 @@ import "./labels.scss";
 
 export const Labels = ({ labels, updateLabel, setState }) => {
   const {
+    inboxLabels,
     calendarLabels,
     ticklerFileLabels,
     actionableLabels,
     dumperLabels,
+    updateInboxLabel,
     updateCalendarLabel,
     updateTicklerFileLabel,
     updateActionableLabels,
     updateDumperLabels,
 
+    setInboxState,
     setCalendarState,
     setTicklerFileState,
     setActionableState,
@@ -22,16 +25,24 @@ export const Labels = ({ labels, updateLabel, setState }) => {
 
   console.log(window.location.pathname);
   switch (window.location.pathname) {
+    case "/Inbox":
+      labels = inboxLabels;
+      updateLabel = updateInboxLabel;
+      setState = setInboxState;
+      break;
+
     case "/Calendar":
       labels = calendarLabels;
       updateLabel = updateCalendarLabel;
       setState = setCalendarState;
       break;
+
     case "/Tickler-File":
       labels = ticklerFileLabels;
       updateLabel = updateTicklerFileLabel;
       setState = setTicklerFileState;
       break;
+
     case "/Actionable-List":
       labels = actionableLabels;
       updateLabel = updateActionableLabels;
@@ -45,6 +56,9 @@ export const Labels = ({ labels, updateLabel, setState }) => {
       setState = setDumperState;
 
     default:
+        labels = [];
+        updateLabel = ()=>{};
+        setState = ()=>{};
       break;
   }
 
@@ -62,12 +76,16 @@ export const Labels = ({ labels, updateLabel, setState }) => {
             <span className={`checkMark text-${lbl}`}></span> {lbl}
           </label>
         ))}
-        <div className="state-filter">
-          <button onClick={() => setTicklerFileState(false)}>All</button>
-          <button onClick={() => setTicklerFileState(1)}>Done</button>
-          <button onClick={() => setTicklerFileState(0)}>Due</button>
-          <button onClick={() => setTicklerFileState(2)}>Missed</button>
-        </div>
+        {window.location.pathname !== "/Calendar" && (
+          <>
+            <div className="state-filter">
+              <button onClick={() => setState(false)}>All</button>
+              <button onClick={() => setState(1)}>Done</button>
+              <button onClick={() => setState(0)}>Due</button>
+              <button onClick={() => setState(2)}>Missed</button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

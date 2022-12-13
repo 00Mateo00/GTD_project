@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import GlobalContext from "../../../context/GlobalContext";
 import dayjs from "dayjs";
 import "./dayView.scss";
@@ -11,22 +11,62 @@ export const DayView = () => {
     setSelectedCalendarEvent,
   } = useContext(GlobalContext);
 
+
+  let intervalID = null
+
+  function setTime(){
+    setHoursPointer(dayjs().hour() * 60);
+    setMinutesPointer(dayjs().minute());
+  }
+  
+  // this whole function make sure that the line will move every time the minute changes
+  function onFocus() {
+    ref.current?.scrollIntoView({behavior: 'smooth'}) // this focus the line when onFocus
+    setTime()
+    setTimeout(() => {
+      setTime()
+      intervalID = setInterval(setTime,(60000))
+    
+    }, (60-parseInt(dayjs().format("ss")))*1000 );
+  }
+
+  function onBlur() {
+    clearInterval(intervalID)
+  }
+
+  //detect changes on tab focus
+  useEffect(() => {
+    window.addEventListener("focus", onFocus);
+    window.addEventListener("blur", onBlur);
+    onFocus();
+    return () => {
+        window.removeEventListener("focus", onFocus);
+        window.removeEventListener("blur", onBlur);
+    };
+  }, []);
+
+
+
+  
+  const ref = useRef(null)
+
   const [dayEvents, setDayEvents] = useState([]);
 
   const [hoursPointer, setHoursPointer] = useState(dayjs().hour() * 60);
   const [minutesPointer, setMinutesPointer] = useState(dayjs().minute());
 
-  setTimeout(() => {
-    setHoursPointer(dayjs().hour() * 60);
-    setMinutesPointer(dayjs().minute());
-  }, 10000);
 
+
+  
+
+  
   useEffect(() => {
     const events = filteredCalendarEvents.filter(
-      (e) => dayjs(e.day).format("DD-MM-YY") === daySelected.format("DD-MM-YY")
+      (e) => dayjs(e.day).format("DD-MM-YY") === daySelected? daySelected.format("DD-MM-YY") : dayjs().format("DD-MM-YY")
     );
     setDayEvents(events);
   }, [filteredCalendarEvents, daySelected]);
+
 
   const hours = [...Array(24).keys()];
 
@@ -55,7 +95,7 @@ export const DayView = () => {
         <div
           className="time-line-wrapper on-top-displays"
         >
-          <div className="line line-pointer" style={styles}></div>
+          <div className="line line-pointer" style={styles} ref={ref}></div>
         </div>
         <div onClick={() => setOnShowModal("/Calendar")} className="events-wrapper on-top-displays">
           {dayEvents.map((e, i) => {

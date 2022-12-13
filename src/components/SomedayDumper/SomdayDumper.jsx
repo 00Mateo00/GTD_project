@@ -79,7 +79,7 @@ export const SomdayDumper = () => {
               </button>
             </header>
             <ul className="menu-body">
-              <li onClick={() => setOnShowModal("/inbox")}>INBOX</li>
+              <li onClick={() => setOnShowModal("/Inbox")}>INBOX</li>
               <li onClick={() => setOnShowModal("/Calendar")}>CALENDAR</li>
               <li onClick={() => setOnShowModal("/Tickler-File")}>
                 TICKLER FILE

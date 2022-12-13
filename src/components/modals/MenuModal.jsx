@@ -13,17 +13,18 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
     onShowModal,
     savedCalendarEvents,
     setOnShowModal,
-    dispatchCallActionableTODO,
-    dispatchCallDumperTODO,
+    dispatchCallInboxEvent,
     dispatchCallCalendarEvent,
     dispatchCallTicklerFileEvent,
+    dispatchCallActionableTODO,
+    dispatchCallDumperTODO,
   } = useContext(GlobalContext);
 
   const [title, setTitle] = useState(selected ? selected.title : "");
   const [description, setDescription] = useState(
     selected ? selected.description : ""
   );
-  const [date, setDate] = useState((selected && selected.day)? selected.day:  dayjs().valueOf())
+  const [date, setDate] = useState((selected && selected.day)? selected.day :  (daySelected? daySelected : dayjs().valueOf()))
 
   const [selectedLabel, setSelectedLabel] = useState(
     selected
@@ -92,9 +93,21 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
       id: selected ? selected.id : Date.now(),
       origin: onShowModal,
       checked: 0,
+      day:date,
+      time:{ timeStart, timeEnd },
+      subtasks:subTasks,
     };
 
     switch (onShowModal) {
+      case "/Inbox":
+        dispatchCallInboxEvent({
+          type:
+            selected && window.location.pathname === onShowModal
+              ? "update"
+              : "push",
+          payload: EVENT,
+        })
+        break;
       case "/Calendar":
         EVENT.day = daySelected ? daySelected.valueOf() : date;
         EVENT.time = { timeStart, timeEnd };
@@ -142,9 +155,10 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
           tempError = "there is another appointment at this time";
           setError(tempError);
         } else {
+          if(window.location.pathname === "/Inbox") tempError = window.location.pathname;
           dispatchCallCalendarEvent({
             type:
-              selected && window.location.pathname === onShowModal
+              selected && (window.location.pathname === onShowModal || window.location.pathname === tempError)
                 ? "update"
                 : "push",
             payload: EVENT,
@@ -171,9 +185,10 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
 
       case "/Tickler-File":
         EVENT.day = date;
+        if(window.location.pathname === "/Inbox") tempError = window.location.pathname;
         dispatchCallTicklerFileEvent({
           type:
-            selected && window.location.pathname === onShowModal
+            selected &&  (window.location.pathname === onShowModal || window.location.pathname === tempError)
               ? "update"
               : "push",
           payload: EVENT,
@@ -193,7 +208,10 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
         break;
     }
 
+    console.log(tempError);
     if (!tempError) {
+      console.log(window.location.pathname);
+      console.log(onShowModal);
       if (window.location.pathname != onShowModal) {
         selected &&
           dispatchCall({
@@ -202,6 +220,8 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
           });
       }
       clear();
+    }else if (tempError === "/Inbox") {
+      clear()
     }
   }
 

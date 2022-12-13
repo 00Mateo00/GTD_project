@@ -24,7 +24,7 @@ export const Calendar = () => {
   const monthTable = currentMonth.map((row, i) => {
     numberOfRow++;
     return (
-      <div className="month-table-wrapper flex-1 grid  grid-cols-7" key={i}>
+      <div className="month-table-wrapper flex-1 grid  grid-cols-7" key={i} >
         {row.map((day, idx) => (
           <Day day={day} key={idx} />
         ))}

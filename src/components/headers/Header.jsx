@@ -4,9 +4,9 @@ import { Link, Route, Routes } from "react-router-dom";
 import GlobalContext from "../../context/GlobalContext";
 import "./calendar.scss";
 import { CalendarHeader } from "./CalendarHeader";
-import { InboxHeader } from "./InboxHeader";
 import { Labels } from "./Labels";
 import { TicklerFileHeader } from "./TicklerFileHeader";
+import { InboxHeader } from "./InboxHeader";
 
 export const Header = () => {
   const {
@@ -40,7 +40,7 @@ export const Header = () => {
         >
           <ul>
             <li onClick={resetAll}>
-              <Link to="/inbox">inbox</Link>
+              <Link to="/Inbox">inbox</Link>
             </li>
             <li onClick={resetAll}>
               <Link to="/Calendar">Calendar</Link>
@@ -58,7 +58,7 @@ export const Header = () => {
           <div>
             <h3>filters</h3>
             <div className="filters-wrapper">
-              {(window.location.pathname===("/Calendar"||"/Tickler-File"||"/Actionable-List"||"/Someday-Dumper"))&&<Labels/>}
+              <Labels/>
             </div>
           </div>
         </div>
@@ -81,7 +81,7 @@ export const Header = () => {
 
         </Routes>
         
-        {(window.location.pathname!=="/inbox"&&<>
+        {(window.location.pathname!=="/Inbox"&&<>
           <button
             onClick={handleReset}
             className="header__button shadow-md hover:shadow-2xl"
@@ -89,7 +89,7 @@ export const Header = () => {
             Today
           </button>
           <button
-            onClick={() => setOnShowModal(true)}
+            onClick={() => setOnShowModal(window.location.pathname)}
             alt="create_event"
             className="CreateEventButton-button shadow-md hover:shadow-2xl" //tailwind
           >
@@ -102,7 +102,8 @@ export const Header = () => {
       <Routes>
         <Route path="/Calendar" element={<CalendarHeader />} />
         <Route path="/Tickler-File" element={<TicklerFileHeader />} />
-        <Route path="/inbox" element={<InboxHeader />} />
+        <Route path="/Inbox" element={<InboxHeader/>} />
+        
       </Routes>
 
     </header>

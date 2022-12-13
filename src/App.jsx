@@ -17,12 +17,12 @@ function App() {
     <div className="App">
       <Header/>
       <Routes>
-        <Route path='/' element={ <Navigate to="/inbox" /> }/>
-        <Route path='/inbox' element={<Inbox/>}/>
+        <Route path='/Inbox' element={<Inbox/>}/>
         <Route path='/Calendar' element={<Calendar/>}/>
         <Route path='/Tickler-File' element={<TicklerFile/>}/>
         <Route path='/Actionable-List' element={<ActionableList/>}/>
         <Route path='/Someday-Dumper' element={<SomdayDumper/>}/>
+        <Route path='/' element={ <Navigate to="/Inbox" /> }/>
       </Routes>
     </div>
   );
