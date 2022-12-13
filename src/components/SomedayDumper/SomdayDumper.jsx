@@ -25,19 +25,19 @@ export const SomdayDumper = () => {
         setSelectedDumperTODO(e);
         setOnShowModal("/Someday-Dumper");
       }}
-      className={`TODO-card`+` ${e.label}`} 
+      className={`card`+` ${e.label}`} 
       key={i}
     >
       {showMenu !== i && (
         <>
-          <div onClick={() => {}} className="TODO-card__header">
+          <div onClick={() => {}} className="card__header">
             <button
               onClick={(prop) => {
                 prop.stopPropagation();
                 setSelectedDumperTODO(e);
                 setShowMenu(i);
               }}
-              className="TODO-card__menu"
+              className="card__menu"
             >
               <span className="material-symbols-outlined">menu</span>
             </button>
@@ -55,10 +55,10 @@ export const SomdayDumper = () => {
               </span>
             </button>
           </div>
-          <div className="TODO-card__title">
+          <div className="card__title">
             <div>{e.title}</div>
           </div>
-          <div className="TODO-card__description">{e.description}</div>
+          <div className="card__description">{e.description}</div>
         </>
       )}
 
@@ -99,9 +99,9 @@ export const SomdayDumper = () => {
       onClick={() => {
         setShowMenu(false);
       }}
-      className="dumper-wrapper"
+      className="wrapper"
     >
-      <div className="grid-container-wrapper">
+      <div className="grid-container">
         {todos}
         <div className="add-button">
           <div className="button-wrapper">
@@ -109,7 +109,7 @@ export const SomdayDumper = () => {
               onClick={() => {
                 setOnShowModal("/Someday-Dumper");
               }}
-              className="dumper-add-button"
+              className="button"
             >
               <span className="material-symbols-outlined">add</span>
             </button>

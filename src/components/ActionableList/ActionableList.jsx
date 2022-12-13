@@ -114,7 +114,7 @@ export const ActionableList = () => {
       onClick={() => {
         setShowMenu(false);
       }}
-      className="actionable-wrapper"
+      className="wrapper"
     >
       <div className="grid-container">
         {AllActionables}
@@ -122,7 +122,7 @@ export const ActionableList = () => {
           <div className="button-wrapper">
             <button
               onClick={() => setOnShowModal("/Actionable-List")}
-              className="actionable-add-button"
+              className="button"
             >
               <span className="material-symbols-outlined">add</span>
             </button>

@@ -1,16 +1,6 @@
-.actionable-wrapper{
-    position: relative;
-    padding: 2rem;
-    width: 100vw;
-    height: calc(100vh - 72px);
-    background-color: plum;
-    overflow-y: auto;
-
+.wrapper{
     .grid-container{
-        display: grid;
-        gap: 0.5rem;
         grid-template-columns: repeat(6, 1fr);
-        grid-auto-columns:auto;
 
         .actionable-card{
             position: relative;
@@ -94,28 +84,6 @@
                             text-decoration: line-through;
                         }
                     }
-                }
-            }
-        }
-
-        .add-button{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            
-            .button-wrapper{
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding-top: 1rem;
-                .actionable-add-button{
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    background-color: azure;
-                    width: 35px;
-                    height: 35px;
-                    border-radius: 100%;
                 }
             }
         }
