@@ -2,7 +2,6 @@ import React from "react";
 import { useContext } from "react";
 import GlobalContext from "../../context/GlobalContext";
 import { MenuModal } from "../modals/MenuModal";
-import "./actionableList.scss";
 
 export const ActionableList = () => {
   const {
@@ -25,12 +24,12 @@ export const ActionableList = () => {
           setSelectedActionableTODO(e);
           setOnShowModal("/Actionable-List");
         }}
-        className={"actionable-card" + ` ${e.label}`}
+        className={"card" + ` ${e.label}`}
         key={i}
       >
         {showMenu !== i && (
           <>
-            <div onClick={() => {}} className="actionable-card__menu">
+            <div onClick={() => {}} className="card__header">
               <button className="actionable-card__button">
                 <span
                   onClick={(prop) => {
@@ -57,9 +56,10 @@ export const ActionableList = () => {
                 </span>
               </button>
             </div>
-            <div className="actionable-card__title">
+            <div className="card__title">
               <div>{e.title}</div>
             </div>
+            <div className="card__description">{e.description}</div>
             <div className="actions-wrapper">
               <h3>ACTIONS:</h3>
               <div className="actions">

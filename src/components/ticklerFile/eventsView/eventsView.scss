@@ -1,3 +1,5 @@
+@import '../../../utils/utils.scss';
+
 .eventsView-wrapper{
     position: absolute;
     top: 0;
@@ -9,7 +11,7 @@
     align-items: center;
 
     .eventsView{
-        background-color: black;
+        background-color: rgb(243 244 246);
         width: 25rem;
         height: 40rem;
         border-radius: 1rem;

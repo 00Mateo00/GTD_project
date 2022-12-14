@@ -56,7 +56,6 @@ export const Day = ({ day }) => {
 
   return (
     <div onClick={() => {
-      console.log(day)
       handleClick(day)
     }} className="day-wrapper">
       <header className="day-wrapper__header">

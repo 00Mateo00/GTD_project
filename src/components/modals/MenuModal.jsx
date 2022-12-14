@@ -24,7 +24,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
   const [description, setDescription] = useState(
     selected ? selected.description : ""
   );
-  const [date, setDate] = useState((selected && selected.day)? selected.day :  (daySelected? daySelected : dayjs().valueOf()))
+  const [date, setDate] = useState(selected && selected.day)
 
   const [selectedLabel, setSelectedLabel] = useState(
     selected
@@ -66,7 +66,6 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
       } else {
         return;
       }
-      console.log(hour);
       if (formated.length > 2) {
         if (formated.slice(2) < 60) {
           minute =
@@ -109,7 +108,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
         })
         break;
       case "/Calendar":
-        EVENT.day = daySelected ? daySelected.valueOf() : date;
+        EVENT.day = date? date : daySelected.valueOf();
         EVENT.time = { timeStart, timeEnd };
         if (!timeStart || !timeEnd) {
           tempError =
@@ -132,8 +131,6 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
         }
 
         let available = savedCalendarEvents.every((i) => {
-          console.log(`saved days: ${i.day}`);
-          console.log(`this event day: ${EVENT.day}`);
           if (i.day !== EVENT.day || (selected && i.id === selected.id)) {
             return true;
           }
@@ -208,10 +205,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
         break;
     }
 
-    console.log(tempError);
     if (!tempError) {
-      console.log(window.location.pathname);
-      console.log(onShowModal);
       if (window.location.pathname != onShowModal) {
         selected &&
           dispatchCall({

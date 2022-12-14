@@ -35,7 +35,7 @@ export const InboxHeader = () => {
     
   return (
     <>  
-        <div>{todaysDate}</div>
+        <div className='inbox-date'>{todaysDate}</div>
     </>
   )
 }

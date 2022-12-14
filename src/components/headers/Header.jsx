@@ -3,6 +3,7 @@ import { useContext,  useState, useEffect } from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import GlobalContext from "../../context/GlobalContext";
 import "./calendar.scss";
+import "./header.scss";
 import { CalendarHeader } from "./CalendarHeader";
 import { Labels } from "./Labels";
 import { TicklerFileHeader } from "./TicklerFileHeader";

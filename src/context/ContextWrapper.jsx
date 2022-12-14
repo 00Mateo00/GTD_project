@@ -22,15 +22,17 @@ function initEvents(name) {
   return parsedEvents;
 }
 
-
 export default function ContextWrapper(props) {
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
-  const [daySelected, setDaySelected] = useState(null);
+  const [daySelected, setDaySelected] = useState(
+    dayjs(dayjs().format("YYYY-MM-DD"))
+  );
   const [showDayView, setShowDayView] = useState(false);
 
   const [selectedInboxEvent, setSelectedInboxEvent] = useState(null);
   const [selectedCalendarEvent, setSelectedCalendarEvent] = useState(null);
-  const [selectedTicklerFileEvent, setSelectedTicklerFileEvent] = useState(null);
+  const [selectedTicklerFileEvent, setSelectedTicklerFileEvent] =
+    useState(null);
   const [selectedDumperTODO, setSelectedDumperTODO] = useState(null);
   const [selectedActionableTODO, setSelectedActionableTODO] = useState(null);
 
@@ -44,13 +46,13 @@ export default function ContextWrapper(props) {
   const [calendarState, setCalendarState] = useState(false);
   const [ticklerFileState, setTicklerFileState] = useState(false);
   const [dumperState, setDumperState] = useState(false);
-  const [actionableState, setActionableState] = useState(false)
-  
+  const [actionableState, setActionableState] = useState(false);
+
   const [onShowModal, setOnShowModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
   function resetAll() {
-    setDaySelected(false);
+    setDaySelected(dayjs(dayjs().format("YYYY-MM-DD")));
     setShowDayView(false);
     setOnShowModal(false);
     setSelectedCalendarEvent(false);
@@ -60,14 +62,16 @@ export default function ContextWrapper(props) {
     setShowMenu(false);
   }
 
-
-
-  const [savedInboxEvents, dispatchCallInboxEvent] = useReducer(reducer, [], () =>
-    initEvents("savedInboxEvents")
+  const [savedInboxEvents, dispatchCallInboxEvent] = useReducer(
+    reducer,
+    [],
+    () => initEvents("savedInboxEvents")
   );
 
-  const [savedCalendarEvents, dispatchCallCalendarEvent] = useReducer(reducer, [], () =>
-    initEvents("savedCalendarEvents")
+  const [savedCalendarEvents, dispatchCallCalendarEvent] = useReducer(
+    reducer,
+    [],
+    () => initEvents("savedCalendarEvents")
   );
 
   const [savedTicklerFileEvents, dispatchCallTicklerFileEvent] = useReducer(
@@ -88,61 +92,66 @@ export default function ContextWrapper(props) {
     () => initEvents("savedActionableTODOS")
   );
 
-
   const filteredInboxEvents = useMemo(() => {
-    return savedInboxEvents.filter((e) => e.checked === (inboxState===false? e.checked : inboxState)&&
-      inboxLabels
-        .filter((lbl) => lbl.checked)
-        .map((lbl) => lbl.label)
-        .includes(e.label)
+    return savedInboxEvents.filter(
+      (e) =>
+        e.checked === (inboxState === false ? e.checked : inboxState) &&
+        inboxLabels
+          .filter((lbl) => lbl.checked)
+          .map((lbl) => lbl.label)
+          .includes(e.label)
     );
   });
 
-
   const filteredCalendarEvents = useMemo(() => {
-    return savedCalendarEvents.filter((e) => e.checked === (calendarState===false? e.checked : calendarState)&&
-      calendarLabels
-        .filter((lbl) => lbl.checked)
-        .map((lbl) => lbl.label)
-        .includes(e.label)
+    return savedCalendarEvents.filter(
+      (e) =>
+        e.checked === (calendarState === false ? e.checked : calendarState) &&
+        calendarLabels
+          .filter((lbl) => lbl.checked)
+          .map((lbl) => lbl.label)
+          .includes(e.label)
     );
   });
 
   const filteredTicklerFileEvents = useMemo(() => {
-    return savedTicklerFileEvents.filter((e) => e.checked === (ticklerFileState===false? e.checked : ticklerFileState)&&
-      ticklerFileLabels
-        .filter((lbl) => lbl.checked)
-        .map((lbl) => lbl.label)
-        .includes(e.label)
+    return savedTicklerFileEvents.filter(
+      (e) =>
+        e.checked ===
+          (ticklerFileState === false ? e.checked : ticklerFileState) &&
+        ticklerFileLabels
+          .filter((lbl) => lbl.checked)
+          .map((lbl) => lbl.label)
+          .includes(e.label)
     );
   });
 
   const filteredDumperTODOS = useMemo(() => {
-    return savedDumperTODOS.filter((e) =>  e.checked === (dumperState===false? e.checked : dumperState)&&
-      dumperLabels
-        .filter((lbl) => lbl.checked)
-        .map((lbl) => lbl.label)
-        .includes(e.label)
+    return savedDumperTODOS.filter(
+      (e) =>
+        e.checked === (dumperState === false ? e.checked : dumperState) &&
+        dumperLabels
+          .filter((lbl) => lbl.checked)
+          .map((lbl) => lbl.label)
+          .includes(e.label)
     );
   });
 
   const filteredActionableTODOS = useMemo(() => {
-    return savedActionableTODOS.filter((e) =>  e.checked === (actionableState===false? e.checked : actionableState)&&
-      actionableLabels
-        .filter((lbl) => lbl.checked)
-        .map((lbl) => lbl.label)
-        .includes(e.label)
+    return savedActionableTODOS.filter(
+      (e) =>
+        e.checked ===
+          (actionableState === false ? e.checked : actionableState) &&
+        actionableLabels
+          .filter((lbl) => lbl.checked)
+          .map((lbl) => lbl.label)
+          .includes(e.label)
     );
   });
 
-
   useEffect(() => {
-    localStorage.setItem(
-      "savedInboxEvents",
-      JSON.stringify(savedInboxEvents)
-    );
+    localStorage.setItem("savedInboxEvents", JSON.stringify(savedInboxEvents));
   }, [savedInboxEvents]);
-
 
   useEffect(() => {
     localStorage.setItem(
@@ -159,32 +168,25 @@ export default function ContextWrapper(props) {
   }, [savedTicklerFileEvents]);
 
   useEffect(() => {
-    localStorage.setItem(
-      "savedDumperTODOS", 
-      JSON.stringify(savedDumperTODOS)
-      );
+    localStorage.setItem("savedDumperTODOS", JSON.stringify(savedDumperTODOS));
   }, [savedDumperTODOS]);
 
   useEffect(() => {
     localStorage.setItem(
-      "savedActionableTODOS", 
+      "savedActionableTODOS",
       JSON.stringify(savedActionableTODOS)
-      );
+    );
   }, [savedActionableTODOS]);
-
-  
 
   useEffect(() => {
     setInboxLabels((prevLabels) => {
-      return [...new Set(savedInboxEvents.map((i) => i.label))].map(
-        (label) => {
-          const currentLabel = prevLabels.find((i) => i.label === label);
-          return {
-            label,
-            checked: currentLabel ? currentLabel.checked : true,
-          };
-        }
-      );
+      return [...new Set(savedInboxEvents.map((i) => i.label))].map((label) => {
+        const currentLabel = prevLabels.find((i) => i.label === label);
+        return {
+          label,
+          checked: currentLabel ? currentLabel.checked : true,
+        };
+      });
     });
   }, [savedInboxEvents]);
 
@@ -242,8 +244,6 @@ export default function ContextWrapper(props) {
     });
   }, [savedActionableTODOS]);
 
-
-
   function updateInboxLabel(label) {
     setInboxLabels(
       inboxLabels.map((lbl) => (lbl.label === label.label ? label : lbl))
@@ -274,18 +274,17 @@ export default function ContextWrapper(props) {
     );
   }
 
-  function handleChecked(e,fun,i) {
-    if (i!==undefined) {
-      e.subtasks[i].checked = e.subtasks[i].checked!==0? 0 : 1;
-    }else{
-      e.checked = e.checked!==0? 0: 1;
+  function handleChecked(e, fun, i) {
+    if (i !== undefined) {
+      e.subtasks[i].checked = e.subtasks[i].checked !== 0 ? 0 : 1;
+    } else {
+      e.checked = e.checked !== 0 ? 0 : 1;
     }
     fun({
-      type:"update",
+      type: "update",
       payload: e,
-    })
+    });
   }
-  
 
   return (
     <GlobalContext.Provider
@@ -313,7 +312,7 @@ export default function ContextWrapper(props) {
         selectedInboxEvent,
         selectedCalendarEvent,
         selectedTicklerFileEvent,
-        selectedActionableTODO, 
+        selectedActionableTODO,
         selectedDumperTODO,
         setSelectedInboxEvent,
         setSelectedCalendarEvent,
@@ -354,7 +353,7 @@ export default function ContextWrapper(props) {
         showMenu,
         setShowMenu,
         resetAll,
-        handleChecked
+        handleChecked,
       }}
     >
       {props.children}

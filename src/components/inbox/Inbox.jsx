@@ -7,10 +7,28 @@ import "./inbox.scss";
 import { useEffect } from "react";
 import { useState } from "react";
 import { DayView } from "../calendar/dayView/DayView";
+import { useRef } from "react";
 
 export const Inbox = () => {
   const [dayEvents, setDayEvents] = useState([]);
   const [eventType, setEventType] = useState(false);
+
+  const ref = useRef(null)
+
+  useEffect(() => {
+    ref.current.addEventListener('wheel', handleWheel, { passive: false });
+  }, [])
+
+  function handleWheel(e) {
+    e.preventDefault()
+    if(e.deltaY===0) return;
+    
+    ref.current.scrollTo({
+      left: ref.current.scrollLeft + e.deltaY,
+      behavior: "smooth"
+    });
+  }
+  
 
   const {
     onShowModal,
@@ -32,6 +50,7 @@ export const Inbox = () => {
     selectedTicklerFileEvent,
     setSelectedTicklerFileEvent,
     dispatchCallTicklerFileEvent,
+    dispatchCallActionableTODO,
   } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -50,7 +69,7 @@ export const Inbox = () => {
           setSelectedTicklerFileEvent(e);
           setOnShowModal("/Tickler-File");
         }}
-        className={`${e.label} tickler-day-event`}
+        className={`${e.label} day-event`}
       >
         <span>{e.title}</span>
         <button
@@ -75,19 +94,19 @@ export const Inbox = () => {
           setSelectedInboxEvent(e);
           setOnShowModal("/Inbox");
         }}
-        className={`TODO-card` + ` ${e.label}`}
+        className={`card` + ` ${e.label}`}
         key={i}
       >
         {showMenu !== i && (
           <>
-            <div onClick={() => {}} className="TODO-card__header">
+            <div onClick={() => {}} className="card__header">
               <button
                 onClick={(prop) => {
                   prop.stopPropagation();
                   setSelectedInboxEvent(e);
                   setShowMenu(i);
                 }}
-                className="TODO-card__menu"
+                className="card__menu"
               >
                 <span className="material-symbols-outlined">menu</span>
               </button>
@@ -105,10 +124,30 @@ export const Inbox = () => {
                 </span>
               </button>
             </div>
-            <div className="TODO-card__title">
+            <div className="card__title">
               <div>{e.title}</div>
             </div>
-            <div className="TODO-card__description">{e.description}</div>
+            <div className="card__description">{e.description}</div>
+            {e.subtasks && (
+              <div className="actions-wrapper">
+                <h3>ACTIONS:</h3>
+                <div className="actions">
+                  {e.subtasks.map((el, i) => (
+                    <button
+                      onClick={(prop) => {
+                        prop.stopPropagation();
+                        handleChecked(e, dispatchCallActionableTODO, i);
+                      }}
+                      key={i}
+                    >
+                      <p className={`${el.checked === 1 ? "done" : "due"}`}>
+                        - {el.action}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </>
         )}
 
@@ -165,7 +204,11 @@ export const Inbox = () => {
           }
         />
       )}
-      <div className="inbox-Tickler" onClick={() => setEventType("Tickler")}>
+      <div
+        className="inbox-Tickler"
+        ref={ref}
+        onClick={() => setEventType("Tickler")}
+      >
         {TicklerEvents}
       </div>
       <div className="grid-container">

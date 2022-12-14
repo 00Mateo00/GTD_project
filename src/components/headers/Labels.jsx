@@ -22,8 +22,6 @@ export const Labels = ({ labels, updateLabel, setState }) => {
     setActionableState,
     setDumperState,
   } = useContext(GlobalContext);
-
-  console.log(window.location.pathname);
   switch (window.location.pathname) {
     case "/Inbox":
       labels = inboxLabels;

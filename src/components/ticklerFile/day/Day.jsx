@@ -42,7 +42,7 @@ export const Day = ({ day }) => {
           onClick={() => {
             setSelectedTicklerFileEvent(e);
           }}
-          className={`${e.label} tickler-day-event`}
+          className={`${e.label} day-event`}
         >
           <span>{e.title}</span>
           <button

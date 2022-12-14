@@ -62,24 +62,3 @@
 }
 
 
-.tickler-day-event{
-    cursor: pointer;
-    padding: 0.25rem;
-    color: rgb(75 85 99);
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    border-radius: 0.25rem;
-    margin-bottom: 0.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    
-    button{
-        display: flex;
-        justify-content: center;
-    }
-}
-

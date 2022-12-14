@@ -1,10 +1,19 @@
-$calendar-lines: 1px solid rgba(87,0,255,0.5);
-$background: linear-gradient(165deg, rgba(87,0,255,0.34) 33%, rgba(190,0,255,0.34) 100%);
-$primary-color:#3b08ff;
+
+
+
+
+$primary-color:#5c3dff;
 $secondary-color:#353535;
 $secondary-light: #d9d9d9;
 $base-color:#ffffff;
 $highlights:#F9E900;
+
+$calendar-lines: 1px solid $primary-color;
+$background: linear-gradient(165deg, rgba(87,0,255,0.34) 33%, $primary-color 100%);
+
+$headerHeight:4rem;
+$bodyHeight: calc(100vh - $headerHeight);
+$box-shadow: $secondary-color 0px 0px 5px;
 
 // slate
 $slate-50: #f8fafc;

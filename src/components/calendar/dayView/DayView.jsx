@@ -11,7 +11,6 @@ export const DayView = () => {
     setSelectedCalendarEvent,
   } = useContext(GlobalContext);
 
-
   let intervalID = null
 
   function setTime(){
@@ -62,7 +61,7 @@ export const DayView = () => {
   
   useEffect(() => {
     const events = filteredCalendarEvents.filter(
-      (e) => dayjs(e.day).format("DD-MM-YY") === daySelected? daySelected.format("DD-MM-YY") : dayjs().format("DD-MM-YY")
+      (e) => dayjs(e.day).format("DD-MM-YY") === daySelected.format("DD-MM-YY")
     );
     setDayEvents(events);
   }, [filteredCalendarEvents, daySelected]);
