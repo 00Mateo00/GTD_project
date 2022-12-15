@@ -211,7 +211,7 @@ export const Inbox = () => {
       >
         {TicklerEvents}
       </div>
-      <div className="grid-container">
+      <div className="grid-inbox">
         <div
           className="calendar-dayView"
           onClick={() => setEventType("Calendar")}
@@ -219,7 +219,7 @@ export const Inbox = () => {
           <DayView />
         </div>
         <div
-          className="actionables-container"
+          className="grid-container"
           onClick={() => setEventType("Inbox")}
         >
           {InobxTodos}

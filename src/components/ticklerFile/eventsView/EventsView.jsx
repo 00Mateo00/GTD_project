@@ -72,12 +72,9 @@ export const EventsView = () => {
                   setSelectedTicklerFileEvent(e);
                   setOnShowModal("/Tickler-File");
                 }}
-                className={`${e.label} tickler-day-event`}
+                className={`${e.label} card`}
               >
-                <div className="tickler-day__header">
-                  <div className="title">
-                    <p>{e.title}</p>
-                  </div>
+                <div className="card__header">
                   <button
                   onClick={(event) => {
                     event.stopPropagation();
@@ -90,7 +87,10 @@ export const EventsView = () => {
                   </span>
                 </button>
                 </div>
-                <div className="info">
+                <div className="card__title">
+                    <p>{e.title}</p>
+                </div>
+                <div className="card__description">
                   <p>{e.description}</p>
                 </div>
               </div>

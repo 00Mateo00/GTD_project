@@ -1,0 +1,143 @@
+@import '../../utils/utils.scss';
+
+.header{
+    display: grid;
+    grid-template-columns: 1fr 3fr 6fr;
+    align-items: center;
+    height: $headerHeight;
+    background-color: $primary-color;
+    box-shadow: $box-shadow;
+
+    .menu-wrapper{
+        position: relative;
+        list-style:none;
+        margin:0;
+        padding-left: 1.5rem;
+
+        .menu-button{
+            span{
+                font-size: 2.5rem;
+                color: whitesmoke;
+            }
+        }
+
+        .list-wrapper-menu{
+            position:absolute;
+            display: grid;
+            grid-template-rows: repeat(2,1fr);
+            z-index: 100;
+            top:calc(50% + $headerHeight/2);
+            left:-15rem;
+            width: 15rem;
+            height: calc(100vh - $headerHeight);
+            background:#eee;
+            padding: 0.5rem;
+            transition: left 0.5s ease-in-out;
+
+            ul{
+                display: grid;
+                height: 20rem;
+                grid-template-rows: repeat(5, 1fr);
+                li{
+                    display: flex;
+                    justify-content: flex-start;
+                    position:relative;
+                    float:left;
+                    margin: 0.5rem 0;
+                    padding:0;
+                    a{
+                        display:block;
+                        text-transform:uppercase;
+                        letter-spacing:1px;
+                        border-bottom: 1px solid transparent;
+    
+                        &:hover{
+                            border-bottom-color: black;
+                        }
+                    }
+                }
+            }
+        }
+
+        .onShow{
+            left: 0;
+            transition: left 0.5s ease-in-out;
+        }
+
+    }
+    
+    .buttons{
+        display: flex;
+        .header__button{
+            margin: 0 0.5rem;
+            width: 8rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem;
+            border-width: 1px;
+            border-radius: 9999px;
+            padding: 0.5rem;
+        }
+
+        .CreateEventButton-button{
+            width: 8rem;
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-width: 1px;
+            border-radius: 9999px;
+            padding: 0.5rem;
+        
+            .add{
+                height: 1.75rem;
+                width: 1.75rem;
+                display: flex;
+                align-items: center;
+            }
+        
+            .create{
+                padding-right: 1.75rem;
+                padding-left: 0.75rem;
+            }
+        }
+
+        button{
+            background-color: whitesmoke;
+            box-shadow: $box-shadow;
+        }
+
+        .go-back{
+            background-color: transparent;
+            box-shadow: none;
+            color: $secondary-light;
+        }
+    }
+
+    .navigation-arrows{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .navigation-arrows__container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            button{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                .arrow{
+                    cursor: pointer;
+                    color: $secondary-light;
+                }
+            }
+        }
+    }
+
+    .inbox-date{
+        color: $secondary-light;
+    }
+
+}

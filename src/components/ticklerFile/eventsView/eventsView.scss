@@ -11,17 +11,19 @@
     align-items: center;
 
     .eventsView{
-        background-color: rgb(243 244 246);
+        background-color: $secondary-color;
         width: 25rem;
         height: 40rem;
         border-radius: 1rem;
+        box-shadow: black 0px 0px 2rem;
         .form__header{
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: rgb(243 244 246);
+            background-color: $secondary-light;
             padding: 0.5rem 1rem;
             border-radius: 1rem 1rem 0 0;
+            box-shadow: $box-shadow;
             
             .navigation-arrows{
                 display: flex;
@@ -51,22 +53,28 @@
         }
 
         .eventsView_body{
-            padding: 1.5rem 0.5rem;
+            padding: 1rem 1rem;
             overflow-y: auto;
             scrollbar-width: none;
             -ms-overflow-style: none;
             display: grid;
             justify-items: center;
-            height: calc(100% - 40px - 1.5rem);
+            height: calc(100% - 40px - 0.5rem);
             grid-template-columns: 1fr 1fr;
+            gap: 1rem;
             
             &::-webkit-scrollbar{
                 display: none;
             }
 
-            .tickler-day-event{
-                height: 12rem;
+            .card{
+                $thisCardHight: 15rem;
                 width: 11rem;
+                height: $thisCardHight;
+
+                .card__description{
+                    height: calc($thisCardHight - 5rem);
+                }
             }
 
             .addButton-wrapper{
