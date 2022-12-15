@@ -59,7 +59,7 @@ export const ActionableList = () => {
             <div className="card__title">
               <div>{e.title}</div>
             </div>
-            <div className="card__description">{e.description}</div>
+            <div className="card__description actionables__description">{e.description}</div>
             <div className="actions-wrapper">
               <h3>ACTIONS:</h3>
               <div className="actions">

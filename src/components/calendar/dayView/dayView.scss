@@ -1,3 +1,5 @@
+@import "../../../utils/utils.scss";
+
 .times-wrapper{
     padding-top: 1.5rem;
     position: absolute;
@@ -7,6 +9,7 @@
     grid-template-columns: 1fr 20fr;
     background-color: white;
     overflow-y: auto;
+    @include barStyles();
     
     .hours-grid{
         display: grid;

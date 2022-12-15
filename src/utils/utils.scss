@@ -1,7 +1,4 @@
 
-
-
-
 $primary-color:#5c3dff;
 $secondary-color:#353535;
 $secondary-light: #d9d9d9;
@@ -14,6 +11,18 @@ $background: linear-gradient(165deg, rgba(87,0,255,0.34) 33%, $primary-color 100
 $headerHeight:4rem;
 $bodyHeight: calc(100vh - $headerHeight);
 $box-shadow: $secondary-color 0px 0px 5px;
+
+@mixin barStyles {
+    &:hover{
+        &::-webkit-scrollbar-track {
+            background: rgba($color: #000000, $alpha: 0.125);
+        }
+
+        &::-webkit-scrollbar-thumb{
+            background: rgba($color: #000000, $alpha: 0.5);
+        }
+    }
+}
 
 // slate
 $slate-50: #f8fafc;
