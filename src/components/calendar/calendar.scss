@@ -2,10 +2,10 @@
 
 .calendar-body__wrapper{
     position: relative; 
-
+    height: $bodyHeight;   
     
-    .calendar-body{
-        height: $bodyHeight;        
+    .calendar-body{     
+        height: 100%;
         .calendar__div{
             height: 100%;
             

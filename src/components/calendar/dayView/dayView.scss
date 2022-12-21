@@ -4,7 +4,7 @@
     padding-top: 1.5rem;
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: $bodyHeight;   
     display: grid;
     grid-template-columns: 1fr 20fr;
     background-color: white;
