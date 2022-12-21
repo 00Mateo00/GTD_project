@@ -49,6 +49,7 @@ export const DayView = () => {
 
   const [hoursPointer, setHoursPointer] = useState(dayjs().hour() * 60);
   const [minutesPointer, setMinutesPointer] = useState(dayjs().minute());
+  const [hourClicked, setHourClicked] = useState({timeStart: "00:00", timeEnd: "00:00"})
 
   useEffect(() => {
     const events = filteredCalendarEvents.filter(
@@ -57,7 +58,7 @@ export const DayView = () => {
     setDayEvents(events);
   }, [filteredCalendarEvents, daySelected]);
 
-  const hours = [...Array(24).keys()];
+  const hoursArray = [...Array(24).keys()];
 
   const styles = {
     gridRowStart: hoursPointer + minutesPointer,
@@ -78,14 +79,14 @@ export const DayView = () => {
     <div className="times-wrapper">
       <div className="aside-hours-wrapper">
         <div className="aside-hours hours-grid">
-          {hours.map((e, i) => i < 23 && <div key={i}>{i + 1}</div>)}
+          {hoursArray.map((e, i) => i < 23 && <div key={i}>{i + 1}</div>)}
         </div>
       </div>
       <div className="time-table hours-grid">
-        {hours.map((e, i) => (
+        {hoursArray.map((e, i) => (
           <div
             onClick={() => {
-              console.log(i)
+              setHourClicked({timeStart: i, timeEnd: i+1})
               setOnShowModal("/Calendar");
             }}
             className={`hour-block number-${i}`}

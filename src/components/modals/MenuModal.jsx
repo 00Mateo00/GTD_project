@@ -7,7 +7,7 @@ import "./menuModal.scss";
 
 const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
 
-export const MenuModal = ({ selected, setSelected, dispatchCall, hourClicked }) => {
+export const MenuModal = ({ selected, setSelected, dispatchCall, hourClicked={timeStart: "00:00", timeEnd: "00:00"}}) => {
   const {
     daySelected,
     onShowModal,
@@ -44,7 +44,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall, hourClicked }) 
   const hoursTemp =
     selected && selected.time
       ? { timeStart: selected.time.timeStart, timeEnd: selected.time.timeEnd }
-      : { timeStart: "00:00", timeEnd: "00:00" };
+      : hourClicked;
 
   const [hours, setHours] = useState(hoursTemp);
 
