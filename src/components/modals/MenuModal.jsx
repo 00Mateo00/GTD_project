@@ -11,7 +11,7 @@ export const MenuModal = ({
   selected,
   setSelected,
   dispatchCall,
-  hourClicked = { timeStart: "00:00", timeEnd: "00:00" },
+  hourClicked = "0",
 }) => {
   const {
     daySelected,

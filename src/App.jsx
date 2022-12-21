@@ -9,8 +9,6 @@ import { SomdayDumper } from "./components/SomedayDumper/SomdayDumper";
 import { Header } from "./components/headers/Header";
 import { DayView } from "./components/calendar/dayView/DayView";
 
-/* TODO:
-make the EventModal window dragable */
 
 function App() {
 
