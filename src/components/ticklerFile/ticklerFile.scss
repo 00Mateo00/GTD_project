@@ -40,16 +40,6 @@
             grid-gap: 1rem;
             color: $secondary-light;
             overflow-y: auto;
-            .tickler-day-wrapper{
-                min-height: 10rem;
-                border-right: 1px solid #5c3dff;
-                border-bottom: 1px solid #5c3dff;
-                .day-wrapper__header{
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-            }
         }
     }
 }
