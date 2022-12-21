@@ -41,6 +41,13 @@ export const MenuModal = ({ selected, setSelected, dispatchCall, hourClicked }) 
     selected && selected.time ? selected.time.timeEnd : "00:00"
   );
 
+  const hoursTemp =
+    selected && selected.time
+      ? { timeStart: selected.time.timeStart, timeEnd: selected.time.timeEnd }
+      : { timeStart: "00:00", timeEnd: "00:00" };
+
+  const [hours, setHours] = useState(hoursTemp);
+
   const [subTasks, setSubTasks] = useState(
     selected && selected.subtasks
       ? selected.subtasks
