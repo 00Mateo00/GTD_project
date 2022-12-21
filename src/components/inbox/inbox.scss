@@ -35,9 +35,9 @@
         
         .calendar-dayView{
             overflow-y: auto;
-            border-radius: 0.5rem;
-            border: 1px solid black;
             .times-wrapper{
+                border-radius: 0.5rem;
+                border: 1px solid black;
                 padding-top: 0;
                 position: relative;
                 @include barStyles();

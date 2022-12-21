@@ -19,7 +19,8 @@ function App() {
       <Header/>
       <Routes>
         <Route path='/Inbox' element={<Inbox/>}/>
-        <Route path='/Calendar/*' element={<Calendar/>}/>
+        <Route path='/Calendar' element={<Calendar/>}/>
+        <Route path="/Calendar/DayView" element={<DayView/>} />
         <Route path='/Tickler-File/*' element={<TicklerFile/>}/>
         <Route path='/Actionable-List' element={<ActionableList/>}/>
         <Route path='/Ideas-Dumper' element={<SomdayDumper/>}/>

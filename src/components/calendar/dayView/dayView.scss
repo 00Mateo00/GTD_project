@@ -54,11 +54,10 @@
             grid-template-rows: repeat(96,1fr);
             pointer-events:none;
             .day-event{
-                margin-left: 0.2rem;
-                margin-right: 0.4rem;
                 display: grid;
                 grid-template-columns: 1fr 10fr;
                 padding: 0.5rem;
+                pointer-events: all;
                 .times{
                     height: 100%;
                     display: flex;
@@ -85,11 +84,29 @@
         .time-line-wrapper{
             grid-template-rows: repeat(1440,1fr);
             pointer-events:none;
-            div{
+            .line{
                 position: relative;
+                height: 0px;
                 z-index: 10;
-                border-radius: 2px;
-                border-top: 2px solid plum;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                &::before{
+                    content: "";
+                    position: absolute;
+                    top: -5px;
+                    left: -10px;
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 100%;
+                    background-color: plum;
+                }
+                &::after{
+                    content: "";
+                    width: 100%;
+                    height: 2px;
+                    background-color: plum;
+                }
             }
         }
     }

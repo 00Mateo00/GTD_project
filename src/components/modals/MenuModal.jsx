@@ -7,7 +7,12 @@ import "./menuModal.scss";
 
 const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
 
-export const MenuModal = ({ selected, setSelected, dispatchCall, hourClicked={timeStart: "00:00", timeEnd: "00:00"}}) => {
+export const MenuModal = ({
+  selected,
+  setSelected,
+  dispatchCall,
+  hourClicked = { timeStart: "00:00", timeEnd: "00:00" },
+}) => {
   const {
     daySelected,
     onShowModal,
@@ -24,7 +29,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall, hourClicked={ti
   const [description, setDescription] = useState(
     selected ? selected.description : ""
   );
-  const [date, setDate] = useState(selected? selected.day:dayjs());
+  const [date, setDate] = useState(selected ? selected.day : dayjs());
 
   const [selectedLabel, setSelectedLabel] = useState(
     selected
@@ -32,26 +37,21 @@ export const MenuModal = ({ selected, setSelected, dispatchCall, hourClicked={ti
       : labelsClasses[0]
   );
 
-
-
-  const [timeStart, setTimeStart] = useState(
-    selected && selected.time ? selected.time.timeStart : "00:00"
-  );
-  const [timeEnd, setTimeEnd] = useState(
-    selected && selected.time ? selected.time.timeEnd : "00:00"
-  );
-
-  const hoursTemp =
-    selected && selected.time
+  const hoursTemp = () => {
+    return selected && selected.time
       ? { timeStart: selected.time.timeStart, timeEnd: selected.time.timeEnd }
-      : hourClicked;
+      : {
+          timeStart: handleTimeForm(`${hourClicked}`),
+          timeEnd: handleTimeForm(`${hourClicked + 1}`),
+        };
+  };
 
   const [hours, setHours] = useState(hoursTemp);
 
   const [subTasks, setSubTasks] = useState(
     selected && selected.subtasks
       ? selected.subtasks
-      : [{ action: "", checked: 0, id:0}]
+      : [{ action: "", checked: 0, id: 0 }]
   );
 
   const [error, setError] = useState(false);
@@ -102,7 +102,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall, hourClicked={ti
       origin: onShowModal,
       checked: 0,
       day: daySelected.valueOf(),
-      time: { timeStart, timeEnd },
+      time: hours,
       subtasks: subTasks,
     };
 
@@ -118,8 +118,8 @@ export const MenuModal = ({ selected, setSelected, dispatchCall, hourClicked={ti
         break;
       case "/Calendar":
         EVENT.day = daySelected.valueOf();
-        EVENT.time = { timeStart, timeEnd };
-        if (!timeStart || !timeEnd) {
+        EVENT.time = hours;
+        if (!hours.timeStart || !hours.timeEnd) {
           tempError =
             "hours must be smaller than 24 and minutes smaller than 60";
           setError(tempError);
@@ -127,10 +127,10 @@ export const MenuModal = ({ selected, setSelected, dispatchCall, hourClicked={ti
         }
 
         const thisTimeStart = parseInt(
-          timeStart.match(/\d/g).toString().replace(/,/g, "")
+          hours.timeStart.match(/\d/g).toString().replace(/,/g, "")
         );
         const thisTimeEnd = parseInt(
-          timeEnd.match(/\d/g).toString().replace(/,/g, "")
+          hours.timeEnd.match(/\d/g).toString().replace(/,/g, "")
         );
 
         if (thisTimeStart > thisTimeEnd || thisTimeStart === thisTimeEnd) {
@@ -161,7 +161,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall, hourClicked={ti
           tempError = "there is another appointment at this time";
           setError(tempError);
         } else {
-          if (window.location.pathname === "/Inbox")
+          if (window.location.pathname === "/Inbox" || window.location.pathname === "/Calendar/DayView")
             tempError = window.location.pathname;
           dispatchCallCalendarEvent({
             type:
@@ -226,11 +226,10 @@ export const MenuModal = ({ selected, setSelected, dispatchCall, hourClicked={ti
           });
       }
       clear();
-    } else if (tempError === "/Inbox") {
+    } else if (tempError === "/Inbox" || tempError === "/Calendar/DayView") {
       clear();
     }
   }
-
 
   return (
     <div
@@ -296,21 +295,37 @@ export const MenuModal = ({ selected, setSelected, dispatchCall, hourClicked={ti
                     <div className="time" onClick={() => setError(false)}>
                       <input
                         type="text"
-                        value={timeStart}
-                        onChange={(e) => setTimeStart(e.target.value)}
+                        value={hours.timeStart}
+                        onChange={(e) =>
+                          setHours({
+                            timeStart: e.target.value,
+                            timeEnd: hours.timeEnd,
+                          })
+                        }
                         onBlur={(e) => {
                           const formated = handleTimeForm(e.target.value);
-                          setTimeStart(formated);
+                          setHours({
+                            timeStart: formated,
+                            timeEnd: hours.timeEnd,
+                          });
                         }}
                       ></input>
                       -
                       <input
                         type="text"
-                        value={timeEnd}
-                        onChange={(e) => setTimeEnd(e.target.value)}
+                        value={hours.timeEnd}
+                        onChange={(e) =>
+                          setHours({
+                            timeStart: hours.timeStart,
+                            timeEnd: e.target.value,
+                          })
+                        }
                         onBlur={(e) => {
                           const formated = handleTimeForm(e.target.value);
-                          setTimeEnd(formated);
+                          setHours({
+                            timeStart: hours.timeStart,
+                            timeEnd: formated,
+                          });
                         }}
                       ></input>
                     </div>
@@ -331,56 +346,65 @@ export const MenuModal = ({ selected, setSelected, dispatchCall, hourClicked={ti
                 </div>
               )}
 
-              {(onShowModal === "/Actionable-List" || (selected && selected.origin==="/Inbox")) && (
+              {(onShowModal === "/Actionable-List" ||
+                (selected && selected.origin === "/Inbox")) && (
                 <div className="actions-wrapper">
                   <h3>Actions:</h3>
                   <div className="actions">
                     <p>{error}</p>
-                    {subTasks.sort((a, b) => a.id - b.id).map((e, i) => {
-                      return (
-                        <div key={i} className="input-wrapper">
-                          <input
-                            type="text"
-                            required={i === 0 ? true : false}
-                            className="action"
-                            value={subTasks[i].action}
-                            onChange={(e) =>
-                              setSubTasks([
-                                ...subTasks.map((el, indx) =>
-                                  indx === i
-                                    ? { action: e.target.value, checked: 0, id:el.id}
-                                    : el
-                                ),
-                              ])
-                            }
-                            onBlur={() => setError(false)}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => {
-                              subTasks.length > 1
-                                ? setSubTasks([
-                                    ...subTasks.filter(
-                                      (el, indx) => indx !== i
-                                    )
-                                  ])
-                                : setError("there should be at least 1 action");
-                            }}
-                          >
-                            <span className="material-symbols-outlined">
-                              delete
-                            </span>
-                          </button>
-                        </div>
-                      );
-                    })}
+                    {subTasks
+                      .sort((a, b) => a.id - b.id)
+                      .map((e, i) => {
+                        return (
+                          <div key={i} className="input-wrapper">
+                            <input
+                              type="text"
+                              required={i === 0 ? true : false}
+                              className="action"
+                              value={subTasks[i].action}
+                              onChange={(e) =>
+                                setSubTasks([
+                                  ...subTasks.map((el, indx) =>
+                                    indx === i
+                                      ? {
+                                          action: e.target.value,
+                                          checked: 0,
+                                          id: el.id,
+                                        }
+                                      : el
+                                  ),
+                                ])
+                              }
+                              onBlur={() => setError(false)}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                subTasks.length > 1
+                                  ? setSubTasks([
+                                      ...subTasks.filter(
+                                        (el, indx) => indx !== i
+                                      ),
+                                    ])
+                                  : setError(
+                                      "there should be at least 1 action"
+                                    );
+                              }}
+                            >
+                              <span className="material-symbols-outlined">
+                                delete
+                              </span>
+                            </button>
+                          </div>
+                        );
+                      })}
                     <div className="add-action-wrapper">
                       <button
                         type="button"
                         onClick={() => {
                           setSubTasks([
                             ...subTasks,
-                            { action: "", checked: 0, id:dayjs().valueOf()},
+                            { action: "", checked: 0, id: dayjs().valueOf() },
                           ]);
                         }}
                         className="add-action"

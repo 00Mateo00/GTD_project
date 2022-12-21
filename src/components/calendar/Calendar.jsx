@@ -4,14 +4,11 @@ import { DayView } from "./dayView/DayView";
 import utils from "../../utils/utils";
 import "./calendar.scss";
 import { MenuModal } from "../modals/MenuModal";
-import { Day
- } from "./day/Day";
-import { Route, Routes } from "react-router-dom";
+import { Day } from "./day/Day";
 export const Calendar = () => {
   const {
     monthIndex,
     onShowModal,
-    showDayView,
     selectedCalendarEvent,
     setSelectedCalendarEvent,
     dispatchCallCalendarEvent,
@@ -42,9 +39,6 @@ export const Calendar = () => {
           dispatchCall={dispatchCallCalendarEvent}
         />
       )}
-      <Routes>
-        <Route path="DayView" element={<DayView/>} />
-      </Routes>
       
       <div className="calendar-body flex flex-col">
         <div className="calendar__div flex flex-1">

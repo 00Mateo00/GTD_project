@@ -101,8 +101,7 @@ export const Header = () => {
       
 
       <Routes>
-        <Route path="/Calendar" element={<CalendarHeader />} />
-        <Route path="/CalendarDayView" element={<CalendarHeader />} />
+        <Route path="/Calendar/*" element={<CalendarHeader />} />
         <Route path="/Tickler-File" element={<TicklerFileHeader />} />
         <Route path="/Inbox" element={<InboxHeader/>} />
         
