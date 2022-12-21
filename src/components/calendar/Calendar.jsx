@@ -6,6 +6,7 @@ import "./calendar.scss";
 import { MenuModal } from "../modals/MenuModal";
 import { Day
  } from "./day/Day";
+import { Route, Routes } from "react-router-dom";
 export const Calendar = () => {
   const {
     monthIndex,
@@ -34,14 +35,17 @@ export const Calendar = () => {
 
   return (
     <div className="calendar-body__wrapper">
-      {showDayView && <DayView />}
-      {onShowModal && (
+    {onShowModal && (
         <MenuModal
           selected={selectedCalendarEvent}
           setSelected={setSelectedCalendarEvent}
           dispatchCall={dispatchCallCalendarEvent}
         />
       )}
+      <Routes>
+        <Route path="DayView" element={<DayView/>} />
+      </Routes>
+      
       <div className="calendar-body flex flex-col">
         <div className="calendar__div flex flex-1">
           <div className="days-month-wrapper">

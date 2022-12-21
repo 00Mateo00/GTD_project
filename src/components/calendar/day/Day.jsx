@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import "./day.scss";
 import GlobalContext from "../../../context/GlobalContext";
+import { Link } from "react-router-dom";
 
 export const Day = ({ day }) => {
   const [dayEvents, setDayEvents] = useState([]);
@@ -67,7 +68,8 @@ export const Day = ({ day }) => {
           }}
           className={`days-numbers ${getCurrentDayClassName()}`}
         >
-          {day.format("DD")}
+        <Link to="DayView">{day.format("DD")}</Link>
+          
         </p>
       </header>
       <div className="dayEvents-wrapper">

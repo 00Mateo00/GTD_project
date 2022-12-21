@@ -7,6 +7,7 @@ import { TicklerFile } from "./components/ticklerFile/TicklerFile";
 import { ActionableList } from "./components/ActionableList/ActionableList";
 import { SomdayDumper } from "./components/SomedayDumper/SomdayDumper";
 import { Header } from "./components/headers/Header";
+import { DayView } from "./components/calendar/dayView/DayView";
 
 /* TODO:
 make the EventModal window dragable */
@@ -18,8 +19,8 @@ function App() {
       <Header/>
       <Routes>
         <Route path='/Inbox' element={<Inbox/>}/>
-        <Route path='/Calendar' element={<Calendar/>}/>
-        <Route path='/Tickler-File' element={<TicklerFile/>}/>
+        <Route path='/Calendar/*' element={<Calendar/>}/>
+        <Route path='/Tickler-File/*' element={<TicklerFile/>}/>
         <Route path='/Actionable-List' element={<ActionableList/>}/>
         <Route path='/Ideas-Dumper' element={<SomdayDumper/>}/>
         <Route path='/' element={ <Navigate to="/Inbox" /> }/>
