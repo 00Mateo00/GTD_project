@@ -18,6 +18,7 @@ export const ActionableList = () => {
 
   const AllActionables = filteredActionableTODOS
     .sort((a, b) => b.id - a.id)
+    .sort((a, b) => a.checked - b.checked)
     .map((e, i) => (
       <div
         onClick={() => {
@@ -59,19 +60,23 @@ export const ActionableList = () => {
             <div className="card__title">
               <div>{e.title}</div>
             </div>
-            <div className="card__description actionables__description">{e.description}</div>
+            <div className="card__description actionables__description">
+              <p>{e.description}</p>
+            </div>
             <div className="actions-wrapper">
-              <h3>ACTIONS:</h3>
+              <h4>ACTIONS:</h4>
               <div className="actions">
-                {e.subtasks.map((el, i) => (
+                {e.subtasks.sort((a, b) => a.id -  b.id).sort((a, b) => a.checked - b.checked).map((el, i) => (
                   <button
                     onClick={(prop) => {
                       prop.stopPropagation();
-                      handleChecked(e,dispatchCallActionableTODO,i)
+                      handleChecked(e, dispatchCallActionableTODO, i);
                     }}
                     key={i}
                   >
-                    <p className={`${el.checked===1?"done":"due"}`}>- {el.action}</p>
+                    <p className={`${el.checked === 1 ? "done" : "due"}`}>
+                      - {el.action}
+                    </p>
                   </button>
                 ))}
               </div>
@@ -99,9 +104,7 @@ export const ActionableList = () => {
                 <li onClick={() => setOnShowModal("/Tickler-File")}>
                   TICKLER FILE
                 </li>
-                <li onClick={() => setOnShowModal("/Someday-Dumper")}>
-                  Dumper
-                </li>
+                <li onClick={() => setOnShowModal("/Ideas-Dumper")}>Dumper</li>
               </ul>
             </div>
           </div>
@@ -116,19 +119,7 @@ export const ActionableList = () => {
       }}
       className="wrapper"
     >
-      <div className="grid-container">
-        {AllActionables}
-        <div className="add-button">
-          <div className="button-wrapper">
-            <button
-              onClick={() => setOnShowModal("/Actionable-List")}
-              className="button"
-            >
-              <span className="material-symbols-outlined">add</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      <div className="grid-container">{AllActionables}</div>
       {/* {onShowModal && onShowModal !=="default" && <MenuModal/>} */}
       {onShowModal && (
         <MenuModal

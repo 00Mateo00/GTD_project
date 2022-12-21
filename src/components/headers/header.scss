@@ -1,5 +1,7 @@
 @import '../../utils/utils.scss';
 
+$transition: left 0.25s ease-in-out;
+
 .header{
     display: grid;
     grid-template-columns: 1fr 3fr 6fr;
@@ -12,7 +14,7 @@
         position: relative;
         list-style:none;
         margin:0;
-        padding-left: 1.5rem;
+        padding-left: 0.5rem;
 
         .menu-button{
             span{
@@ -32,7 +34,7 @@
             height: calc(100vh - $headerHeight);
             background:#eee;
             padding: 0.5rem;
-            transition: left 0.5s ease-in-out;
+            transition: $transition;
 
             ul{
                 display: grid;
@@ -61,7 +63,7 @@
 
         .onShow{
             left: 0;
-            transition: left 0.5s ease-in-out;
+            transition: $transition;
         }
 
     }
@@ -70,35 +72,30 @@
         display: flex;
         .header__button{
             margin: 0 0.5rem;
-            width: 8rem;
+            width: 5rem;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 0.5rem;
             border-width: 1px;
-            border-radius: 9999px;
+            border-radius: 100px;
             padding: 0.5rem;
         }
 
         .CreateEventButton-button{
-            width: 8rem;
+            width: fit-content;
             display: flex;
             align-items: center;
+            justify-content: center;
             padding: 0.5rem;
             border-width: 1px;
-            border-radius: 9999px;
+            border-radius: 100%;
             padding: 0.5rem;
         
             .add{
-                height: 1.75rem;
-                width: 1.75rem;
-                display: flex;
-                align-items: center;
-            }
-        
-            .create{
-                padding-right: 1.75rem;
-                padding-left: 0.75rem;
+                height: fit-content;
+                width: fit-content;
+                text-align: center;
             }
         }
 
@@ -140,4 +137,12 @@
         color: $secondary-light;
     }
 
+}
+
+.InboxHeader{
+    grid-template-columns: 1fr 9fr;
+    .inbox-date{
+        display: flex;
+        justify-content: center;
+    }
 }

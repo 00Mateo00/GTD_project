@@ -7,14 +7,10 @@ export const InboxHeader = () => {
     const [todaysDate, setTodaysDate] = useState(dayjs().format("ddd DD MMMM YYYY"))
 
     function onFocus() {
-        console.log("onFocus");
         setTodaysDate(dayjs().format("ddd DD MMMM YYYY"))
         if (parseInt(dayjs().format("HH"))<23) {
-            console.log("smaller than 23");
             return
         }
-
-        console.log("greater than 23");
         setTimeout(() => {
             setTodaysDate(dayjs().format("ddd DD MMMM YYYY"))
         }, (3601-(parseInt(dayjs().format("mm")))*60 )*1000 );

@@ -52,19 +52,39 @@
 
         .events-wrapper{
             grid-template-rows: repeat(96,1fr);
+            pointer-events:none;
             .day-event{
                 margin-left: 0.2rem;
                 margin-right: 0.4rem;
-                display: flex;
+                display: grid;
+                grid-template-columns: 1fr 10fr;
                 padding: 0.5rem;
+                .times{
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
+                }
                 .info{
-                    padding-left: 1rem;
+                    height: 100%;
+                    div{
+                        width: 100%;
+                        &:nth-child(1){
+                            h3{
+                                width: 100%;
+                                text-align: center;
+                                border-bottom: black 1px solid;
+
+                            }
+                        }
+                    }
                 }
             }
         }
     
         .time-line-wrapper{
             grid-template-rows: repeat(1440,1fr);
+            pointer-events:none;
             div{
                 position: relative;
                 z-index: 10;

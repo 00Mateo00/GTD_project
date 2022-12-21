@@ -7,7 +7,7 @@ import "./menuModal.scss";
 
 const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
 
-export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
+export const MenuModal = ({ selected, setSelected, dispatchCall, hourClicked }) => {
   const {
     daySelected,
     onShowModal,
@@ -19,9 +19,6 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
     dispatchCallActionableTODO,
     dispatchCallDumperTODO,
   } = useContext(GlobalContext);
-
-  console.log(onShowModal);
-  console.log(daySelected);
 
   const [title, setTitle] = useState(selected ? selected.title : "");
   const [description, setDescription] = useState(
@@ -35,6 +32,8 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
       : labelsClasses[0]
   );
 
+
+
   const [timeStart, setTimeStart] = useState(
     selected && selected.time ? selected.time.timeStart : "00:00"
   );
@@ -45,7 +44,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
   const [subTasks, setSubTasks] = useState(
     selected && selected.subtasks
       ? selected.subtasks
-      : [{ action: "", checked: 0 }]
+      : [{ action: "", checked: 0, id:0}]
   );
 
   const [error, setError] = useState(false);
@@ -198,7 +197,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
           });
         }
         break;
-      case "/Someday-Dumper":
+      case "/Ideas-Dumper":
         dispatchCallDumperTODO({
           type:
             selected && window.location.pathname === onShowModal
@@ -225,7 +224,6 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
     }
   }
 
-  console.log(selected);
 
   return (
     <div
@@ -331,7 +329,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
                   <h3>Actions:</h3>
                   <div className="actions">
                     <p>{error}</p>
-                    {subTasks.map((e, i) => {
+                    {subTasks.sort((a, b) => a.id - b.id).map((e, i) => {
                       return (
                         <div key={i} className="input-wrapper">
                           <input
@@ -343,7 +341,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
                               setSubTasks([
                                 ...subTasks.map((el, indx) =>
                                   indx === i
-                                    ? { action: e.target.value, checked: 0 }
+                                    ? { action: e.target.value, checked: 0, id:el.id}
                                     : el
                                 ),
                               ])
@@ -357,7 +355,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
                                 ? setSubTasks([
                                     ...subTasks.filter(
                                       (el, indx) => indx !== i
-                                    ),
+                                    )
                                   ])
                                 : setError("there should be at least 1 action");
                             }}
@@ -375,7 +373,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
                         onClick={() => {
                           setSubTasks([
                             ...subTasks,
-                            { action: "", checked: 0 },
+                            { action: "", checked: 0, id:dayjs().valueOf()},
                           ]);
                         }}
                         className="add-action"

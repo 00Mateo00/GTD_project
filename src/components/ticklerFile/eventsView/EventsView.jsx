@@ -12,27 +12,29 @@ export const EventsView = () => {
     setSelectedTicklerFileEvent,
     setOnShowModal,
     dispatchCallTicklerFileEvent,
-    handleChecked
+    handleChecked,
   } = useContext(GlobalContext);
-
 
   const [dayEvents, setDayEvents] = useState([]);
 
   useEffect(() => {
-    const events = filteredTicklerFileEvents.filter(
-      (e) => dayjs(e.day).format("DD-MM-YY") === daySelected.format("DD-MM-YY")
-    );
+    const events = filteredTicklerFileEvents
+      .filter(
+        (e) =>
+          dayjs(e.day).format("DD-MM-YY") === daySelected.format("DD-MM-YY")
+      )
+      .sort((a, b) => b.id - a.id)
+      .sort((a, b) => a.checked - b.checked);
     setDayEvents(events);
   }, [filteredTicklerFileEvents, daySelected]);
 
   function handlePrev() {
-    setDaySelected(dayjs(daySelected).subtract(1, "day"))
+    setDaySelected(dayjs(daySelected).subtract(1, "day"));
   }
 
   function handleNext() {
-    setDaySelected(dayjs(daySelected).add(1, "day"))
+    setDaySelected(dayjs(daySelected).add(1, "day"));
   }
-
 
   return (
     <div onClick={() => setShowDayView(false)} className="eventsView-wrapper">
@@ -42,21 +44,21 @@ export const EventsView = () => {
           <div className="navigation-arrows">
             <div className="navigation-arrows__container">
               <button onClick={handlePrev}>
-                <span className="arrow material-symbols-outlined">chevron_left</span>
+                <span className="arrow material-symbols-outlined">
+                  chevron_left
+                </span>
               </button>
 
-              <div className="">
-                {dayjs(daySelected).format( "DD")}
-              </div>
+              <div className="">{dayjs(daySelected).format("DD")}</div>
 
               <button onClick={handleNext}>
-                <span className="arrow material-symbols-outlined">chevron_right</span>
+                <span className="arrow material-symbols-outlined">
+                  chevron_right
+                </span>
               </button>
             </div>
-            <h2>
-              {daySelected.format( "MMMM YYYY")}
-            </h2>
-            </div>
+            <h2>{daySelected.format("MMMM YYYY")}</h2>
+          </div>
           <div>
             <button onClick={() => setShowDayView(false)}>
               <span className="material-symbols-outlined">close</span>
@@ -64,7 +66,7 @@ export const EventsView = () => {
           </div>
         </header>
         <div className="eventsView_body">
-          {dayEvents.sort((a,b)=> a.id - b.id).sort((a,b)=> a.checked - b.checked).map((e, i) => {
+          {dayEvents.map((e, i) => {
             return (
               <div
                 key={i}
@@ -76,19 +78,21 @@ export const EventsView = () => {
               >
                 <div className="card__header">
                   <button
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    handleChecked(e,dispatchCallTicklerFileEvent);
-                  }}
-                  className="actionable-card__check"
-                >
-                  <span className="material-symbols-outlined">
-                    {e.checked === 0? "check_box_outline_blank" : "select_check_box"}
-                  </span>
-                </button>
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleChecked(e, dispatchCallTicklerFileEvent);
+                    }}
+                    className="actionable-card__check"
+                  >
+                    <span className="material-symbols-outlined">
+                      {e.checked === 0
+                        ? "check_box_outline_blank"
+                        : "select_check_box"}
+                    </span>
+                  </button>
                 </div>
                 <div className="card__title">
-                    <p>{e.title}</p>
+                  <p>{e.title}</p>
                 </div>
                 <div className="card__description">
                   <p>{e.description}</p>
@@ -96,7 +100,11 @@ export const EventsView = () => {
               </div>
             );
           })}
-          <div className="addButton-wrapper"><button onClick={()=> setOnShowModal("/Tickler-File")}><span className="material-symbols-outlined">add</span></button></div>
+          <div className="addButton-wrapper">
+            <button onClick={() => setOnShowModal("/Tickler-File")}>
+              <span className="material-symbols-outlined">add</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

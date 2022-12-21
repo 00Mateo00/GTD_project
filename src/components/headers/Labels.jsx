@@ -48,7 +48,7 @@ export const Labels = ({ labels, updateLabel, setState }) => {
 
       break;
 
-    case "/Someday-Dumper":
+    case "/Ideas-Dumper":
       labels = dumperLabels;
       updateLabel = updateDumperLabels;
       setState = setDumperState;

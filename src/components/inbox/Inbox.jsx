@@ -13,22 +13,21 @@ export const Inbox = () => {
   const [dayEvents, setDayEvents] = useState([]);
   const [eventType, setEventType] = useState(false);
 
-  const ref = useRef(null)
+  const ref = useRef(null);
 
   useEffect(() => {
-    ref.current.addEventListener('wheel', handleWheel, { passive: false });
-  }, [])
+    ref.current.addEventListener("wheel", handleWheel, { passive: false });
+  }, []);
 
   function handleWheel(e) {
-    e.preventDefault()
-    if(e.deltaY===0) return;
-    
+    e.preventDefault();
+    if (e.deltaY === 0) return;
+
     ref.current.scrollTo({
       left: ref.current.scrollLeft + e.deltaY,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   }
-  
 
   const {
     onShowModal,
@@ -54,40 +53,42 @@ export const Inbox = () => {
   } = useContext(GlobalContext);
 
   useEffect(() => {
-    const events = filteredTicklerFileEvents.filter(
-      (e) => dayjs(e.day).format("DD-MM-YY") === dayjs().format("DD-MM-YY")
-    );
+    const events = filteredTicklerFileEvents
+      .filter(
+        (e) => dayjs(e.day).format("DD-MM-YY") === dayjs().format("DD-MM-YY")
+      )
+      .sort((a, b) => b.id - a.id)
+      .sort((a, b) => a.checked - b.checked);
     setDayEvents(events);
   }, [filteredTicklerFileEvents]);
 
-  const TicklerEvents = dayEvents
-    .sort((a, b) => a.id - b.id)
-    .map((e, i) => (
-      <div
-        key={i}
-        onClick={() => {
-          setSelectedTicklerFileEvent(e);
-          setOnShowModal("/Tickler-File");
+  const TicklerEvents = dayEvents.map((e, i) => (
+    <div
+      key={i}
+      onClick={() => {
+        setSelectedTicklerFileEvent(e);
+        setOnShowModal("/Tickler-File");
+      }}
+      className={`${e.label} day-event`}
+    >
+      <span>{e.title}</span>
+      <button
+        onClick={(event) => {
+          event.stopPropagation();
+          handleChecked(e, dispatchCallTicklerFileEvent);
         }}
-        className={`${e.label} day-event`}
+        className="tickler-event__check"
       >
-        <span>{e.title}</span>
-        <button
-          onClick={(event) => {
-            event.stopPropagation();
-            handleChecked(e, dispatchCallTicklerFileEvent);
-          }}
-          className="tickler-event__check"
-        >
-          <span className="material-symbols-outlined">
-            {e.checked === 0 ? "check_box_outline_blank" : "select_check_box"}
-          </span>
-        </button>
-      </div>
-    ));
+        <span className="material-symbols-outlined">
+          {e.checked === 0 ? "check_box_outline_blank" : "select_check_box"}
+        </span>
+      </button>
+    </div>
+  ));
 
   const InobxTodos = filteredInboxEvents
     .sort((a, b) => b.id - a.id)
+    .sort((a, b) => a.checked - b.checked)
     .map((e, i) => (
       <div
         onClick={() => {
@@ -127,16 +128,18 @@ export const Inbox = () => {
             <div className="card__title">
               <div>{e.title}</div>
             </div>
-            <div className="card__description actionables__description">{e.description}</div>
+            <div className="card__description actionables__description">
+              <p>{e.description}</p>
+            </div>
             {e.subtasks && (
               <div className="actions-wrapper">
-                <h3>ACTIONS:</h3>
+                <h4>ACTIONS:</h4>
                 <div className="actions">
-                  {e.subtasks.map((el, i) => (
+                  {e.subtasks.sort((a, b) => a.id -  b.id).sort((a, b) => a.checked - b.checked).map((el, i) => (
                     <button
                       onClick={(prop) => {
                         prop.stopPropagation();
-                        handleChecked(e, dispatchCallActionableTODO, i);
+                        handleChecked(e, dispatchCallInboxEvent, i);
                       }}
                       key={i}
                     >
@@ -173,8 +176,8 @@ export const Inbox = () => {
                 <li onClick={() => setOnShowModal("/Actionable-List")}>
                   ACTIONABLE
                 </li>
-                <li onClick={() => setOnShowModal("/Someday-Dumper")}>
-                  SOMEDAY / DUMPER
+                <li onClick={() => setOnShowModal("/Ideas-Dumper")}>
+                  IDEAS DUMPER
                 </li>
               </ul>
             </div>
@@ -218,10 +221,7 @@ export const Inbox = () => {
         >
           <DayView />
         </div>
-        <div
-          className="grid-container"
-          onClick={() => setEventType("Inbox")}
-        >
+        <div className="grid-container" onClick={() => setEventType("Inbox")}>
           {InobxTodos}
         </div>
       </div>

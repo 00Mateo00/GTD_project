@@ -21,7 +21,7 @@ function App() {
         <Route path='/Calendar' element={<Calendar/>}/>
         <Route path='/Tickler-File' element={<TicklerFile/>}/>
         <Route path='/Actionable-List' element={<ActionableList/>}/>
-        <Route path='/Someday-Dumper' element={<SomdayDumper/>}/>
+        <Route path='/Ideas-Dumper' element={<SomdayDumper/>}/>
         <Route path='/' element={ <Navigate to="/Inbox" /> }/>
       </Routes>
     </div>

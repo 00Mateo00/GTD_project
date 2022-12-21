@@ -1,10 +1,11 @@
 @import '../../utils/utils.scss';
 
 .calendar-body__wrapper{
-    position: relative;    
+    position: relative; 
+
     
     .calendar-body{
-        height: calc(100vh - 72px);        
+        height: $bodyHeight;        
         .calendar__div{
             height: 100%;
             

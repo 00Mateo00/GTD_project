@@ -49,7 +49,7 @@ export const Day = ({ day }) => {
           }}
           className={`${e.label} day-event`}
         >
-          <span>{e.time.timeStart}</span> <span>{e.title}</span>
+        <h3>{e.title}</h3>
         </div>
       )
   );

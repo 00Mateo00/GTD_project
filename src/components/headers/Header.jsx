@@ -26,7 +26,7 @@ export const Header = () => {
   } = useContext(GlobalContext);
 
   return (
-    <header className="header">
+    <header className={`header ${window.location.pathname === "/Inbox"? "InboxHeader":""}`}>
       <div
         onClick={() =>
           showMenu === "mainMenu" ? setShowMenu(false) : setShowMenu("mainMenu")
@@ -41,19 +41,19 @@ export const Header = () => {
         >
           <ul>
             <li onClick={resetAll}>
-              <Link to="/Inbox">inbox</Link>
+              <Link to="/Inbox">Inbox</Link>
             </li>
             <li onClick={resetAll}>
               <Link to="/Calendar">Calendar</Link>
             </li>
             <li onClick={resetAll}>
-              <Link to="/Tickler-File">tickler file</Link>
+              <Link to="/Tickler-File">Tickler file</Link>
             </li>
             <li onClick={resetAll}>
               <Link to="/Actionable-List">Actionable list</Link>
             </li>
             <li onClick={resetAll}>
-              <Link to="/Someday-Dumper">Someday / dumper</Link>
+              <Link to="/Ideas-Dumper">Ideas dumper</Link>
             </li>
           </ul>
           <div>
@@ -65,24 +65,24 @@ export const Header = () => {
         </div>
       </div>
 
-      <div className="buttons">
-        <Routes>
-          <Route
-            path="/Calendar"
-            element={showDayView && (
-            <button
-              onClick={() => setShowDayView(false)}
-              className={"go-back"}
-              alt="go back"
-            >
-              <span className="material-symbols-outlined">arrow_back</span>
-            </button>
-          )}
-          />
+      {(window.location.pathname!=="/Inbox"&&
+      <>
+        <div className="buttons">
+          <Routes>
+            <Route
+              path="/Calendar"
+              element={showDayView && (
+              <button
+                onClick={() => setShowDayView(false)}
+                className={"go-back"}
+                alt="go back"
+              >
+                <span className="material-symbols-outlined">arrow_back</span>
+              </button>
+            )}
+            />
 
-        </Routes>
-        
-        {(window.location.pathname!=="/Inbox"&&<>
+          </Routes>
           <button
             onClick={handleReset}
             className="header__button shadow-md hover:shadow-2xl"
@@ -92,13 +92,13 @@ export const Header = () => {
           <button
             onClick={() => setOnShowModal(window.location.pathname)}
             alt="create_event"
-            className="CreateEventButton-button shadow-md hover:shadow-2xl" //tailwind
+            className="CreateEventButton-button"
           >
             <span className="add material-symbols-outlined">add</span>
-            <span className="create">Create</span>
           </button>
-        </>)}
-      </div>
+        </div>
+      </>)}
+      
 
       <Routes>
         <Route path="/Calendar" element={<CalendarHeader />} />
