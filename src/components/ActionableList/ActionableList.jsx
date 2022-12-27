@@ -102,12 +102,12 @@ export const ActionableList = () => {
                 </button>
               </header>
               <ul className="menu-body">
-                <li onClick={() => setOnShowModal("/Inbox")}>INBOX</li>
-                <li onClick={() => setOnShowModal("/Calendar")}>CALENDAR</li>
-                <li onClick={() => setOnShowModal("/Tickler-File")}>
+                <li onClick={() => setOnShowModal({type:type.update, to:to.Inbox})}>INBOX</li>
+                <li onClick={() => setOnShowModal({type:type.push, to:to.Calendar})}>CALENDAR</li>
+                <li onClick={() => setOnShowModal({type:type.push, to:to.Tickler})}>
                   TICKLER FILE
                 </li>
-                <li onClick={() => setOnShowModal("/Ideas-Dumper")}>Dumper</li>
+                <li onClick={() => setOnShowModal({type:type.push, to:to.Dumper})}>Dumper</li>
               </ul>
             </div>
           </div>
@@ -122,7 +122,6 @@ export const ActionableList = () => {
       }}
       className="wrapper"
     >
-      <div className="grid-container">{AllActionables}</div>
       {onShowModal && (
         <MenuModal
           selected={selectedActionableTODO}
@@ -130,6 +129,7 @@ export const ActionableList = () => {
           dispatchCall={dispatchCallActionableTODO}
         />
       )}
+      <div className="grid-container">{AllActionables}</div>
     </div>
   );
 };

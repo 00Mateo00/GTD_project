@@ -170,12 +170,7 @@ export const MenuModal = ({
           )
             tempError = window.location.pathname;
           dispatchCallCalendarEvent({
-            type:type
-              /* selected &&
-              (window.location.pathname === onShowModal ||
-                window.location.pathname === tempError)
-                ? "update"
-                : "push" */,
+            type:type,
             payload: EVENT,
           });
         }
@@ -186,12 +181,7 @@ export const MenuModal = ({
         if (window.location.pathname === "/Inbox")
           tempError = window.location.pathname;
         dispatchCallTicklerFileEvent({
-          type:type
-           /*  selected &&
-            (window.location.pathname === onShowModal ||
-              window.location.pathname === tempError)
-              ? "update"
-              : "push" */,
+          type:type,
           payload: EVENT,
         });
         break;
@@ -209,10 +199,7 @@ export const MenuModal = ({
         break;
       case Ideas:
         dispatchCallDumperTODO({
-          type:type
-            /* selected && window.location.pathname === onShowModal
-              ? "update"
-              : "push" */,
+          type:type,
           payload: EVENT,
         });
         break;
