@@ -1,34 +1,25 @@
 import React, { useContext } from "react";
-import { Routes } from "react-router-dom";
 import GlobalContext from "../../context/GlobalContext";
 import "./labels.scss";
 
 export const Labels = ({ labels, updateLabel, setState }) => {
   const {
-    inboxLabels,
     calendarLabels,
     ticklerFileLabels,
     actionableLabels,
     dumperLabels,
-    updateInboxLabel,
     updateCalendarLabel,
     updateTicklerFileLabel,
     updateActionableLabels,
     updateDumperLabels,
 
-    setInboxState,
     setCalendarState,
     setTicklerFileState,
     setActionableState,
     setDumperState,
   } = useContext(GlobalContext);
   switch (window.location.pathname) {
-    case "/Inbox":
-      labels = inboxLabels;
-      updateLabel = updateInboxLabel;
-      setState = setInboxState;
-      break;
-
+   
     case "/Calendar":
       labels = calendarLabels;
       updateLabel = updateCalendarLabel;

@@ -52,21 +52,15 @@ export default function ContextWrapper(props) {
     dayjs(dayjs().format("YYYY-MM-DD"))
   );
   const [showDayView, setShowDayView] = useState(false);
-
-  const [selectedInboxEvent, setSelectedInboxEvent] = useState(null);
   const [selectedCalendarEvent, setSelectedCalendarEvent] = useState(null);
   const [selectedTicklerFileEvent, setSelectedTicklerFileEvent] =
     useState(null);
   const [selectedDumperTODO, setSelectedDumperTODO] = useState(null);
   const [selectedActionableTODO, setSelectedActionableTODO] = useState(null);
-
-  const [inboxLabels, setInboxLabels] = useState([]);
   const [calendarLabels, setCalendarLabels] = useState([]);
   const [ticklerFileLabels, setTicklerFileLabels] = useState([]);
   const [dumperLabels, setDumperLabels] = useState([]);
   const [actionableLabels, setActionableLabels] = useState([]);
-
-  const [inboxState, setInboxState] = useState(false);
   const [calendarState, setCalendarState] = useState(false);
   const [ticklerFileState, setTicklerFileState] = useState(false);
   const [dumperState, setDumperState] = useState(false);
@@ -85,12 +79,6 @@ export default function ContextWrapper(props) {
     setOnShowModal(false);
     setShowMenu(false);
   }
-
-  const [savedInboxEvents, dispatchCallInboxEvent] = useReducer(
-    reducer,
-    [],
-    () => initEvents("savedInboxEvents")
-  );
 
   const [savedCalendarEvents, dispatchCallCalendarEvent] = useReducer(
     reducer,
@@ -116,16 +104,7 @@ export default function ContextWrapper(props) {
     () => initEvents("savedActionableTODOS")
   );
 
-  const filteredInboxEvents = useMemo(() => {
-    return savedInboxEvents.filter(
-      (e) =>
-        e.checked === (inboxState === false ? e.checked : inboxState) &&
-        inboxLabels
-          .filter((lbl) => lbl.checked)
-          .map((lbl) => lbl.label)
-          .includes(e.label)
-    );
-  });
+
 
   const filteredCalendarEvents = useMemo(() => {
     return savedCalendarEvents.filter(
@@ -173,9 +152,6 @@ export default function ContextWrapper(props) {
     );
   });
 
-  useEffect(() => {
-    localStorage.setItem("savedInboxEvents", JSON.stringify(savedInboxEvents));
-  }, [savedInboxEvents]);
 
   useEffect(() => {
     localStorage.setItem(
@@ -202,17 +178,6 @@ export default function ContextWrapper(props) {
     );
   }, [savedActionableTODOS]);
 
-  useEffect(() => {
-    setInboxLabels((prevLabels) => {
-      return [...new Set(savedInboxEvents.map((i) => i.label))].map((label) => {
-        const currentLabel = prevLabels.find((i) => i.label === label);
-        return {
-          label,
-          checked: currentLabel ? currentLabel.checked : true,
-        };
-      });
-    });
-  }, [savedInboxEvents]);
 
   useEffect(() => {
     setCalendarLabels((prevLabels) => {
@@ -268,11 +233,7 @@ export default function ContextWrapper(props) {
     });
   }, [savedActionableTODOS]);
 
-  function updateInboxLabel(label) {
-    setInboxLabels(
-      inboxLabels.map((lbl) => (lbl.label === label.label ? label : lbl))
-    );
-  }
+
 
   function updateCalendarLabel(label) {
     setCalendarLabels(
@@ -325,29 +286,24 @@ export default function ContextWrapper(props) {
         onShowModal,
         setOnShowModal,
 
-        savedInboxEvents,
         savedCalendarEvents,
         savedTicklerFileEvents,
         savedActionableTODOS,
         savedDumperTODOS,
-        dispatchCallInboxEvent,
         dispatchCallCalendarEvent,
         dispatchCallTicklerFileEvent,
         dispatchCallActionableTODO,
         dispatchCallDumperTODO,
 
-        selectedInboxEvent,
         selectedCalendarEvent,
         selectedTicklerFileEvent,
         selectedActionableTODO,
         selectedDumperTODO,
-        setSelectedInboxEvent,
         setSelectedCalendarEvent,
         setSelectedTicklerFileEvent,
         setSelectedActionableTODO,
         setSelectedDumperTODO,
 
-        inboxLabels,
         calendarLabels,
         ticklerFileLabels,
         actionableLabels,
@@ -357,19 +313,16 @@ export default function ContextWrapper(props) {
         setActionableLabels,
         setDumperLabels,
 
-        updateInboxLabel,
         updateCalendarLabel,
         updateTicklerFileLabel,
         updateActionableLabels,
         updateDumperLabels,
 
-        filteredInboxEvents,
         filteredCalendarEvents,
         filteredTicklerFileEvents,
         filteredDumperTODOS,
         filteredActionableTODOS,
 
-        setInboxState,
         setCalendarState,
         setTicklerFileState,
         setActionableState,
