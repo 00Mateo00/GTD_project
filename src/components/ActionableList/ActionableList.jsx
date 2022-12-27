@@ -5,6 +5,7 @@ import { MenuModal } from "../modals/MenuModal";
 
 export const ActionableList = () => {
   const {
+    ModalParams,
     filteredActionableTODOS,
     onShowModal,
     setOnShowModal,
@@ -16,6 +17,8 @@ export const ActionableList = () => {
     handleChecked,
   } = useContext(GlobalContext);
 
+  const {type,to} = ModalParams;
+
   const AllActionables = filteredActionableTODOS
     .sort((a, b) => b.id - a.id)
     .sort((a, b) => a.checked - b.checked)
@@ -23,7 +26,7 @@ export const ActionableList = () => {
       <div
         onClick={() => {
           setSelectedActionableTODO(e);
-          setOnShowModal("/Actionable-List");
+          setOnShowModal({ type: type.update, from:to.Actionables, to: to.Actionables});;
         }}
         className={"card" + ` ${e.label}`}
         key={i}
@@ -120,7 +123,6 @@ export const ActionableList = () => {
       className="wrapper"
     >
       <div className="grid-container">{AllActionables}</div>
-      {/* {onShowModal && onShowModal !=="default" && <MenuModal/>} */}
       {onShowModal && (
         <MenuModal
           selected={selectedActionableTODO}
