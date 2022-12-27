@@ -103,25 +103,24 @@ export const MenuModal = ({
       description,
       label: selectedLabel,
       id: selected ? selected.id : Date.now(),
-      origin: onShowModal,
+      origin: onShowModal.to,
       checked: 0,
-      day: daySelected.valueOf(),
+      day: date.valueOf(),
       time: hours,
       subtasks: subTasks,
     };
 
-    switch (onShowModal) {
-      case "/Inbox":
+    console.log(EVENT.subtasks.length)
+
+    switch (to) {
+      case Inbox:
         dispatchCallInboxEvent({
-          type:
-            selected && window.location.pathname === onShowModal
-              ? "update"
-              : "push",
+          type:type,
           payload: EVENT,
         });
         break;
-      case "/Calendar":
-        EVENT.day = daySelected.valueOf();
+      case Calendar:
+        EVENT.day = date.valueOf();
         EVENT.time = hours;
         if (!hours.timeStart || !hours.timeEnd) {
           tempError =
@@ -165,55 +164,55 @@ export const MenuModal = ({
           tempError = "there is another appointment at this time";
           setError(tempError);
         } else {
-          if (window.location.pathname === "/Inbox" || window.location.pathname === "/Calendar/DayView")
+          if (
+            window.location.pathname === "/Inbox" ||
+            window.location.pathname === "/Calendar/DayView"
+          )
             tempError = window.location.pathname;
           dispatchCallCalendarEvent({
-            type:
-              selected &&
+            type:type
+              /* selected &&
               (window.location.pathname === onShowModal ||
                 window.location.pathname === tempError)
                 ? "update"
-                : "push",
+                : "push" */,
             payload: EVENT,
           });
         }
 
         break;
-      case "/Tickler-File":
-        EVENT.day = daySelected.valueOf();
+      case Tickler:
+        EVENT.day = date.valueOf();
         if (window.location.pathname === "/Inbox")
           tempError = window.location.pathname;
         dispatchCallTicklerFileEvent({
-          type:
-            selected &&
+          type:type
+           /*  selected &&
             (window.location.pathname === onShowModal ||
               window.location.pathname === tempError)
               ? "update"
-              : "push",
+              : "push" */,
           payload: EVENT,
         });
         break;
-      case "/Actionable-List":
+      case Actionables:
         EVENT.subtasks = subTasks.filter((e) => Boolean(e.action));
         if (EVENT.subtasks.length < 1) {
           tempError = "there should be at least 1 action";
           setError(tempError);
         } else {
           dispatchCallActionableTODO({
-            type:
-              selected && window.location.pathname === onShowModal
-                ? "update"
-                : "push",
+            type:type,
             payload: EVENT,
           });
         }
         break;
-      case "/Ideas-Dumper":
+      case Ideas:
         dispatchCallDumperTODO({
-          type:
-            selected && window.location.pathname === onShowModal
+          type:type
+            /* selected && window.location.pathname === onShowModal
               ? "update"
-              : "push",
+              : "push" */,
           payload: EVENT,
         });
         break;
@@ -222,7 +221,7 @@ export const MenuModal = ({
     }
 
     if (!tempError) {
-      if (window.location.pathname != onShowModal) {
+      if (from != to) {
         selected &&
           dispatchCall({
             type: "delete",
@@ -230,10 +229,11 @@ export const MenuModal = ({
           });
       }
       clear();
-    } else if (tempError === "/Inbox" || tempError === "/Calendar/DayView") {
+    } /* else if (tempError === "/Inbox" || tempError === "/Calendar/DayView") {
       clear();
-    }
+    } */
   }
+
 
   return (
     <div
