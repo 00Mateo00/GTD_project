@@ -10,7 +10,33 @@ import { DayView } from "../calendar/dayView/DayView";
 import { useRef } from "react";
 
 export const Inbox = () => {
-  const [dayEvents, setDayEvents] = useState([]);
+  const {
+    ModalParams,
+    onShowModal,
+    setOnShowModal,
+    handleChecked,
+    showMenu,
+    setShowMenu,
+
+    selectedCalendarEvent,
+    setSelectedCalendarEvent,
+    dispatchCallCalendarEvent,
+
+    filteredTicklerFileEvents,
+    selectedTicklerFileEvent,
+    setSelectedTicklerFileEvent,
+    dispatchCallTicklerFileEvent,
+
+    filteredActionableTODOS,
+    selectedActionableTODO,
+    setSelectedActionableTODO,
+    dispatchCallActionableTODO,
+  } = useContext(GlobalContext);
+
+  const {type,to} = ModalParams;
+
+  const [ticklerEventsForToday, setTicklerEventsForToday] = useState([]);
+  const [actionablesEventsForToday, setActionablesEventsForToday] = useState([])
   const [eventType, setEventType] = useState(false);
 
   const ref = useRef(null);
@@ -29,24 +55,6 @@ export const Inbox = () => {
     });
   }
 
-  const {
-    onShowModal,
-    setOnShowModal,
-    handleChecked,
-    showMenu,
-    setShowMenu,
-
-    selectedCalendarEvent,
-    setSelectedCalendarEvent,
-    dispatchCallCalendarEvent,
-
-    filteredTicklerFileEvents,
-    selectedTicklerFileEvent,
-    setSelectedTicklerFileEvent,
-    dispatchCallTicklerFileEvent,
-    dispatchCallActionableTODO,
-  } = useContext(GlobalContext);
-
   useEffect(() => {
     const events = filteredTicklerFileEvents
       .filter(
@@ -54,15 +62,49 @@ export const Inbox = () => {
       )
       .sort((a, b) => b.id - a.id)
       .sort((a, b) => a.checked - b.checked);
-    setDayEvents(events);
+    setTicklerEventsForToday(events);
   }, [filteredTicklerFileEvents]);
 
-  const TicklerEvents = dayEvents.map((e, i) => (
+  useEffect(() => {
+    const events = filteredActionableTODOS
+      .filter(
+        (e) => dayjs(e.day).format("DD-MM-YY") === dayjs().format("DD-MM-YY")
+      )
+      .sort((a, b) => b.id - a.id)
+      .sort((a, b) => a.checked - b.checked);
+    setActionablesEventsForToday(events);
+  }, [filteredActionableTODOS]);
+
+  const TicklerEvents = ticklerEventsForToday.map((e, i) => (
     <div
       key={i}
       onClick={() => {
         setSelectedTicklerFileEvent(e);
-        setOnShowModal("/Tickler-File");
+        setOnShowModal({type:type.update, from:to.Tickler, to: to.Tickler});
+      }}
+      className={`${e.label} day-event`}
+    >
+      <span>{e.title}</span>
+      <button
+        onClick={(event) => {
+          event.stopPropagation();
+          handleChecked(e, dispatchCallTicklerFileEvent);
+        }}
+        className="tickler-event__check"
+      >
+        <span className="material-symbols-outlined">
+          {e.checked === 0 ? "check_box_outline_blank" : "select_check_box"}
+        </span>
+      </button>
+    </div>
+  ));
+
+  const ActionableEvents = actionablesEventsForToday.map((e, i) => (
+    <div
+      key={i}
+      onClick={() => {
+        setSelectedTicklerFileEvent(e);
+        setOnShowModal({type:type.update, from:to.Actionables, to: to.Actionables});
       }}
       className={`${e.label} day-event`}
     >
@@ -114,6 +156,7 @@ export const Inbox = () => {
           <DayView />
         </div>
         <div className="grid-container" onClick={() => setEventType("Inbox")}>
+          
         </div>
       </div>
     </div>

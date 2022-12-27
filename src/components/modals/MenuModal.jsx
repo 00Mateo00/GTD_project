@@ -268,6 +268,13 @@ export const MenuModal = ({
                 onChange={(e) => setDescription(e.target.value)}
               ></input>
 
+              {to==Inbox &&(
+                <>
+                  <button onClick={()=>setDate(dayjs())}>today</button>
+                  <button onClick={()=>setDate(dayjs().add(1,'day'))}>tomorrow</button>
+                </>
+              )}
+
               {to === Calendar && (
                 <>
                   <div className="date-selector">
