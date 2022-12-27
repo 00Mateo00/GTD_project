@@ -43,7 +43,8 @@ export const Day = ({ day }) => {
       i < 3 && (
         <div
           key={i}
-          onClick={() => {
+          onClick={(el) => {
+            el.stopPropagation()
             setSelectedCalendarEvent(e);
             setOnShowModal({type: type.update, from:to.Calendar, to:to.Calendar});
           }}
@@ -86,7 +87,8 @@ export const Day = ({ day }) => {
                   setShowDayView(true);
                 }}
               >
-                ...
+               <Link to="DayView">...</Link>
+                
               </div>
             </>
           )}

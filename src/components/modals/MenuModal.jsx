@@ -26,14 +26,6 @@ export const MenuModal = ({
     dispatchCallDumperTODO,
   } = useContext(GlobalContext);
 
-  function checkSelected() {/* 
-    console.log({selected});
-    console.log({daySelected});
-    console.log(new Date(selected.day)); */
-    if(selected) return new Date(selected.day);
-    if(daySelected) return daySelected;
-    return dayjs()
-  }
 
   const {Inbox,Calendar,Tickler,Actionables,Ideas} = ModalParams.to;
   const {type,from, to} = onShowModal;
@@ -42,9 +34,7 @@ export const MenuModal = ({
   const [description, setDescription] = useState(
     selected ? selected.description : ""
   );
-  const [date, setDate] = useState(checkSelected());
-
-  console.log(date);
+  const [date, setDate] = useState(daySelected? daySelected:dayjs());
 
   const [selectedLabel, setSelectedLabel] = useState(
     selected
@@ -121,8 +111,6 @@ export const MenuModal = ({
       subtasks: subTasks,
     };
 
-    console.log(EVENT.subtasks.length)
-
     switch (to) {
       case Inbox:
         dispatchCallInboxEvent({
@@ -175,11 +163,6 @@ export const MenuModal = ({
           tempError = "there is another appointment at this time";
           setError(tempError);
         } else {
-          if (
-            window.location.pathname === "/Inbox" ||
-            window.location.pathname === "/Calendar/DayView"
-          )
-            tempError = window.location.pathname;
           dispatchCallCalendarEvent({
             type:type,
             payload: EVENT,
@@ -189,8 +172,6 @@ export const MenuModal = ({
         break;
       case Tickler:
         EVENT.day = date.valueOf();
-        if (window.location.pathname === "/Inbox")
-          tempError = window.location.pathname;
         dispatchCallTicklerFileEvent({
           type:type,
           payload: EVENT,
