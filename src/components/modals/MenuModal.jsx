@@ -7,11 +7,7 @@ import "./menuModal.scss";
 
 const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
 
-export const MenuModal = ({
-  selected,
-  setSelected,
-  dispatchCall,
-}) => {
+export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
   const {
     hourClicked,
     ModalParams,
@@ -24,18 +20,28 @@ export const MenuModal = ({
     dispatchCallActionableTODO,
     dispatchCallDumperTODO,
   } = useContext(GlobalContext);
-  
-
 
   const { Inbox, Calendar, Tickler, Actionables, Ideas } = ModalParams.to;
   const { type, from, to } = onShowModal;
 
   function HandleDate() {
-    if (selected) return selected.day;
-    if (daySelected) return daySelected;
-    if (to === Inbox) return false;
+    if (selected) {
+      console.log("selected");
+      return selected.day;
+    }
+    if (daySelected) {
+      console.log("Dayselected");
+      return daySelected;
+    }
+    if (to === Inbox) {
+      console.log("Inbox");
+      return false;
+    }
+    console.log("none");
     return dayjs();
   }
+
+  console.log(HandleDate());
 
   const [title, setTitle] = useState(selected ? selected.title : "");
   const [description, setDescription] = useState(
@@ -103,7 +109,6 @@ export const MenuModal = ({
       .minute(minute)
       .format("mm")}`;
   }
-
 
   function handleSubmit() {
     let tempError = error;
@@ -212,7 +217,7 @@ export const MenuModal = ({
         break;
     }
     if (!tempError) {
-      if (from != to && to !=Inbox) {
+      if (from != to && to != Inbox) {
         selected &&
           dispatchCall({
             type: "delete",
@@ -226,7 +231,7 @@ export const MenuModal = ({
   return (
     <div
       onClick={(prop) => {
-        prop.stopPropagation()
+        prop.stopPropagation();
         setOnShowModal(false);
         clear();
       }}
@@ -293,7 +298,9 @@ export const MenuModal = ({
                     type="button"
                     onClick={() => {
                       setError(false);
-                      setDate(dayjs(dayjs().format("YYYY-MM-DD")).add(1, "day"));
+                      setDate(
+                        dayjs(dayjs().format("YYYY-MM-DD")).add(1, "day")
+                      );
                     }}
                   >
                     tomorrow
