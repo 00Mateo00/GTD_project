@@ -45,7 +45,7 @@ export const Day = ({ day }) => {
           key={i}
           onClick={() => {
             setSelectedCalendarEvent(e);
-            setOnShowModal({type: type, from:to.Calendar, to:to.Calendar});
+            setOnShowModal({type: type.update, from:to.Calendar, to:to.Calendar});
           }}
           className={`${e.label} day-event`}
         >
@@ -57,7 +57,7 @@ export const Day = ({ day }) => {
   return (
     <div onClick={() => {
       setDaySelected(day);
-      setOnShowModal({type: type, from:to.Calendar, to:to.Calendar});
+      setOnShowModal({type: type.push, from:to.Calendar, to:to.Calendar});
     }} className="day-wrapper">
       <header className="day-wrapper__header">
         <p

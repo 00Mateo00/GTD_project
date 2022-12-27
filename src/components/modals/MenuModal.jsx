@@ -26,6 +26,15 @@ export const MenuModal = ({
     dispatchCallDumperTODO,
   } = useContext(GlobalContext);
 
+  function checkSelected() {/* 
+    console.log({selected});
+    console.log({daySelected});
+    console.log(new Date(selected.day)); */
+    if(selected) return new Date(selected.day);
+    if(daySelected) return daySelected;
+    return dayjs()
+  }
+
   const {Inbox,Calendar,Tickler,Actionables,Ideas} = ModalParams.to;
   const {type,from, to} = onShowModal;
 
@@ -33,7 +42,9 @@ export const MenuModal = ({
   const [description, setDescription] = useState(
     selected ? selected.description : ""
   );
-  const [date, setDate] = useState(selected ? selected.day : dayjs());
+  const [date, setDate] = useState(checkSelected());
+
+  console.log(date);
 
   const [selectedLabel, setSelectedLabel] = useState(
     selected
