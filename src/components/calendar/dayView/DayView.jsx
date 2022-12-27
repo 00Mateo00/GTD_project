@@ -113,6 +113,14 @@ export const DayView = () => {
 
   return (
     <>
+      {onShowModal && (
+        <MenuModal
+          selected={selectedCalendarEvent}
+          setSelected={setSelectedCalendarEvent}
+          dispatchCall={dispatchCallCalendarEvent}
+          hourClicked={hourClicked}
+        />
+      )}
       <div className="times-wrapper">
         <div className="aside-hours-wrapper">
           <div className="aside-hours hours-grid">
@@ -139,14 +147,6 @@ export const DayView = () => {
           </div>
         </div>
       </div>
-      {onShowModal && (
-        <MenuModal
-          selected={selectedCalendarEvent}
-          setSelected={setSelectedCalendarEvent}
-          dispatchCall={dispatchCallCalendarEvent}
-          hourClicked={hourClicked}
-        />
-      )}
     </>
   );
 };
