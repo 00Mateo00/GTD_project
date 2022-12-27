@@ -23,7 +23,7 @@ export const Calendar = () => {
   const monthTable = currentMonth.map((row, i) => {
     numberOfRow++;
     return (
-      <div className="month-table-wrapper flex-1 grid  grid-cols-7" key={i} >
+      <div className="month-table-wrapper flex-1 grid  grid-cols-7" key={i}>
         {row.map((day, idx) => (
           <Day day={day} key={idx} />
         ))}
@@ -33,14 +33,6 @@ export const Calendar = () => {
 
   return (
     <div className="calendar-body__wrapper">
-    {onShowModal && (
-        <MenuModal
-          selected={selectedCalendarEvent}
-          setSelected={setSelectedCalendarEvent}
-          dispatchCall={dispatchCallCalendarEvent}
-        />
-      )}
-      
       <div className="calendar-body flex flex-col">
         <div className="calendar__div flex flex-1">
           <div className="days-month-wrapper">
@@ -64,6 +56,13 @@ export const Calendar = () => {
           </div>
         </div>
       </div>
+      {onShowModal && (
+        <MenuModal
+          selected={selectedCalendarEvent}
+          setSelected={setSelectedCalendarEvent}
+          dispatchCall={dispatchCallCalendarEvent}
+        />
+      )}
     </div>
   );
 };

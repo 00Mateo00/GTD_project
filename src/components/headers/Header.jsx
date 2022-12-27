@@ -17,20 +17,14 @@ export const Header = () => {
     showMenu,
     setShowMenu,
     setOnShowModal,
-    setTicklerFileState,
     showDayView,
     setShowDayView,
-    calendarLabels,
-    ticklerFileLabels,
-    actionableLabels,
-    dumperLabels,
   } = useContext(GlobalContext);
   const {push} = ModalParams.type;
 
 
   function UrlToModal(path) {
     const ListName = path.replace("DayView","").replaceAll("/","")
-    console.log(ListName);
     const to =  ModalParams.to.hasOwnProperty(ListName)&&ModalParams.to[ListName]
     setOnShowModal({type:push,from:to, to:to})
   }
@@ -60,7 +54,7 @@ export const Header = () => {
               <Link to="/Tickler">Tickler file</Link>
             </li>
             <li onClick={resetAll}>
-              <Link to="/Actionable">Actionable list</Link>
+              <Link to="/Actionables">Actionable list</Link>
             </li>
             <li onClick={resetAll}>
               <Link to="/Ideas">Ideas dumper</Link>

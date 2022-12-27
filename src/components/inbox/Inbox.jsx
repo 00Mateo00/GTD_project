@@ -33,10 +33,13 @@ export const Inbox = () => {
     dispatchCallActionableTODO,
   } = useContext(GlobalContext);
 
-  const {type,to} = ModalParams;
+  const { type, to } = ModalParams;
 
   const [ticklerEventsForToday, setTicklerEventsForToday] = useState([]);
-  const [actionablesEventsForToday, setActionablesEventsForToday] = useState([])
+  const [actionablesEventsForToday, setActionablesEventsForToday] = useState(
+    []
+  );
+  
   const [eventType, setEventType] = useState(false);
 
   const ref = useRef(null);
@@ -80,7 +83,7 @@ export const Inbox = () => {
       key={i}
       onClick={() => {
         setSelectedTicklerFileEvent(e);
-        setOnShowModal({type:type.update, from:to.Tickler, to: to.Tickler});
+        setOnShowModal({ type: type.update, from: to.Tickler, to: to.Tickler });
       }}
       className={`${e.label} day-event`}
     >
@@ -101,46 +104,113 @@ export const Inbox = () => {
 
   const ActionableEvents = actionablesEventsForToday.map((e, i) => (
     <div
-      key={i}
       onClick={() => {
-        setSelectedTicklerFileEvent(e);
-        setOnShowModal({type:type.update, from:to.Actionables, to: to.Actionables});
+        setSelectedActionableTODO(e);
+        setOnShowModal({
+          type: type.update,
+          from: to.Actionables,
+          to: to.Actionables,
+        });
       }}
-      className={`${e.label} day-event`}
+      className={"card" + ` ${e.label}`}
+      key={i}
     >
-      <span>{e.title}</span>
-      <button
-        onClick={(event) => {
-          event.stopPropagation();
-          handleChecked(e, dispatchCallTicklerFileEvent);
-        }}
-        className="tickler-event__check"
-      >
-        <span className="material-symbols-outlined">
-          {e.checked === 0 ? "check_box_outline_blank" : "select_check_box"}
-        </span>
-      </button>
+      {showMenu !== i && (
+        <>
+          <div onClick={() => {}} className="card__header">
+            <button className="actionable-card__button">
+              <span
+                onClick={(prop) => {
+                  prop.stopPropagation();
+                  setSelectedActionableTODO(e);
+                  setShowMenu(i);
+                }}
+                className="material-symbols-outlined"
+              >
+                menu
+              </span>
+            </button>
+            <button
+              onClick={(event) => {
+                event.stopPropagation();
+                handleChecked(e, dispatchCallActionableTODO);
+              }}
+              className="actionable-card__check"
+            >
+              <span className="material-symbols-outlined">
+                {e.checked === 0
+                  ? "check_box_outline_blank"
+                  : "select_check_box"}
+              </span>
+            </button>
+          </div>
+          <div className="card__title">
+            <div>{e.title}</div>
+          </div>
+          <div className="card__description actionables__description">
+            <p>{e.description}</p>
+          </div>
+          <div className="actions-wrapper">
+            <h4>ACTIONS:</h4>
+            <div className="actions">
+              {e.subtasks
+                .sort((a, b) => a.id - b.id)
+                .sort((a, b) => a.checked - b.checked)
+                .map((el, i) => (
+                  <button
+                    onClick={(prop) => {
+                      prop.stopPropagation();
+                      handleChecked(e, dispatchCallActionableTODO, i);
+                    }}
+                    key={i}
+                  >
+                    <p className={`${el.checked === 1 ? "done" : "due"}`}>
+                      - {el.action}
+                    </p>
+                  </button>
+                ))}
+            </div>
+          </div>
+        </>
+      )}
+
+      {showMenu === i && (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowMenu(false);
+          }}
+          className="menu-wrapper"
+        >
+          <div className="menu">
+            <header className="header-wrapper">
+              <button onClick={() => setShowMenu(false)}>
+                <span className="material-symbols-outlined">arrow_back</span>
+              </button>
+            </header>
+            <ul className="menu-body">
+              <li
+                onClick={() =>
+                  setOnShowModal({
+                    type: type.update,
+                    from: to.Actionables,
+                    to: to.Inbox,
+                  })
+                }
+              >
+                INBOX
+              </li>
+            </ul>
+          </div>
+        </div>
+      )}
     </div>
   ));
 
+
+
   return (
     <div className="inbox-wrapper">
-      {onShowModal && (
-        <MenuModal
-          selected={
-            (eventType === "Tickler" && selectedTicklerFileEvent) ||
-            (eventType === "Calendar" && selectedCalendarEvent)
-          }
-          setSelected={
-            (eventType === "Tickler" && setSelectedTicklerFileEvent) ||
-            (eventType === "Calendar" && setSelectedCalendarEvent)
-          }
-          dispatchCall={
-            (eventType === "Tickler" && dispatchCallTicklerFileEvent) ||
-            (eventType === "Calendar" && dispatchCallCalendarEvent)
-          }
-        />
-      )}
       <div
         className="inbox-Tickler"
         ref={ref}
@@ -155,12 +225,32 @@ export const Inbox = () => {
         >
           <DayView />
         </div>
-        <div className="grid-container" onClick={() => setEventType("Inbox")}>
-          
+        <div
+          className="grid-container"
+          onClick={() => setEventType("Actionables")}
+        >
+          {ActionableEvents}
         </div>
       </div>
+      {onShowModal && (
+        <MenuModal
+          selected={
+            (eventType === "Actionables" && selectedActionableTODO) ||
+            (eventType === "Tickler" && selectedTicklerFileEvent) ||
+            (eventType === "Calendar" && selectedCalendarEvent)
+          }
+          setSelected={
+            (eventType === "Actionables" && setSelectedActionableTODO) ||
+            (eventType === "Tickler" && setSelectedTicklerFileEvent) ||
+            (eventType === "Calendar" && setSelectedCalendarEvent)
+          }
+          dispatchCall={
+            (eventType === "Actionables" && dispatchCallActionableTODO) ||
+            (eventType === "Tickler" && dispatchCallTicklerFileEvent) ||
+            (eventType === "Calendar" && dispatchCallCalendarEvent)
+          }
+        />
+      )}
     </div>
   );
 };
-
-

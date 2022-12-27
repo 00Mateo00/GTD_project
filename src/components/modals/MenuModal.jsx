@@ -19,22 +19,27 @@ export const MenuModal = ({
     onShowModal,
     savedCalendarEvents,
     setOnShowModal,
-    dispatchCallInboxEvent,
     dispatchCallCalendarEvent,
     dispatchCallTicklerFileEvent,
     dispatchCallActionableTODO,
     dispatchCallDumperTODO,
   } = useContext(GlobalContext);
+  
+  console.log({hourClicked})
+  function HandleDate() {
+    if (to === Inbox) return false;
+    if (daySelected) return daySelected;
+    return dayjs();
+  }
 
-
-  const {Inbox,Calendar,Tickler,Actionables,Ideas} = ModalParams.to;
-  const {type,from, to} = onShowModal;
+  const { Inbox, Calendar, Tickler, Actionables, Ideas } = ModalParams.to;
+  const { type, from, to } = onShowModal;
 
   const [title, setTitle] = useState(selected ? selected.title : "");
   const [description, setDescription] = useState(
     selected ? selected.description : ""
   );
-  const [date, setDate] = useState(daySelected? daySelected:dayjs());
+  const [date, setDate] = useState(HandleDate());
 
   const [selectedLabel, setSelectedLabel] = useState(
     selected
@@ -97,6 +102,7 @@ export const MenuModal = ({
       .format("mm")}`;
   }
 
+
   function handleSubmit() {
     let tempError = error;
     const EVENT = {
@@ -113,8 +119,12 @@ export const MenuModal = ({
 
     switch (to) {
       case Inbox:
-        dispatchCallInboxEvent({
-          type:type,
+        if (!EVENT.day) {
+          setError("you must choose a day");
+          return;
+        }
+        dispatchCallActionableTODO({
+          type: type,
           payload: EVENT,
         });
         break;
@@ -164,7 +174,7 @@ export const MenuModal = ({
           setError(tempError);
         } else {
           dispatchCallCalendarEvent({
-            type:type,
+            type: type,
             payload: EVENT,
           });
         }
@@ -173,34 +183,34 @@ export const MenuModal = ({
       case Tickler:
         EVENT.day = date.valueOf();
         dispatchCallTicklerFileEvent({
-          type:type,
+          type: type,
           payload: EVENT,
         });
         break;
       case Actionables:
         EVENT.subtasks = subTasks.filter((e) => Boolean(e.action));
+        EVENT.day = false;
         if (EVENT.subtasks.length < 1) {
           tempError = "there should be at least 1 action";
           setError(tempError);
         } else {
           dispatchCallActionableTODO({
-            type:type,
+            type: type,
             payload: EVENT,
           });
         }
         break;
       case Ideas:
         dispatchCallDumperTODO({
-          type:type,
+          type: type,
           payload: EVENT,
         });
         break;
       default:
         break;
     }
-
     if (!tempError) {
-      if (from != to) {
+      if (from != to && to !=Inbox) {
         selected &&
           dispatchCall({
             type: "delete",
@@ -208,18 +218,15 @@ export const MenuModal = ({
           });
       }
       clear();
-    } /* else if (tempError === "/Inbox" || tempError === "/Calendar/DayView") {
-      clear();
-    } */
+    }
   }
-
 
   return (
     <div
-      onClick={() => {
+      onClick={(prop) => {
+        prop.stopPropagation()
         setOnShowModal(false);
-        setSelected(false);
-        clear()
+        clear();
       }}
       className="menuModal_wrapper"
     >
@@ -267,11 +274,28 @@ export const MenuModal = ({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               ></input>
+              {error && <p className="error">{error}</p>}
 
-              {to==Inbox &&(
+              {to == Inbox && (
                 <>
-                  <button onClick={()=>setDate(dayjs())}>today</button>
-                  <button onClick={()=>setDate(dayjs().add(1,'day'))}>tomorrow</button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setError(false);
+                      setDate(dayjs(dayjs().format("YYYY-MM-DD")));
+                    }}
+                  >
+                    today
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setError(false);
+                      setDate(dayjs(dayjs().format("YYYY-MM-DD")).add(1, "day"));
+                    }}
+                  >
+                    tomorrow
+                  </button>
                 </>
               )}
 
@@ -320,7 +344,6 @@ export const MenuModal = ({
                         }}
                       ></input>
                     </div>
-                    {error && <p className="error">{error}</p>}
                   </div>
                 </>
               )}
@@ -341,7 +364,6 @@ export const MenuModal = ({
                 <div className="actions-wrapper">
                   <h3>Actions:</h3>
                   <div className="actions">
-                    <p>{error}</p>
                     {subTasks
                       .sort((a, b) => a.id - b.id)
                       .map((e, i) => {

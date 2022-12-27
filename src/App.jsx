@@ -20,7 +20,7 @@ function App() {
         <Route path='/Calendar' element={<Calendar/>}/>
         <Route path="/Calendar/DayView" element={<DayView/>} />
         <Route path='/Tickler' element={<TicklerFile/>}/>
-        <Route path='/Actionable' element={<ActionableList/>}/>
+        <Route path='/Actionables' element={<ActionableList/>}/>
         <Route path='/Ideas' element={<SomdayDumper/>}/>
         <Route path='/' element={ <Navigate to="/Inbox" /> }/>
       </Routes>

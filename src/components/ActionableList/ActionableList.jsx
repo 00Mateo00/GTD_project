@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import React from "react";
 import { useContext } from "react";
 import GlobalContext from "../../context/GlobalContext";
@@ -19,7 +20,19 @@ export const ActionableList = () => {
 
   const {type,to} = ModalParams;
 
+  const tomorrow = dayjs(dayjs().format("YYYY-MM-DD")).add(1, "day").valueOf();
+
+  function whichDate(e) {
+    if (!e.day) return""
+    if(e.day===tomorrow) return""
+    return "missed"
+  }
+
   const AllActionables = filteredActionableTODOS
+    .filter((e)=> {
+      if(e.day===tomorrow) return e
+      if (!e.day) return e
+    })
     .sort((a, b) => b.id - a.id)
     .sort((a, b) => a.checked - b.checked)
     .map((e, i) => (
@@ -28,7 +41,7 @@ export const ActionableList = () => {
           setSelectedActionableTODO(e);
           setOnShowModal({ type: type.update, from:to.Actionables, to: to.Actionables});
         }}
-        className={"card" + ` ${e.label}`}
+        className={"card" + ` ${e.label}` + `${whichDate(e)}`}
         key={i}
       >
         {showMenu !== i && (
@@ -103,7 +116,7 @@ export const ActionableList = () => {
               </header>
               <ul className="menu-body">
                 <li onClick={() => setOnShowModal({type:type.update, from:to.Actionables, to:to.Inbox})}>INBOX</li>
-                <li onClick={() => setOnShowModal({type:type.push, from:to.Actionables, to:to.Dumper})}>DUMPER</li>
+                <li onClick={() => setOnShowModal({type:type.push, from:to.Actionables, to:to.Ideas})}>DUMPER</li>
               </ul>
             </div>
           </div>
@@ -118,6 +131,7 @@ export const ActionableList = () => {
       }}
       className="wrapper"
     >
+      <div className="grid-container">{AllActionables}</div>
       {onShowModal && (
         <MenuModal
           selected={selectedActionableTODO}
@@ -125,7 +139,6 @@ export const ActionableList = () => {
           dispatchCall={dispatchCallActionableTODO}
         />
       )}
-      <div className="grid-container">{AllActionables}</div>
     </div>
   );
 };

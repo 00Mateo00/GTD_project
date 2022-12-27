@@ -97,6 +97,7 @@ export const SomdayDumper = () => {
       }}
       className="wrapper"
     >
+      <div className="grid-container">{todos}</div>
       {onShowModal && (
         <MenuModal
           selected={selectedDumperTODO}
@@ -104,7 +105,6 @@ export const SomdayDumper = () => {
           dispatchCall={dispatchCallDumperTODO}
         />
       )}
-      <div className="grid-container">{todos}</div>
     </div>
   );
 };

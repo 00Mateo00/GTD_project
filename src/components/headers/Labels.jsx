@@ -26,20 +26,20 @@ export const Labels = ({ labels, updateLabel, setState }) => {
       setState = setCalendarState;
       break;
 
-    case "/Tickler-File":
+    case "/Tickler":
       labels = ticklerFileLabels;
       updateLabel = updateTicklerFileLabel;
       setState = setTicklerFileState;
       break;
 
-    case "/Actionable-List":
+    case "/Actionables":
       labels = actionableLabels;
       updateLabel = updateActionableLabels;
       setState = setActionableState;
 
       break;
 
-    case "/Ideas-Dumper":
+    case "/Ideas":
       labels = dumperLabels;
       updateLabel = updateDumperLabels;
       setState = setDumperState;

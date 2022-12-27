@@ -113,14 +113,6 @@ export const DayView = () => {
 
   return (
     <>
-      {onShowModal && (
-        <MenuModal
-          selected={selectedCalendarEvent}
-          setSelected={setSelectedCalendarEvent}
-          dispatchCall={dispatchCallCalendarEvent}
-          hourClicked={hourClicked}
-        />
-      )}
       <div className="times-wrapper">
         <div className="aside-hours-wrapper">
           <div className="aside-hours hours-grid">
@@ -132,6 +124,7 @@ export const DayView = () => {
             <div
               onClick={() => {
                 setHourClicked(i);
+                console.log({i})
                 setOnShowModal({type: type.push, from:to.Calendar, to:to.Calendar});
               }}
               className={`hour-block number-${i}`}
@@ -146,6 +139,14 @@ export const DayView = () => {
           </div>
         </div>
       </div>
+      {onShowModal && (
+        <MenuModal
+          selected={selectedCalendarEvent}
+          setSelected={setSelectedCalendarEvent}
+          dispatchCall={dispatchCallCalendarEvent}
+          hourClicked={hourClicked}
+        />
+      )}
     </>
   );
 };
