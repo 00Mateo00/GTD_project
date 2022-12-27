@@ -14,6 +14,7 @@ export const MenuModal = ({
   hourClicked = "0",
 }) => {
   const {
+    ModalParams,
     daySelected,
     onShowModal,
     savedCalendarEvents,
@@ -24,6 +25,9 @@ export const MenuModal = ({
     dispatchCallActionableTODO,
     dispatchCallDumperTODO,
   } = useContext(GlobalContext);
+
+  const {Inbox,Calendar,Tickler,Actionables,Ideas} = ModalParams.to;
+  const {type,from, to} = onShowModal;
 
   const [title, setTitle] = useState(selected ? selected.title : "");
   const [description, setDescription] = useState(
