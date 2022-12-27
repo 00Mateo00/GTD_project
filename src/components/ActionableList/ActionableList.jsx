@@ -103,11 +103,7 @@ export const ActionableList = () => {
               </header>
               <ul className="menu-body">
                 <li onClick={() => setOnShowModal({type:type.update, from:to.Actionables, to:to.Inbox})}>INBOX</li>
-                <li onClick={() => setOnShowModal({type:type.push, from:to.Actionables, to:to.Calendar})}>CALENDAR</li>
-                <li onClick={() => setOnShowModal({type:type.push, from:to.Actionables, to:to.Tickler})}>
-                  TICKLER FILE
-                </li>
-                <li onClick={() => setOnShowModal({type:type.push, from:to.Actionables, to:to.Dumper})}>Dumper</li>
+                <li onClick={() => setOnShowModal({type:type.push, from:to.Actionables, to:to.Dumper})}>DUMPER</li>
               </ul>
             </div>
           </div>

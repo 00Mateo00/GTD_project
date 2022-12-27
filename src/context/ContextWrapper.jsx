@@ -16,6 +16,8 @@ function reducer(state, { type, payload }) {
   }
 }
 
+
+
 function initEvents(name) {
   const storageEvents = localStorage.getItem(name);
   const parsedEvents = storageEvents ? JSON.parse(storageEvents) : [];
@@ -23,6 +25,16 @@ function initEvents(name) {
 }
 
 export default function ContextWrapper(props) {
+
+  function handleReset() {
+    setMonthIndex(
+      monthIndex === dayjs().month()
+        ? monthIndex + Math.random()
+        : dayjs().month()
+    );
+
+    showDayView && setDaySelected(dayjs())
+  }
 
   const ModalParams={
     type: { update: "update", push: "push" },
@@ -302,6 +314,7 @@ export default function ContextWrapper(props) {
     <GlobalContext.Provider
       value={{
         ModalParams,
+        handleReset,
 
         monthIndex,
         setMonthIndex,

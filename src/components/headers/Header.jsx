@@ -11,10 +11,11 @@ import { InboxHeader } from "./InboxHeader";
 
 export const Header = () => {
   const {
+    ModalParams,
+    handleReset,
     resetAll,
     showMenu,
     setShowMenu,
-    handleReset,
     setOnShowModal,
     setTicklerFileState,
     showDayView,
@@ -24,6 +25,15 @@ export const Header = () => {
     actionableLabels,
     dumperLabels,
   } = useContext(GlobalContext);
+  const {push} = ModalParams.type;
+
+
+  function UrlToModal(path) {
+    const ListName = path.replace("DayView","").replaceAll("/","")
+    console.log(ListName);
+    const to =  ModalParams.to.hasOwnProperty(ListName)&&ModalParams.to[ListName]
+    setOnShowModal({type:push,from:to, to:to})
+  }
 
   return (
     <header className={`header ${window.location.pathname === "/Inbox"? "InboxHeader":""}`}>
@@ -47,13 +57,13 @@ export const Header = () => {
               <Link to="/Calendar">Calendar</Link>
             </li>
             <li onClick={resetAll}>
-              <Link to="/Tickler-File">Tickler file</Link>
+              <Link to="/Tickler">Tickler file</Link>
             </li>
             <li onClick={resetAll}>
-              <Link to="/Actionable-List">Actionable list</Link>
+              <Link to="/Actionable">Actionable list</Link>
             </li>
             <li onClick={resetAll}>
-              <Link to="/Ideas-Dumper">Ideas dumper</Link>
+              <Link to="/Ideas">Ideas dumper</Link>
             </li>
           </ul>
           <div>
@@ -70,14 +80,14 @@ export const Header = () => {
         <div className="buttons">
           <Routes>
             <Route
-              path="/Calendar"
+              path="/Calendar/DayView"
               element={showDayView && (
               <button
                 onClick={() => setShowDayView(false)}
                 className={"go-back"}
                 alt="go back"
               >
-                <span className="material-symbols-outlined">arrow_back</span>
+                <Link to="/Calendar"><span className="material-symbols-outlined">arrow_back</span></Link>
               </button>
             )}
             />
@@ -90,7 +100,7 @@ export const Header = () => {
             Today
           </button>
           <button
-            onClick={() => setOnShowModal(window.location.pathname)}
+            onClick={() => UrlToModal(window.location.pathname)}
             alt="create_event"
             className="CreateEventButton-button"
           >
