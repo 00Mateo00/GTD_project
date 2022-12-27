@@ -6,6 +6,8 @@ import { MenuModal } from "../../modals/MenuModal";
 
 export const DayView = () => {
   const {
+    hourClicked,
+    setHourClicked,
     ModalParams,
     onShowModal,
     selectedCalendarEvent,
@@ -57,7 +59,6 @@ export const DayView = () => {
 
   const [hoursPointer, setHoursPointer] = useState(dayjs().hour() * 60);
   const [minutesPointer, setMinutesPointer] = useState(dayjs().minute());
-  const [hourClicked, setHourClicked] = useState(0);
 
   useEffect(() => {
     const events = filteredCalendarEvents.filter(
@@ -118,7 +119,6 @@ export const DayView = () => {
           selected={selectedCalendarEvent}
           setSelected={setSelectedCalendarEvent}
           dispatchCall={dispatchCallCalendarEvent}
-          hourClicked={hourClicked}
         />
       )}
       <div className="times-wrapper">

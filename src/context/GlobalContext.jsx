@@ -1,6 +1,9 @@
 import React from "react";
 
 const GlobalContext = React.createContext({
+
+  hourClicked:0,
+  setHourClicked:()=>{},
   ModalParams:{},
   handleReset:()=>{},
   monthIndex: 0,

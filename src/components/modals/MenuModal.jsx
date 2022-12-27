@@ -11,9 +11,9 @@ export const MenuModal = ({
   selected,
   setSelected,
   dispatchCall,
-  hourClicked = "0",
 }) => {
   const {
+    hourClicked,
     ModalParams,
     daySelected,
     onShowModal,
@@ -25,15 +25,17 @@ export const MenuModal = ({
     dispatchCallDumperTODO,
   } = useContext(GlobalContext);
   
-  console.log({hourClicked})
-  function HandleDate() {
-    if (to === Inbox) return false;
-    if (daySelected) return daySelected;
-    return dayjs();
-  }
+
 
   const { Inbox, Calendar, Tickler, Actionables, Ideas } = ModalParams.to;
   const { type, from, to } = onShowModal;
+
+  function HandleDate() {
+    if (selected) return selected.day;
+    if (daySelected) return daySelected;
+    if (to === Inbox) return false;
+    return dayjs();
+  }
 
   const [title, setTitle] = useState(selected ? selected.title : "");
   const [description, setDescription] = useState(
@@ -112,7 +114,7 @@ export const MenuModal = ({
       id: selected ? selected.id : Date.now(),
       origin: onShowModal.to,
       checked: 0,
-      day: date.valueOf(),
+      day: date,
       time: hours,
       subtasks: subTasks,
     };
@@ -276,7 +278,7 @@ export const MenuModal = ({
               ></input>
               {error && <p className="error">{error}</p>}
 
-              {to == Inbox && (
+              {to === Inbox && (
                 <>
                   <button
                     type="button"

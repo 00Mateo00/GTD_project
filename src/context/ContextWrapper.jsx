@@ -47,6 +47,8 @@ export default function ContextWrapper(props) {
     }
   }
 
+  const [hourClicked, setHourClicked] = useState(0);
+
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
   const [daySelected, setDaySelected] = useState(
     dayjs(dayjs().format("YYYY-MM-DD"))
@@ -274,6 +276,9 @@ export default function ContextWrapper(props) {
   return (
     <GlobalContext.Provider
       value={{
+
+        hourClicked,
+        setHourClicked,
         ModalParams,
         handleReset,
 
