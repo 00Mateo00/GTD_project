@@ -25,13 +25,13 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
   const { type, from, to } = onShowModal;
 
   function HandleDate() {
-    if (selected) {
-      console.log("selected");
-      return selected.day;
-    }
     if (daySelected) {
       console.log("Dayselected");
       return daySelected;
+    }
+    if (selected) {
+      console.log("selected");
+      return selected.day;
     }
     if (to === Inbox) {
       console.log("Inbox");
@@ -40,8 +40,6 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
     console.log("none");
     return dayjs();
   }
-
-  console.log(HandleDate());
 
   const [title, setTitle] = useState(selected ? selected.title : "");
   const [description, setDescription] = useState(

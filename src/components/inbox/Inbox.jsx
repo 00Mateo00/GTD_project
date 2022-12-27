@@ -121,6 +121,7 @@ export const Inbox = () => {
             <button className="actionable-card__button">
               <span
                 onClick={(prop) => {
+                  setEventType("Actionables")
                   prop.stopPropagation();
                   setSelectedActionableTODO(e);
                   setShowMenu(i);

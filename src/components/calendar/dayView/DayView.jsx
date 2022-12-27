@@ -93,8 +93,7 @@ export const DayView = () => {
       <div
         style={styles}
         key={i}
-        onClick={(el) => {
-          el.stopPropagation()
+        onClick={() => {
           setSelectedCalendarEvent(e);
           setOnShowModal({type: type.update, from:to.Calendar, to:to.Calendar});
         }}
