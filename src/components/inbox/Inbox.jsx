@@ -211,6 +211,25 @@ export const Inbox = () => {
 
   return (
     <div className="inbox-wrapper">
+      {onShowModal && (
+        <MenuModal
+          selected={
+            (eventType === "Actionables" && selectedActionableTODO) ||
+            (eventType === "Tickler" && selectedTicklerFileEvent) ||
+            (eventType === "Calendar" && selectedCalendarEvent)
+          }
+          setSelected={
+            (eventType === "Actionables" && setSelectedActionableTODO) ||
+            (eventType === "Tickler" && setSelectedTicklerFileEvent) ||
+            (eventType === "Calendar" && setSelectedCalendarEvent)
+          }
+          dispatchCall={
+            (eventType === "Actionables" && dispatchCallActionableTODO) ||
+            (eventType === "Tickler" && dispatchCallTicklerFileEvent) ||
+            (eventType === "Calendar" && dispatchCallCalendarEvent)
+          }
+        />
+      )}
       <div
         className="inbox-Tickler"
         ref={ref}
@@ -232,25 +251,6 @@ export const Inbox = () => {
           {ActionableEvents}
         </div>
       </div>
-      {onShowModal && (
-        <MenuModal
-          selected={
-            (eventType === "Actionables" && selectedActionableTODO) ||
-            (eventType === "Tickler" && selectedTicklerFileEvent) ||
-            (eventType === "Calendar" && selectedCalendarEvent)
-          }
-          setSelected={
-            (eventType === "Actionables" && setSelectedActionableTODO) ||
-            (eventType === "Tickler" && setSelectedTicklerFileEvent) ||
-            (eventType === "Calendar" && setSelectedCalendarEvent)
-          }
-          dispatchCall={
-            (eventType === "Actionables" && dispatchCallActionableTODO) ||
-            (eventType === "Tickler" && dispatchCallTicklerFileEvent) ||
-            (eventType === "Calendar" && dispatchCallCalendarEvent)
-          }
-        />
-      )}
     </div>
   );
 };
