@@ -23,6 +23,18 @@ function initEvents(name) {
 }
 
 export default function ContextWrapper(props) {
+
+  const ModalParams={
+    type: { update: "update", push: "push" },
+    to: {
+      Actionables: "Actionables",
+      Calendar: "Calendar",
+      Tickler: "Tickler",
+      Ideas: "Ideas",
+      Inbox:"Inbox",
+    }
+  }
+
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
   const [daySelected, setDaySelected] = useState(
     dayjs(dayjs().format("YYYY-MM-DD"))
@@ -289,6 +301,8 @@ export default function ContextWrapper(props) {
   return (
     <GlobalContext.Provider
       value={{
+        ModalParams,
+
         monthIndex,
         setMonthIndex,
         daySelected,
