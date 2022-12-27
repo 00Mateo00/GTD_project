@@ -1,6 +1,7 @@
 import React from "react";
 
 const GlobalContext = React.createContext({
+  ModalParams:{},
   monthIndex: 0,
   setMonthIndex: (index) => {},
   daySelected: null,
