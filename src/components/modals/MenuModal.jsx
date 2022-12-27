@@ -227,6 +227,7 @@ export const MenuModal = ({
       onClick={() => {
         setOnShowModal(false);
         setSelected(false);
+        clear()
       }}
       className="menuModal_wrapper"
     >
@@ -275,13 +276,13 @@ export const MenuModal = ({
                 onChange={(e) => setDescription(e.target.value)}
               ></input>
 
-              {onShowModal === "/Calendar" && (
+              {to === Calendar && (
                 <>
                   <div className="date-selector">
                     <input
                       type="date"
-                      value={daySelected.format("YYYY-MM-DD")}
-                      onChange={(e) => setDate(dayjs(e.target.value).valueOf())}
+                      value={date.format("YYYY-MM-DD")}
+                      onChange={(e) => setDate(dayjs(e.target.value))}
                     />
                     <div className="time" onClick={() => setError(false)}>
                       <input
@@ -325,7 +326,7 @@ export const MenuModal = ({
                 </>
               )}
 
-              {onShowModal === "/Tickler-File" && (
+              {to === Tickler && (
                 <div className="date-selector">
                   <div className="miniCalendar-section">
                     <input
@@ -337,8 +338,7 @@ export const MenuModal = ({
                 </div>
               )}
 
-              {(onShowModal === "/Actionable-List" ||
-                (selected && selected.origin === "/Inbox")) && (
+              {to === Actionables && (
                 <div className="actions-wrapper">
                   <h3>Actions:</h3>
                   <div className="actions">

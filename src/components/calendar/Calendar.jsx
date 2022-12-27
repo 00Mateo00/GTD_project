@@ -13,6 +13,7 @@ export const Calendar = () => {
     setSelectedCalendarEvent,
     dispatchCallCalendarEvent,
   } = useContext(GlobalContext);
+
   const [currentMonth, setCurrentMonth] = useState(utils.getCalendarMonth());
   useEffect(() => {
     setCurrentMonth(utils.getCalendarMonth(monthIndex));

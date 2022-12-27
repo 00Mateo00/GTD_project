@@ -5,6 +5,7 @@ import { MenuModal } from "../modals/MenuModal";
 
 export const SomdayDumper = () => {
   const {
+    ModalParams,
     filteredDumperTODOS,
     selectedDumperTODO,
     setSelectedDumperTODO,
@@ -16,6 +17,8 @@ export const SomdayDumper = () => {
     handleChecked,
   } = useContext(GlobalContext);
 
+  const {type,to} = ModalParams;
+
   const todos = filteredDumperTODOS
     .sort((a, b) => b.id - a.id)
     .sort((a, b) => a.checked - b.checked)
@@ -23,7 +26,7 @@ export const SomdayDumper = () => {
       <div
         onClick={() => {
           setSelectedDumperTODO(e);
-          setOnShowModal("/Ideas-Dumper");
+          setOnShowModal({ type: type.update, from:to.Ideas, to: to.Ideas});
         }}
         className={`card` + ` ${e.label}`}
         key={i}
@@ -77,14 +80,9 @@ export const SomdayDumper = () => {
                 </button>
               </header>
               <ul className="menu-body">
-                <li onClick={() => setOnShowModal("/Inbox")}>INBOX</li>
-                <li onClick={() => setOnShowModal("/Calendar")}>CALENDAR</li>
-                <li onClick={() => setOnShowModal("/Tickler-File")}>
-                  TICKLER FILE
-                </li>
-                <li onClick={() => setOnShowModal("/Actionable-List")}>
-                  ACTIONABLE
-                </li>
+                <li onClick={() => setOnShowModal({type:type.push, from:to.Ideas, to:to.Actionables})}>ACTIONABLES</li>
+                <li onClick={() => setOnShowModal({type:type.push, from:to.Ideas, to:to.Calendar})}>CALENDAR</li>
+                <li onClick={() => setOnShowModal({type:type.push, from:to.Ideas, to:to.Tickler})}>TICKLER FILE</li>
               </ul>
             </div>
           </div>
@@ -99,7 +97,6 @@ export const SomdayDumper = () => {
       }}
       className="wrapper"
     >
-      <div className="grid-container">{todos}</div>
       {onShowModal && (
         <MenuModal
           selected={selectedDumperTODO}
@@ -107,6 +104,7 @@ export const SomdayDumper = () => {
           dispatchCall={dispatchCallDumperTODO}
         />
       )}
+      <div className="grid-container">{todos}</div>
     </div>
   );
 };
