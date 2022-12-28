@@ -1,14 +1,16 @@
 @import '../../utils/utils.scss';
 
 .missed{
-    opacity: 0.5;
+    opacity: 0.85;
+    border:2px solid $Red-800;
 }
 
 .scheduled{
+    border: 2px solid $Blue-700;
     &__span{
         position: absolute;
-        top: 0px;
-        right: 0px;
-        color:$Blue-500;
+        top: -6px;
+        right: -10px;
+        color:$Blue-400;
     }
 }
