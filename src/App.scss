@@ -194,9 +194,10 @@ $card-hight: 25rem;
         align-items: flex-start;
         flex-direction: column;
 
-        button{
+        .action-wrapper{
             .done{
                 text-decoration: line-through;
+                opacity: 0.9;
             }
         }
     }
