@@ -36,7 +36,7 @@ export const ActionableList = () => {
     if (title && titleRef.current) titleRef.current.focus();
     if (description && descriptionRef.current) descriptionRef.current.focus();
     if (subTasks && actionRef) actionRef.current.focus();
-  }, [title, description, subTasks, titleRef, descriptionRef, actionRef]);
+  }, [title, description, subTasks, titleRef, descriptionRef, actionRef,onEditAction]);
 
   function clear() {
     setOnEdit(false);
@@ -65,7 +65,7 @@ export const ActionableList = () => {
       checked: e.checked,
       day: e.day,
       time: e.time,
-      subtasks: e.subtasks, //tofix
+      subtasks: subTasks? subTasks : e.subtasks,
     };
 
     dispatchCallActionableTODO({
@@ -96,10 +96,6 @@ export const ActionableList = () => {
   const cardDisplay = (e, i) => (
     <>
       <div
-        onClick={() => {
-          console.log(e);
-          setSubTasks(e.subtasks);
-        }}
         className="card__header"
       >
         <button className="actionable-card__button">
@@ -196,16 +192,16 @@ export const ActionableList = () => {
         <h4>ACTIONS:</h4>
         <div
           className="actions"
-          onClick={(prop) => {
-            prop.stopPropagation();
-            setOnEdit(i);
-          }}
         >
           {e.subtasks
             .sort((a, b) => a.id - b.id)
             .sort((a, b) => a.checked - b.checked)
             .map((el, j) => (
-              <div className="action-wrapper" key={j}>
+              <div className="action-wrapper" key={j} onClick={(prop)=>{
+                prop.stopPropagation()
+                setSubTasks(e.subtasks);
+                setOnEdit(i);
+              }}>
                 <button
                   onClick={(prop) => {
                     prop.stopPropagation();
@@ -226,10 +222,18 @@ export const ActionableList = () => {
                     <input
                       ref={actionRef}
                       type="text"
-                      value={subTasks[j]}
+                      value={subTasks[j].action}
                       onChange={(event) =>
                         setSubTasks(
-                          subTasks.map((e, i) => i === j && event.target.value)
+                          subTasks.map((el, indx) =>
+                            indx === j
+                              ? {
+                                  action: event.target.value,
+                                  checked: el.checked,
+                                  id: el.id,
+                                }
+                              : el
+                          )
                         )
                       }
                       onClick={(prop) => prop.stopPropagation()}
