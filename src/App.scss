@@ -105,7 +105,8 @@ $card-hight: 25rem;
 
     .card__header{
         height: 1.5rem;
-
+        display: flex;
+        justify-content: space-between;
         span{
             cursor: pointer;
         }

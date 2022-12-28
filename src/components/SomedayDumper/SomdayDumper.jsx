@@ -4,6 +4,8 @@ import { useContext } from "react";
 import GlobalContext from "../../context/GlobalContext";
 import { MenuModal } from "../modals/MenuModal";
 
+import "./somdayDumper.scss";
+
 export const SomdayDumper = () => {
   const {
     ModalParams,
@@ -22,7 +24,32 @@ export const SomdayDumper = () => {
   const [description, setDescription] = useState(false);
   const [onEdit, setOnEdit] = useState(false);
 
-  function handleEdit() {}
+  function handleSubmit(e) {
+    const EVENT = {
+      title: title ? title : e.title,
+      description: description ? description : e.description,
+      label: e.label,
+      id: e.id,
+      origin: e.origin,
+      checked: e.checked,
+      day: e.day,
+      time: e.time,
+      subtasks: e.subtasks,
+    };
+
+    dispatchCallDumperTODO({
+      type: type.update,
+      payload: EVENT,
+    });
+
+    //ubmit code goes here
+    clear();
+  }
+  function clear() {
+    setOnEdit(false);
+    setTitle(false);
+    setDescription(false);
+  }
 
   const cardDisplay = (e, i) => (
     <>
@@ -37,50 +64,80 @@ export const SomdayDumper = () => {
         >
           <span className="material-symbols-outlined">menu</span>
         </button>
-        <button
-          onClick={(event) => {
-            event.stopPropagation();
-            handleChecked(e, dispatchCallDumperTODO);
-          }}
-          className="TODO-card__check"
-        >
-          <span className="material-symbols-outlined">
-            {e.checked === 0 ? "check_box_outline_blank" : "select_check_box"}
-          </span>
-        </button>
+        {onEdit === i ? (
+          <>
+            <div
+              className="editOptions-wrapper"
+              onClick={(prop) => prop.stopPropagation()}
+            >
+              <span
+                className="Option_save material-symbols-outlined"
+                onClick={() => handleSubmit(e)}
+              >
+                done
+              </span>
+              <span
+                className="Option_close material-symbols-outlined"
+                onClick={clear}
+              >
+                close
+              </span>
+            </div>
+          </>
+        ) : (
+          <button
+            onClick={(event) => {
+              event.stopPropagation();
+              handleChecked(e, dispatchCallDumperTODO);
+            }}
+            className="TODO-card__check"
+          >
+            <span className="material-symbols-outlined">
+              {e.checked === 0 ? "check_box_outline_blank" : "select_check_box"}
+            </span>
+          </button>
+        )}
       </div>
-      <div
-        className="card__title"
-        onClick={() => {
-          setOnEdit(i);
-          setTitle(e.title);
-        }}
-      >
+      <div className="card__title">
         {title && onEdit === i ? (
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            onClick={(prop) => prop.stopPropagation()}
           ></input>
         ) : (
-          <div>{e.title}</div>
+          <div
+            onClick={(prop) => {
+              prop.stopPropagation();
+              setOnEdit(i);
+              setTitle(e.title);
+            }}
+          >
+            {e.title}
+          </div>
         )}
       </div>
       <div
         className="card__description"
-        onClick={() => {
-          setOnEdit(i);
-          setDescription(e.description);
-        }}
       >
         {description && onEdit === i ? (
-          <input
+          <textarea
             type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-          ></input>
+            onClick={(prop) => prop.stopPropagation()}
+          ></textarea>
         ) : (
-          <div>{e.description}</div>
+          <div
+            onClick={(prop) => {
+              prop.stopPropagation();
+              setOnEdit(i);
+              setDescription(e.description);
+            }}
+          >
+            {e.description}
+          </div>
         )}
       </div>
     </>
@@ -146,7 +203,8 @@ export const SomdayDumper = () => {
     .sort((a, b) => a.checked - b.checked)
     .map((e, i) => (
       <div
-        onClick={() => {
+        onClick={(prop) => {
+          prop.stopPropagation();
           setSelectedDumperTODO(e);
           setOnShowModal({ type: type.update, from: to.Ideas, to: to.Ideas });
         }}
@@ -163,6 +221,7 @@ export const SomdayDumper = () => {
     <div
       onClick={() => {
         setShowMenu(false);
+        clear();
       }}
       className="wrapper"
     >
