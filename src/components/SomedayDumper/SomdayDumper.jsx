@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { useContext } from "react";
 import GlobalContext from "../../context/GlobalContext";
 import { MenuModal } from "../modals/MenuModal";
@@ -17,11 +18,15 @@ export const SomdayDumper = () => {
     handleChecked,
   } = useContext(GlobalContext);
 
-  //T-T
+  const [title, setTitle] = useState(false);
+  const [description, setDescription] = useState(false);
+  const [onEdit, setOnEdit] = useState(false);
 
-  const cardDisplay = (e,i)=>(
+  function handleEdit() {}
+
+  const cardDisplay = (e, i) => (
     <>
-      <div onClick={() => {}} className="card__header">
+      <div className="card__header">
         <button
           onClick={(prop) => {
             prop.stopPropagation();
@@ -40,18 +45,46 @@ export const SomdayDumper = () => {
           className="TODO-card__check"
         >
           <span className="material-symbols-outlined">
-            {e.checked === 0
-              ? "check_box_outline_blank"
-              : "select_check_box"}
+            {e.checked === 0 ? "check_box_outline_blank" : "select_check_box"}
           </span>
         </button>
       </div>
-      <div className="card__title">
-        <div>{e.title}</div>
+      <div
+        className="card__title"
+        onClick={() => {
+          setOnEdit(i);
+          setTitle(e.title);
+        }}
+      >
+        {title && onEdit === i ? (
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          ></input>
+        ) : (
+          <div>{e.title}</div>
+        )}
       </div>
-      <div className="card__description">{e.description}</div>
+      <div
+        className="card__description"
+        onClick={() => {
+          setOnEdit(i);
+          setDescription(e.description);
+        }}
+      >
+        {description && onEdit === i ? (
+          <input
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          ></input>
+        ) : (
+          <div>{e.description}</div>
+        )}
+      </div>
     </>
-  )
+  );
 
   const cardMenuDisplay = (
     <div
@@ -68,15 +101,45 @@ export const SomdayDumper = () => {
           </button>
         </header>
         <ul className="menu-body">
-          <li onClick={() => setOnShowModal({type:type.push, from:to.Ideas, to:to.Actionables})}>ACTIONABLES</li>
-          <li onClick={() => setOnShowModal({type:type.push, from:to.Ideas, to:to.Calendar})}>CALENDAR</li>
-          <li onClick={() => setOnShowModal({type:type.push, from:to.Ideas, to:to.Tickler})}>TICKLER FILE</li>
+          <li
+            onClick={() =>
+              setOnShowModal({
+                type: type.push,
+                from: to.Ideas,
+                to: to.Actionables,
+              })
+            }
+          >
+            ACTIONABLES
+          </li>
+          <li
+            onClick={() =>
+              setOnShowModal({
+                type: type.push,
+                from: to.Ideas,
+                to: to.Calendar,
+              })
+            }
+          >
+            CALENDAR
+          </li>
+          <li
+            onClick={() =>
+              setOnShowModal({
+                type: type.push,
+                from: to.Ideas,
+                to: to.Tickler,
+              })
+            }
+          >
+            TICKLER FILE
+          </li>
         </ul>
       </div>
     </div>
-  )
+  );
 
-  const {type,to} = ModalParams;
+  const { type, to } = ModalParams;
 
   const todos = filteredDumperTODOS
     .sort((a, b) => b.id - a.id)
@@ -85,12 +148,12 @@ export const SomdayDumper = () => {
       <div
         onClick={() => {
           setSelectedDumperTODO(e);
-          setOnShowModal({ type: type.update, from:to.Ideas, to: to.Ideas});
+          setOnShowModal({ type: type.update, from: to.Ideas, to: to.Ideas });
         }}
         className={`card` + ` ${e.label}`}
         key={i}
       >
-        {showMenu !== i && cardDisplay(e,i)}
+        {showMenu !== i && cardDisplay(e, i)}
 
         {showMenu === i && cardMenuDisplay}
       </div>
