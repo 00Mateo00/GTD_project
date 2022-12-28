@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
-import { Logger } from "sass";
 import GlobalContext from "../../context/GlobalContext";
 import { MenuModal } from "../modals/MenuModal";
 import "./actionableList.scss";
