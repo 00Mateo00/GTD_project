@@ -1,0 +1,14 @@
+@import '../../utils/utils.scss';
+
+.missed{
+    opacity: 0.5;
+}
+
+.scheduled{
+    &__span{
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        color:$Blue-500;
+    }
+}
