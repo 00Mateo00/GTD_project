@@ -25,19 +25,25 @@ export const ActionableList = () => {
 
   const titleRef = useRef(null);
   const descriptionRef = useRef(null);
+  const actionRef = useRef(null);
   const [title, setTitle] = useState(false);
   const [description, setDescription] = useState(false);
+  const [action, setAction] = useState(false);
   const [onEdit, setOnEdit] = useState(false);
+  const [onEditAction, setOnEditAction] = useState(false);
 
   useEffect(() => {
-    if (title && titleRef.current) titleRef.current.focus()
+    if (title && titleRef.current) titleRef.current.focus();
     if (description && descriptionRef.current) descriptionRef.current.focus();
-  }, [title, description, titleRef, descriptionRef]);
+    if (action && actionRef) actionRef.current.focus(); 
+  }, [title, description, action, titleRef, descriptionRef, actionRef]);
 
   function clear() {
     setOnEdit(false);
     setTitle(false);
     setDescription(false);
+    setOnEditAction(false);
+    setAction(false);
   }
 
   const tomorrow = dayjs(dayjs().format("YYYY-MM-DD")).add(1, "day").valueOf();
@@ -181,22 +187,56 @@ export const ActionableList = () => {
       </div>
       <div className="actions-wrapper">
         <h4>ACTIONS:</h4>
-        <div className="actions">
+        <div
+          className="actions"
+          onClick={(prop) => {
+            prop.stopPropagation();
+            setOnEdit(i);
+          }}
+        >
           {e.subtasks
             .sort((a, b) => a.id - b.id)
             .sort((a, b) => a.checked - b.checked)
-            .map((el, i) => (
-              <button
-                onClick={(prop) => {
-                  prop.stopPropagation();
-                  handleChecked(e, dispatchCallActionableTODO, i);
-                }}
-                key={i}
-              >
-                <p className={`${el.checked === 1 ? "done" : "due"}`}>
-                  - {el.action}
-                </p>
-              </button>
+            .map((el, j) => (
+              <div className="action-wrapper" 
+                  key={j}>
+                <button
+                  onClick={(prop) => {
+                    prop.stopPropagation();
+                    handleChecked(e, dispatchCallActionableTODO, j);
+                  }}
+                >
+                  <span
+                    className={
+                      "actionsCheck material-symbols-outlined" +
+                      ` ${el.checked === 1 ? "checked" : "unchecked"}`
+                    }
+                  >
+                    {el.checked === 1 ? "check_box" : "check_box_outline_blank"}
+                  </span>
+                </button>
+                <div>
+                  {action && (onEditAction === j && onEdit === i) ? (
+                    <input
+                      ref={actionRef}
+                      type="text"
+                      value={action}
+                      onChange={(e) => setAction(e.target.value)}
+                      onClick={(prop) => prop.stopPropagation()}
+                    ></input>
+                  ) : (
+                    <div
+                      className={`${el.checked === 1 ? "done" : "due"}`}
+                      onClick={() => {
+                        setOnEditAction(j);
+                        setAction(el.action);
+                      }}
+                    >
+                      {el.action}
+                    </div>
+                  )}
+                </div>
+              </div>
             ))}
         </div>
       </div>

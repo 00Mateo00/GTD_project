@@ -15,8 +15,26 @@
     }
 }
 
-.actionables__description{
-    input[type="text"]{
-        background-color: rgba($color: #000000, $alpha: 0);
+input[type="text"]{
+    background-color: rgba($color: #000000, $alpha: 0);
+}
+
+.actionsCheck{
+    font-size: larger;
+}
+
+.action-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    button{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-right: 0.25rem;
+
+        .checked{
+            color: $primary-color;
+        }
     }
 }
