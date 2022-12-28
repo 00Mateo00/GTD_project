@@ -31,11 +31,12 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
       return selected.day;
     }
 
-    if (daySelected) { //this is always gonna be
+    if (daySelected) {
+      //this is always gonna be
       console.log("Dayselected");
       return daySelected.valueOf();
     }
-    
+
     if (to === Inbox) {
       console.log("Inbox");
       return false;
@@ -131,7 +132,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
           setError("you must choose a day");
           return;
         }
-        if (from===to) {
+        if (from === to) {
           EVENT.day = false;
         }
         dispatchCallActionableTODO({
@@ -287,13 +288,16 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
               ></input>
               {error && <p className="error">{error}</p>}
 
-              {(to === Inbox && from!==to)&&(
+              {to === Inbox && from !== to && (
                 <>
                   <button
                     type="button"
                     onClick={() => {
                       setError(false);
-                      setDate(dayjs(dayjs().format("YYYY-MM-DD")));
+                      setDate(
+                        dayjs(dayjs().format("YYYY-MM-DD"))
+                          .valueOf()
+                      );
                     }}
                   >
                     today
@@ -303,7 +307,9 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
                     onClick={() => {
                       setError(false);
                       setDate(
-                        dayjs(dayjs().format("YYYY-MM-DD")).add(1, "day")
+                        dayjs(dayjs().format("YYYY-MM-DD"))
+                          .add(1, "day")
+                          .valueOf()
                       );
                     }}
                   >

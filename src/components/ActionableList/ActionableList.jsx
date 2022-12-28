@@ -23,6 +23,7 @@ export const ActionableList = () => {
   const tomorrow = dayjs(dayjs().format("YYYY-MM-DD")).add(1, "day").valueOf();
 
   function whichDate(e) {
+    console.log(e);
     if (!e.day) return""
     if(e.day===tomorrow) return""
     return "missed"
