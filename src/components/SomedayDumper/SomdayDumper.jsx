@@ -1,5 +1,7 @@
 import React from "react";
 import { useState } from "react";
+import { useRef } from "react";
+import { useEffect } from "react";
 import { useContext } from "react";
 import GlobalContext from "../../context/GlobalContext";
 import { MenuModal } from "../modals/MenuModal";
@@ -20,9 +22,16 @@ export const SomdayDumper = () => {
     handleChecked,
   } = useContext(GlobalContext);
 
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
   const [title, setTitle] = useState(false);
   const [description, setDescription] = useState(false);
   const [onEdit, setOnEdit] = useState(false);
+
+  useEffect(() => {
+    if (title && titleRef.current) titleRef.current.focus()
+    if (description && descriptionRef.current) descriptionRef.current.focus();
+  }, [title, description, titleRef, descriptionRef]);
 
   function handleSubmit(e) {
     const EVENT = {
@@ -41,10 +50,9 @@ export const SomdayDumper = () => {
       type: type.update,
       payload: EVENT,
     });
-
-    //ubmit code goes here
     clear();
   }
+
   function clear() {
     setOnEdit(false);
     setTitle(false);
@@ -101,6 +109,7 @@ export const SomdayDumper = () => {
       <div className="card__title">
         {title && onEdit === i ? (
           <input
+            ref={titleRef}
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -109,6 +118,7 @@ export const SomdayDumper = () => {
         ) : (
           <div
             onClick={(prop) => {
+              clear()
               prop.stopPropagation();
               setOnEdit(i);
               setTitle(e.title);
@@ -118,11 +128,10 @@ export const SomdayDumper = () => {
           </div>
         )}
       </div>
-      <div
-        className="card__description"
-      >
+      <div className="card__description">
         {description && onEdit === i ? (
           <textarea
+            ref={descriptionRef}
             type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -131,6 +140,7 @@ export const SomdayDumper = () => {
         ) : (
           <div
             onClick={(prop) => {
+              clear()
               prop.stopPropagation();
               setOnEdit(i);
               setDescription(e.description);
