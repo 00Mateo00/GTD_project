@@ -194,12 +194,12 @@ export const Inbox = () => {
                 onClick={() =>
                   setOnShowModal({
                     type: type.update,
-                    from: to.Actionables,
+                    from: to.Inbox,
                     to: to.Inbox,
                   })
                 }
               >
-                INBOX
+                Acionables
               </li>
             </ul>
           </div>

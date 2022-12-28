@@ -25,14 +25,17 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
   const { type, from, to } = onShowModal;
 
   function HandleDate() {
-    if (daySelected) {
-      console.log("Dayselected");
-      return daySelected;
-    }
+    console.log(dayjs(daySelected.valueOf()).format("YYYY-MM-DD"));
     if (selected) {
       console.log("selected");
       return selected.day;
     }
+
+    if (daySelected) { //this is always gonna be
+      console.log("Dayselected");
+      return daySelected.valueOf();
+    }
+    
     if (to === Inbox) {
       console.log("Inbox");
       return false;
@@ -127,6 +130,9 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
         if (!EVENT.day) {
           setError("you must choose a day");
           return;
+        }
+        if (from===to) {
+          EVENT.day = false;
         }
         dispatchCallActionableTODO({
           type: type,
@@ -281,7 +287,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
               ></input>
               {error && <p className="error">{error}</p>}
 
-              {to === Inbox && (
+              {(to === Inbox && from!==to)&&(
                 <>
                   <button
                     type="button"
@@ -311,7 +317,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
                   <div className="date-selector">
                     <input
                       type="date"
-                      value={date.format("YYYY-MM-DD")}
+                      value={dayjs(date.valueOf()).format("YYYY-MM-DD")}
                       onChange={(e) => setDate(dayjs(e.target.value))}
                     />
                     <div className="time" onClick={() => setError(false)}>

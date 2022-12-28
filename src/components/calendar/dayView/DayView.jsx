@@ -131,7 +131,6 @@ export const DayView = () => {
             <div
               onClick={() => {
                 setHourClicked(i);
-                console.log({i})
                 setOnShowModal({type: type.push, from:to.Calendar, to:to.Calendar});
               }}
               className={`hour-block number-${i}`}
