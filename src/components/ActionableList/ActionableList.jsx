@@ -1,5 +1,7 @@
 import dayjs from "dayjs";
-import React from "react";
+import React, { useState } from "react";
+import { useRef } from "react";
+import { useEffect } from "react";
 import { useContext } from "react";
 import GlobalContext from "../../context/GlobalContext";
 import { MenuModal } from "../modals/MenuModal";
@@ -21,6 +23,23 @@ export const ActionableList = () => {
 
   const { type, to } = ModalParams;
 
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const [title, setTitle] = useState(false);
+  const [description, setDescription] = useState(false);
+  const [onEdit, setOnEdit] = useState(false);
+
+  useEffect(() => {
+    if (title && titleRef.current) titleRef.current.focus()
+    if (description && descriptionRef.current) descriptionRef.current.focus();
+  }, [title, description, titleRef, descriptionRef]);
+
+  function clear() {
+    setOnEdit(false);
+    setTitle(false);
+    setDescription(false);
+  }
+
   const tomorrow = dayjs(dayjs().format("YYYY-MM-DD")).add(1, "day").valueOf();
   const today = dayjs(dayjs().format("YYYY-MM-DD")).valueOf();
 
@@ -28,6 +47,26 @@ export const ActionableList = () => {
     if (!e.day) return "";
     if (e.day === tomorrow) return "scheduled";
     return "missed";
+  }
+
+  function handleSubmit(e) {
+    const EVENT = {
+      title: title ? title : e.title,
+      description: description ? description : e.description,
+      label: e.label,
+      id: e.id,
+      origin: e.origin,
+      checked: e.checked,
+      day: e.day,
+      time: e.time,
+      subtasks: e.subtasks, //tofix
+    };
+
+    dispatchCallActionableTODO({
+      type: type.update,
+      payload: EVENT,
+    });
+    clear();
   }
 
   //sorts the array into 2 groups, order them and joins them into 1 array then returns it
@@ -47,64 +86,122 @@ export const ActionableList = () => {
     return tempFlat;
   }
 
-  const cardDisplay = (e, i) => {
-    return (
-      <>
-        <div onClick={() => {}} className="card__header">
-          <button className="actionable-card__button">
-            <span
-              onClick={(prop) => {
-                prop.stopPropagation();
-                setSelectedActionableTODO(e);
-                setShowMenu(i);
-              }}
-              className="material-symbols-outlined"
+  const cardDisplay = (e, i) => (
+    <>
+      <div onClick={() => {}} className="card__header">
+        <button className="actionable-card__button">
+          <span
+            onClick={(prop) => {
+              prop.stopPropagation();
+              setSelectedActionableTODO(e);
+              setShowMenu(i);
+            }}
+            className="material-symbols-outlined"
+          >
+            menu
+          </span>
+        </button>
+        {onEdit === i ? (
+          <>
+            <div
+              className="editOptions-wrapper"
+              onClick={(prop) => prop.stopPropagation()}
             >
-              menu
-            </span>
-          </button>
+              <span
+                className="Option_save material-symbols-outlined"
+                onClick={() => handleSubmit(e)}
+              >
+                done
+              </span>
+              <span
+                className="Option_close material-symbols-outlined"
+                onClick={clear}
+              >
+                close
+              </span>
+            </div>
+          </>
+        ) : (
           <button
             onClick={(event) => {
               event.stopPropagation();
               handleChecked(e, dispatchCallActionableTODO);
             }}
-            className="actionable-card__check"
+            className="TODO-card__check"
           >
             <span className="material-symbols-outlined">
               {e.checked === 0 ? "check_box_outline_blank" : "select_check_box"}
             </span>
           </button>
-        </div>
-        <div className="card__title">
-          <div>{e.title}</div>
-        </div>
-        <div className="card__description actionables__description">
-          <p>{e.description}</p>
-        </div>
-        <div className="actions-wrapper">
-          <h4>ACTIONS:</h4>
-          <div className="actions">
-            {e.subtasks
-              .sort((a, b) => a.id - b.id)
-              .sort((a, b) => a.checked - b.checked)
-              .map((el, i) => (
-                <button
-                  onClick={(prop) => {
-                    prop.stopPropagation();
-                    handleChecked(e, dispatchCallActionableTODO, i);
-                  }}
-                  key={i}
-                >
-                  <p className={`${el.checked === 1 ? "done" : "due"}`}>
-                    - {el.action}
-                  </p>
-                </button>
-              ))}
+        )}
+      </div>
+      <div className="card__title">
+        {title && onEdit === i ? (
+          <input
+            ref={titleRef}
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            onClick={(prop) => prop.stopPropagation()}
+          ></input>
+        ) : (
+          <div
+            onClick={(prop) => {
+              clear();
+              prop.stopPropagation();
+              setOnEdit(i);
+              setTitle(e.title);
+            }}
+          >
+            {e.title}
           </div>
+        )}
+      </div>
+      <div className="card__description actionables__description">
+        {description && onEdit === i ? (
+          <input
+            ref={descriptionRef}
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            onClick={(prop) => prop.stopPropagation()}
+          ></input>
+        ) : (
+          <div
+            onClick={(prop) => {
+              clear();
+              prop.stopPropagation();
+              setOnEdit(i);
+              setDescription(e.description);
+            }}
+          >
+            {e.description}
+          </div>
+        )}
+      </div>
+      <div className="actions-wrapper">
+        <h4>ACTIONS:</h4>
+        <div className="actions">
+          {e.subtasks
+            .sort((a, b) => a.id - b.id)
+            .sort((a, b) => a.checked - b.checked)
+            .map((el, i) => (
+              <button
+                onClick={(prop) => {
+                  prop.stopPropagation();
+                  handleChecked(e, dispatchCallActionableTODO, i);
+                }}
+                key={i}
+              >
+                <p className={`${el.checked === 1 ? "done" : "due"}`}>
+                  - {el.action}
+                </p>
+              </button>
+            ))}
         </div>
-      </>
-    );
-  };
+      </div>
+    </>
+  );
 
   const cardMenuDisplay = (
     <div
@@ -166,7 +263,9 @@ export const ActionableList = () => {
         key={i}
       >
         {whichDate(e) === "scheduled" && (
-          <span className="scheduled__span material-symbols-outlined">schedule</span>
+          <span className="scheduled__span material-symbols-outlined">
+            schedule
+          </span>
         )}
         {showMenu !== i && cardDisplay(e, i)}
 
@@ -178,6 +277,7 @@ export const ActionableList = () => {
     <div
       onClick={() => {
         setShowMenu(false);
+        clear();
       }}
       className="wrapper"
     >
