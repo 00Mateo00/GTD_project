@@ -470,6 +470,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
           </div>
         </form>
       </div>
+      
     </div>
   );
 };
