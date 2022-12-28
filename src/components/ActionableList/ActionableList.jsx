@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
+import { Logger } from "sass";
 import GlobalContext from "../../context/GlobalContext";
 import { MenuModal } from "../modals/MenuModal";
 import "./actionableList.scss";
@@ -28,22 +29,22 @@ export const ActionableList = () => {
   const actionRef = useRef(null);
   const [title, setTitle] = useState(false);
   const [description, setDescription] = useState(false);
-  const [action, setAction] = useState(false);
+  const [subTasks, setSubTasks] = useState(false);
   const [onEdit, setOnEdit] = useState(false);
   const [onEditAction, setOnEditAction] = useState(false);
 
   useEffect(() => {
     if (title && titleRef.current) titleRef.current.focus();
     if (description && descriptionRef.current) descriptionRef.current.focus();
-    if (action && actionRef) actionRef.current.focus(); 
-  }, [title, description, action, titleRef, descriptionRef, actionRef]);
+    if (subTasks && actionRef) actionRef.current.focus();
+  }, [title, description, subTasks, titleRef, descriptionRef, actionRef]);
 
   function clear() {
     setOnEdit(false);
     setTitle(false);
     setDescription(false);
     setOnEditAction(false);
-    setAction(false);
+    setSubTasks(false);
   }
 
   const tomorrow = dayjs(dayjs().format("YYYY-MM-DD")).add(1, "day").valueOf();
@@ -72,6 +73,7 @@ export const ActionableList = () => {
       type: type.update,
       payload: EVENT,
     });
+
     clear();
   }
 
@@ -94,7 +96,13 @@ export const ActionableList = () => {
 
   const cardDisplay = (e, i) => (
     <>
-      <div onClick={() => {}} className="card__header">
+      <div
+        onClick={() => {
+          console.log(e);
+          setSubTasks(e.subtasks);
+        }}
+        className="card__header"
+      >
         <button className="actionable-card__button">
           <span
             onClick={(prop) => {
@@ -198,8 +206,7 @@ export const ActionableList = () => {
             .sort((a, b) => a.id - b.id)
             .sort((a, b) => a.checked - b.checked)
             .map((el, j) => (
-              <div className="action-wrapper" 
-                  key={j}>
+              <div className="action-wrapper" key={j}>
                 <button
                   onClick={(prop) => {
                     prop.stopPropagation();
@@ -216,20 +223,23 @@ export const ActionableList = () => {
                   </span>
                 </button>
                 <div>
-                  {action && (onEditAction === j && onEdit === i) ? (
+                  {onEditAction === j && onEdit === i ? (
                     <input
                       ref={actionRef}
                       type="text"
-                      value={action}
-                      onChange={(e) => setAction(e.target.value)}
+                      value={subTasks[j]}
+                      onChange={(event) =>
+                        setSubTasks(
+                          subTasks.map((e, i) => i === j && event.target.value)
+                        )
+                      }
                       onClick={(prop) => prop.stopPropagation()}
-                    ></input>
+                    />
                   ) : (
                     <div
                       className={`${el.checked === 1 ? "done" : "due"}`}
                       onClick={() => {
                         setOnEditAction(j);
-                        setAction(el.action);
                       }}
                     >
                       {el.action}
