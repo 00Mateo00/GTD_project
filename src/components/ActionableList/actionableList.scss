@@ -2,7 +2,8 @@
 
 .missed{
     opacity: 0.85;
-    border:2px solid $Red-800;
+    border:2px solid $Gray-400;
+    background-color: $Gray-600;
 }
 
 .scheduled{
@@ -35,6 +36,13 @@ input[type="text"]{
 
         .checked{
             color: $primary-color;
+            font-variation-settings:
+            'FILL' 1,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 48
         }
     }
 }
+
+

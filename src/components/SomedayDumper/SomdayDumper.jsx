@@ -218,7 +218,7 @@ export const SomdayDumper = () => {
           setSelectedDumperTODO(e);
           setOnShowModal({ type: type.update, from: to.Ideas, to: to.Ideas });
         }}
-        className={`card` + ` ${e.label}`}
+        className={`card` +" dumper_card" + ` ${e.label}`}
         key={i}
       >
         {showMenu !== i && cardDisplay(e, i)}

@@ -233,7 +233,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
     }
   }
 
-  const cardDisplay = () => (
+  const ticklerCardDisplay = () => (
     <div
       className={
         "card" +
@@ -372,8 +372,423 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
     </div>
   );
 
-  console.log({from});
-  console.log({to});
+  const ideasCardDisplay = () => (
+    <div
+      className={
+        "card" +
+        ` ${selectedLabel ? selectedLabel : selected.label}` +
+        " card_modal"
+      }
+      onClick={(prop) => {
+        prop.stopPropagation();
+      }}
+    >
+      <header className="card__header">
+        <button className="card__menu">
+          <span className="material-symbols-outlined">menu</span>
+        </button>
+        <div>
+          {selected && (
+            <button
+              type="button"
+              onClick={() => {
+                dispatchCall({
+                  type: "delete",
+                  payload: selected,
+                });
+                clear();
+              }}
+            >
+              <span className="material-symbols-outlined">delete</span>
+            </button>
+          )}
+
+          <button type="button" onClick={clear}>
+            <span className="material-symbols-outlined">close</span>
+          </button>
+        </div>
+      </header>
+      <div className="card__title">
+        <input
+          type="text"
+          name="title"
+          required
+          placeholder="Add Title"
+          value={title}
+          className="title-input"
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </div>
+      <div className="card__description">
+        <textarea
+          type="text"
+          placeholder="Add a description"
+          className="description-input"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </div>
+      {error && <p className="error">{error}</p>}
+      <div className="colors-input">
+        {labelsClasses.map((lblClass, i) => (
+          <span
+            key={i}
+            onClick={() => setSelectedLabel(lblClass)}
+            className={`${lblClass} color ${
+              selectedLabel === lblClass && "material-symbols-outlined"
+            }`}
+          >
+            {selectedLabel === lblClass && "check"}
+          </span>
+        ))}
+      </div>
+      <footer>
+        <button onClick={handleSubmit} type="button">
+          save
+        </button>
+      </footer>
+    </div>
+  );
+
+  function to_name(to, from) {
+    console.log({ to }, { from });
+
+    if (to === Actionables) {
+      console.log("actionables");
+      return ticklerCardDisplay();
+    }
+    if (to === Ideas) {
+      console.log("ideas");
+      return ideasCardDisplay()
+    }
+
+    return (
+      <div onClick={(e) => e.stopPropagation()} className="menuModal">
+        <form>
+          <header className="menuModal__header">
+            <span className="material-symbols-outlined">drag_handle</span>
+            <div>
+              {selected && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    dispatchCall({
+                      type: "delete",
+                      payload: selected,
+                    });
+                    clear();
+                  }}
+                >
+                  <span className="material-symbols-outlined">delete</span>
+                </button>
+              )}
+
+              <button type="button" onClick={clear}>
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+          </header>
+
+          <div className="menuModal__body">
+            <div className="body-wrapper">
+              <input
+                type="text"
+                name="title"
+                required
+                placeholder="Add Title"
+                value={title}
+                className="title-input"
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Add a description"
+                className="description-input"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></input>
+              {error && <p className="error">{error}</p>}
+
+              {to === Inbox && from !== to && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setError(false);
+                      setDate(dayjs(dayjs().format("YYYY-MM-DD")).valueOf());
+                    }}
+                  >
+                    today
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setError(false);
+                      setDate(
+                        dayjs(dayjs().format("YYYY-MM-DD"))
+                          .add(1, "day")
+                          .valueOf()
+                      );
+                    }}
+                  >
+                    tomorrow
+                  </button>
+                </>
+              )}
+
+              {to === Calendar && (
+                <>
+                  <div className="date-selector">
+                    <input
+                      type="date"
+                      value={dayjs(date.valueOf()).format("YYYY-MM-DD")}
+                      onChange={(e) => setDate(dayjs(e.target.value))}
+                    />
+                    <div className="time" onClick={() => setError(false)}>
+                      <input
+                        type="text"
+                        value={hours.timeStart}
+                        onChange={(e) =>
+                          setHours({
+                            timeStart: e.target.value,
+                            timeEnd: hours.timeEnd,
+                          })
+                        }
+                        onBlur={(e) => {
+                          const formated = handleTimeForm(e.target.value);
+                          setHours({
+                            timeStart: formated,
+                            timeEnd: hours.timeEnd,
+                          });
+                        }}
+                      ></input>
+                      -
+                      <input
+                        type="text"
+                        value={hours.timeEnd}
+                        onChange={(e) =>
+                          setHours({
+                            timeStart: hours.timeStart,
+                            timeEnd: e.target.value,
+                          })
+                        }
+                        onBlur={(e) => {
+                          const formated = handleTimeForm(e.target.value);
+                          setHours({
+                            timeStart: hours.timeStart,
+                            timeEnd: formated,
+                          });
+                        }}
+                      ></input>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {to === Tickler && (
+                <div className="date-selector">
+                  <div className="miniCalendar-section">
+                    <input
+                      type="date"
+                      value={daySelected.format("YYYY-MM-DD")}
+                      onChange={(e) => setDate(dayjs(e.target.value).valueOf())}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="colors-input">
+                {labelsClasses.map((lblClass, i) => (
+                  <span
+                    key={i}
+                    onClick={() => setSelectedLabel(lblClass)}
+                    className={`${lblClass} color ${
+                      selectedLabel === lblClass && "material-symbols-outlined"
+                    }`}
+                  >
+                    {selectedLabel === lblClass && "check"}
+                  </span>
+                ))}
+              </div>
+
+              <footer>
+                <button onClick={handleSubmit} type="button">
+                  save
+                </button>
+              </footer>
+            </div>
+          </div>
+        </form>
+      </div>
+    );
+
+    /*     {(from===Actionables && to === Inbox) && cardDisplay()
+    ||
+    to !== Actionables && to !== Ideas && (
+      <div onClick={(e) => e.stopPropagation()} className="menuModal">
+        <form>
+          <header className="menuModal__header">
+            <span className="material-symbols-outlined">drag_handle</span>
+            <div>
+              {selected && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    dispatchCall({
+                      type: "delete",
+                      payload: selected,
+                    });
+                    clear();
+                  }}
+                >
+                  <span className="material-symbols-outlined">delete</span>
+                </button>
+              )}
+
+              <button type="button" onClick={clear}>
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+          </header>
+
+          <div className="menuModal__body">
+            <div className="body-wrapper">
+              <input
+                type="text"
+                name="title"
+                required
+                placeholder="Add Title"
+                value={title}
+                className="title-input"
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Add a description"
+                className="description-input"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></input>
+              {error && <p className="error">{error}</p>}
+
+              {to === Inbox && from !== to && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setError(false);
+                      setDate(dayjs(dayjs().format("YYYY-MM-DD")).valueOf());
+                    }}
+                  >
+                    today
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setError(false);
+                      setDate(
+                        dayjs(dayjs().format("YYYY-MM-DD"))
+                          .add(1, "day")
+                          .valueOf()
+                      );
+                    }}
+                  >
+                    tomorrow
+                  </button>
+                </>
+              )}
+
+              {to === Calendar && (
+                <>
+                  <div className="date-selector">
+                    <input
+                      type="date"
+                      value={dayjs(date.valueOf()).format("YYYY-MM-DD")}
+                      onChange={(e) => setDate(dayjs(e.target.value))}
+                    />
+                    <div className="time" onClick={() => setError(false)}>
+                      <input
+                        type="text"
+                        value={hours.timeStart}
+                        onChange={(e) =>
+                          setHours({
+                            timeStart: e.target.value,
+                            timeEnd: hours.timeEnd,
+                          })
+                        }
+                        onBlur={(e) => {
+                          const formated = handleTimeForm(e.target.value);
+                          setHours({
+                            timeStart: formated,
+                            timeEnd: hours.timeEnd,
+                          });
+                        }}
+                      ></input>
+                      -
+                      <input
+                        type="text"
+                        value={hours.timeEnd}
+                        onChange={(e) =>
+                          setHours({
+                            timeStart: hours.timeStart,
+                            timeEnd: e.target.value,
+                          })
+                        }
+                        onBlur={(e) => {
+                          const formated = handleTimeForm(e.target.value);
+                          setHours({
+                            timeStart: hours.timeStart,
+                            timeEnd: formated,
+                          });
+                        }}
+                      ></input>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {to === Tickler && (
+                <div className="date-selector">
+                  <div className="miniCalendar-section">
+                    <input
+                      type="date"
+                      value={daySelected.format("YYYY-MM-DD")}
+                      onChange={(e) =>
+                        setDate(dayjs(e.target.value).valueOf())
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="colors-input">
+                {labelsClasses.map((lblClass, i) => (
+                  <span
+                    key={i}
+                    onClick={() => setSelectedLabel(lblClass)}
+                    className={`${lblClass} color ${
+                      selectedLabel === lblClass &&
+                      "material-symbols-outlined"
+                    }`}
+                  >
+                    {selectedLabel === lblClass && "check"}
+                  </span>
+                ))}
+              </div>
+
+              <footer>
+                <button onClick={handleSubmit} type="button">
+                  save
+                </button>
+              </footer>
+            </div>
+          </div>
+        </form>
+      </div>
+    )} */
+  }
+
+  to_name(to, from);
 
   return (
     <div
@@ -384,174 +799,7 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
       }}
       className="menuModal_wrapper"
     >
-      
-      
-      {to === Actionables && cardDisplay()}
-      {to === Ideas && cardDisplay()}
-      {(from===Actionables && to === Inbox) && cardDisplay()
-      ||
-      to !== Actionables && to !== Ideas && (
-        <div onClick={(e) => e.stopPropagation()} className="menuModal">
-          <form>
-            <header className="menuModal__header">
-              <span className="material-symbols-outlined">drag_handle</span>
-              <div>
-                {selected && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      dispatchCall({
-                        type: "delete",
-                        payload: selected,
-                      });
-                      clear();
-                    }}
-                  >
-                    <span className="material-symbols-outlined">delete</span>
-                  </button>
-                )}
-
-                <button type="button" onClick={clear}>
-                  <span className="material-symbols-outlined">close</span>
-                </button>
-              </div>
-            </header>
-
-            <div className="menuModal__body">
-              <div className="body-wrapper">
-                <input
-                  type="text"
-                  name="title"
-                  required
-                  placeholder="Add Title"
-                  value={title}
-                  className="title-input"
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-                <input
-                  type="text"
-                  placeholder="Add a description"
-                  className="description-input"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                ></input>
-                {error && <p className="error">{error}</p>}
-
-                {to === Inbox && from !== to && (
-                  <>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setError(false);
-                        setDate(dayjs(dayjs().format("YYYY-MM-DD")).valueOf());
-                      }}
-                    >
-                      today
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setError(false);
-                        setDate(
-                          dayjs(dayjs().format("YYYY-MM-DD"))
-                            .add(1, "day")
-                            .valueOf()
-                        );
-                      }}
-                    >
-                      tomorrow
-                    </button>
-                  </>
-                )}
-
-                {to === Calendar && (
-                  <>
-                    <div className="date-selector">
-                      <input
-                        type="date"
-                        value={dayjs(date.valueOf()).format("YYYY-MM-DD")}
-                        onChange={(e) => setDate(dayjs(e.target.value))}
-                      />
-                      <div className="time" onClick={() => setError(false)}>
-                        <input
-                          type="text"
-                          value={hours.timeStart}
-                          onChange={(e) =>
-                            setHours({
-                              timeStart: e.target.value,
-                              timeEnd: hours.timeEnd,
-                            })
-                          }
-                          onBlur={(e) => {
-                            const formated = handleTimeForm(e.target.value);
-                            setHours({
-                              timeStart: formated,
-                              timeEnd: hours.timeEnd,
-                            });
-                          }}
-                        ></input>
-                        -
-                        <input
-                          type="text"
-                          value={hours.timeEnd}
-                          onChange={(e) =>
-                            setHours({
-                              timeStart: hours.timeStart,
-                              timeEnd: e.target.value,
-                            })
-                          }
-                          onBlur={(e) => {
-                            const formated = handleTimeForm(e.target.value);
-                            setHours({
-                              timeStart: hours.timeStart,
-                              timeEnd: formated,
-                            });
-                          }}
-                        ></input>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                {to === Tickler && (
-                  <div className="date-selector">
-                    <div className="miniCalendar-section">
-                      <input
-                        type="date"
-                        value={daySelected.format("YYYY-MM-DD")}
-                        onChange={(e) =>
-                          setDate(dayjs(e.target.value).valueOf())
-                        }
-                      />
-                    </div>
-                  </div>
-                )}
-
-                <div className="colors-input">
-                  {labelsClasses.map((lblClass, i) => (
-                    <span
-                      key={i}
-                      onClick={() => setSelectedLabel(lblClass)}
-                      className={`${lblClass} color ${
-                        selectedLabel === lblClass &&
-                        "material-symbols-outlined"
-                      }`}
-                    >
-                      {selectedLabel === lblClass && "check"}
-                    </span>
-                  ))}
-                </div>
-
-                <footer>
-                  <button onClick={handleSubmit} type="button">
-                    save
-                  </button>
-                </footer>
-              </div>
-            </div>
-          </form>
-        </div>
-      )}
+      {to_name(to, from)}
     </div>
   );
 };

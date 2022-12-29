@@ -43,6 +43,7 @@ export const Labels = ({ labels, updateLabel, setState }) => {
       labels = dumperLabels;
       updateLabel = updateDumperLabels;
       setState = setDumperState;
+      break;
 
     default:
         labels = [];
@@ -51,10 +52,19 @@ export const Labels = ({ labels, updateLabel, setState }) => {
       break;
   }
 
+
   return (
     <div className="label-wrapper">
-      <p>Label</p>
       <div className="list-wrapper">
+        {window.location.pathname !== "/Calendar" && (
+          <>
+            <div className="state-filter">
+              <button onClick={() => setState(false)}>All</button>
+              <button onClick={() => setState(1)}>Done</button>
+              <button onClick={() => setState(0)}>Due</button>
+            </div>
+          </>
+        )}
         {labels.map(({ label: lbl, checked }, idx) => (
           <label key={idx}>
             <input
@@ -65,16 +75,6 @@ export const Labels = ({ labels, updateLabel, setState }) => {
             <span className={`checkMark text-${lbl}`}></span> {lbl}
           </label>
         ))}
-        {window.location.pathname !== "/Calendar" && (
-          <>
-            <div className="state-filter">
-              <button onClick={() => setState(false)}>All</button>
-              <button onClick={() => setState(1)}>Done</button>
-              <button onClick={() => setState(0)}>Due</button>
-              <button onClick={() => setState(2)}>Missed</button>
-            </div>
-          </>
-        )}
       </div>
     </div>
   );

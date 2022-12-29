@@ -66,7 +66,7 @@
 //phone
 @media (max-width:425px) {
     .inbox-wrapper{
-        padding: 1rem 0rem 0 0.5rem;
+        padding: 1rem 0.5rem 0 0.5rem;
         .inbox-Tickler{
             .day-event{
                 width: 10rem;
@@ -78,7 +78,20 @@
             padding-top: 0.25rem;
 
             .grid-container{
-                grid-template-columns: 1fr;
+                justify-content: flex-start;
+                display: flex;
+                
+                .card{
+                    height: 25rem;
+                    .actionables__description{
+                        display: none;
+                    }
+                    .actions-wrapper{
+                        h4{
+                            display: none;
+                        }
+                    }
+                }
             }
         }
     }
