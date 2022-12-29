@@ -334,7 +334,9 @@ export const ActionableList = () => {
       }}
       className="wrapper"
     >
-      <div className="grid-container">{AllActionables}</div>
+      <div className="scroll-wrapper">
+        <div className="grid-container">{AllActionables}</div>
+      </div>
       {onShowModal && (
         <MenuModal
           selected={selectedActionableTODO}

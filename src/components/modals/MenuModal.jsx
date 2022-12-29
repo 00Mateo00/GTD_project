@@ -233,6 +233,148 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
     }
   }
 
+  const cardDisplay = () => (
+    <div
+      className={
+        "card" +
+        ` ${selectedLabel ? selectedLabel : selected.label}` +
+        " card_modal"
+      }
+      onClick={(prop) => {
+        prop.stopPropagation();
+      }}
+    >
+      <header className="card__header">
+        <button className="actionable-card__button">
+          <span className="material-symbols-outlined">menu</span>
+        </button>
+        <div>
+          {selected && (
+            <button
+              type="button"
+              onClick={() => {
+                dispatchCall({
+                  type: "delete",
+                  payload: selected,
+                });
+                clear();
+              }}
+            >
+              <span className="material-symbols-outlined">delete</span>
+            </button>
+          )}
+
+          <button type="button" onClick={clear}>
+            <span className="material-symbols-outlined">close</span>
+          </button>
+        </div>
+      </header>
+
+      <div className="card__title">
+        <input
+          type="text"
+          name="title"
+          required
+          placeholder="Add Title"
+          value={title}
+          className="title-input"
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </div>
+      <div className="card__description actionables__description">
+        <input
+          type="text"
+          placeholder="Add a description"
+          className="description-input"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </div>
+      {error && <p className="error">{error}</p>}
+      <div className="actions-wrapper">
+        <h3>Actions:</h3>
+        <div className="actions">
+          {subTasks
+            .sort((a, b) => a.id - b.id)
+            .map((e, i) => {
+              return (
+                <div key={i} className="input-wrapper">
+                  <input
+                    type="text"
+                    required={i === 0 ? true : false}
+                    className="action"
+                    value={subTasks[i].action}
+                    onChange={(e) =>
+                      setSubTasks([
+                        ...subTasks.map((el, indx) =>
+                          indx === i
+                            ? {
+                                action: e.target.value,
+                                checked: 0,
+                                id: el.id,
+                              }
+                            : el
+                        ),
+                      ])
+                    }
+                    onBlur={() => setError(false)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      subTasks.length > 1
+                        ? setSubTasks([
+                            ...subTasks.filter((el, indx) => indx !== i),
+                          ])
+                        : setError("there should be at least 1 action");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">delete</span>
+                  </button>
+                </div>
+              );
+            })}
+          <div className="add-action-wrapper">
+            <button
+              type="button"
+              onClick={() => {
+                setSubTasks([
+                  ...subTasks,
+                  { action: "", checked: 0, id: dayjs().valueOf() },
+                ]);
+              }}
+              className="add-action"
+            >
+              <span className="material-symbols-outlined">add</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="colors-input">
+        {labelsClasses.map((lblClass, i) => (
+          <span
+            key={i}
+            onClick={() => setSelectedLabel(lblClass)}
+            className={`${lblClass} color ${
+              selectedLabel === lblClass && "material-symbols-outlined"
+            }`}
+          >
+            {selectedLabel === lblClass && "check"}
+          </span>
+        ))}
+      </div>
+
+      <footer>
+        <button onClick={handleSubmit} type="button">
+          save
+        </button>
+      </footer>
+    </div>
+  );
+
+  console.log({from});
+  console.log({to});
+
   return (
     <div
       onClick={(prop) => {
@@ -242,235 +384,174 @@ export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
       }}
       className="menuModal_wrapper"
     >
-      <div onClick={(e) => e.stopPropagation()} className="menuModal">
-        <form>
-          <header className="menuModal__header">
-            <span className="material-symbols-outlined">drag_handle</span>
-            <div>
-              {selected && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    dispatchCall({
-                      type: "delete",
-                      payload: selected,
-                    });
-                    clear();
-                  }}
-                >
-                  <span className="material-symbols-outlined">delete</span>
-                </button>
-              )}
-
-              <button type="button" onClick={clear}>
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-          </header>
-
-          <div className="menuModal__body">
-            <div className="body-wrapper">
-              <input
-                type="text"
-                name="title"
-                required
-                placeholder="Add Title"
-                value={title}
-                className="title-input"
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Add a description"
-                className="description-input"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              ></input>
-              {error && <p className="error">{error}</p>}
-
-              {to === Inbox && from !== to && (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setError(false);
-                      setDate(
-                        dayjs(dayjs().format("YYYY-MM-DD"))
-                          .valueOf()
-                      );
-                    }}
-                  >
-                    today
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setError(false);
-                      setDate(
-                        dayjs(dayjs().format("YYYY-MM-DD"))
-                          .add(1, "day")
-                          .valueOf()
-                      );
-                    }}
-                  >
-                    tomorrow
-                  </button>
-                </>
-              )}
-
-              {to === Calendar && (
-                <>
-                  <div className="date-selector">
-                    <input
-                      type="date"
-                      value={dayjs(date.valueOf()).format("YYYY-MM-DD")}
-                      onChange={(e) => setDate(dayjs(e.target.value))}
-                    />
-                    <div className="time" onClick={() => setError(false)}>
-                      <input
-                        type="text"
-                        value={hours.timeStart}
-                        onChange={(e) =>
-                          setHours({
-                            timeStart: e.target.value,
-                            timeEnd: hours.timeEnd,
-                          })
-                        }
-                        onBlur={(e) => {
-                          const formated = handleTimeForm(e.target.value);
-                          setHours({
-                            timeStart: formated,
-                            timeEnd: hours.timeEnd,
-                          });
-                        }}
-                      ></input>
-                      -
-                      <input
-                        type="text"
-                        value={hours.timeEnd}
-                        onChange={(e) =>
-                          setHours({
-                            timeStart: hours.timeStart,
-                            timeEnd: e.target.value,
-                          })
-                        }
-                        onBlur={(e) => {
-                          const formated = handleTimeForm(e.target.value);
-                          setHours({
-                            timeStart: hours.timeStart,
-                            timeEnd: formated,
-                          });
-                        }}
-                      ></input>
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {to === Tickler && (
-                <div className="date-selector">
-                  <div className="miniCalendar-section">
-                    <input
-                      type="date"
-                      value={daySelected.format("YYYY-MM-DD")}
-                      onChange={(e) => setDate(dayjs(e.target.value).valueOf())}
-                    />
-                  </div>
-                </div>
-              )}
-
-              {to === Actionables && (
-                <div className="actions-wrapper">
-                  <h3>Actions:</h3>
-                  <div className="actions">
-                    {subTasks
-                      .sort((a, b) => a.id - b.id)
-                      .map((e, i) => {
-                        return (
-                          <div key={i} className="input-wrapper">
-                            <input
-                              type="text"
-                              required={i === 0 ? true : false}
-                              className="action"
-                              value={subTasks[i].action}
-                              onChange={(e) =>
-                                setSubTasks([
-                                  ...subTasks.map((el, indx) =>
-                                    indx === i
-                                      ? {
-                                          action: e.target.value,
-                                          checked: 0,
-                                          id: el.id,
-                                        }
-                                      : el
-                                  ),
-                                ])
-                              }
-                              onBlur={() => setError(false)}
-                            />
-                            <button
-                              type="button"
-                              onClick={() => {
-                                subTasks.length > 1
-                                  ? setSubTasks([
-                                      ...subTasks.filter(
-                                        (el, indx) => indx !== i
-                                      ),
-                                    ])
-                                  : setError(
-                                      "there should be at least 1 action"
-                                    );
-                              }}
-                            >
-                              <span className="material-symbols-outlined">
-                                delete
-                              </span>
-                            </button>
-                          </div>
-                        );
-                      })}
-                    <div className="add-action-wrapper">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSubTasks([
-                            ...subTasks,
-                            { action: "", checked: 0, id: dayjs().valueOf() },
-                          ]);
-                        }}
-                        className="add-action"
-                      >
-                        <span className="material-symbols-outlined">add</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="colors-input">
-                {labelsClasses.map((lblClass, i) => (
-                  <span
-                    key={i}
-                    onClick={() => setSelectedLabel(lblClass)}
-                    className={`${lblClass} color ${
-                      selectedLabel === lblClass && "material-symbols-outlined"
-                    }`}
-                  >
-                    {selectedLabel === lblClass && "check"}
-                  </span>
-                ))}
-              </div>
-
-              <footer>
-                <button onClick={handleSubmit} type="button">
-                  save
-                </button>
-              </footer>
-            </div>
-          </div>
-        </form>
-      </div>
       
+      
+      {to === Actionables && cardDisplay()}
+      {to === Ideas && cardDisplay()}
+      {(from===Actionables && to === Inbox) && cardDisplay()
+      ||
+      to !== Actionables && to !== Ideas && (
+        <div onClick={(e) => e.stopPropagation()} className="menuModal">
+          <form>
+            <header className="menuModal__header">
+              <span className="material-symbols-outlined">drag_handle</span>
+              <div>
+                {selected && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      dispatchCall({
+                        type: "delete",
+                        payload: selected,
+                      });
+                      clear();
+                    }}
+                  >
+                    <span className="material-symbols-outlined">delete</span>
+                  </button>
+                )}
+
+                <button type="button" onClick={clear}>
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
+            </header>
+
+            <div className="menuModal__body">
+              <div className="body-wrapper">
+                <input
+                  type="text"
+                  name="title"
+                  required
+                  placeholder="Add Title"
+                  value={title}
+                  className="title-input"
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+                <input
+                  type="text"
+                  placeholder="Add a description"
+                  className="description-input"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                ></input>
+                {error && <p className="error">{error}</p>}
+
+                {to === Inbox && from !== to && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setError(false);
+                        setDate(dayjs(dayjs().format("YYYY-MM-DD")).valueOf());
+                      }}
+                    >
+                      today
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setError(false);
+                        setDate(
+                          dayjs(dayjs().format("YYYY-MM-DD"))
+                            .add(1, "day")
+                            .valueOf()
+                        );
+                      }}
+                    >
+                      tomorrow
+                    </button>
+                  </>
+                )}
+
+                {to === Calendar && (
+                  <>
+                    <div className="date-selector">
+                      <input
+                        type="date"
+                        value={dayjs(date.valueOf()).format("YYYY-MM-DD")}
+                        onChange={(e) => setDate(dayjs(e.target.value))}
+                      />
+                      <div className="time" onClick={() => setError(false)}>
+                        <input
+                          type="text"
+                          value={hours.timeStart}
+                          onChange={(e) =>
+                            setHours({
+                              timeStart: e.target.value,
+                              timeEnd: hours.timeEnd,
+                            })
+                          }
+                          onBlur={(e) => {
+                            const formated = handleTimeForm(e.target.value);
+                            setHours({
+                              timeStart: formated,
+                              timeEnd: hours.timeEnd,
+                            });
+                          }}
+                        ></input>
+                        -
+                        <input
+                          type="text"
+                          value={hours.timeEnd}
+                          onChange={(e) =>
+                            setHours({
+                              timeStart: hours.timeStart,
+                              timeEnd: e.target.value,
+                            })
+                          }
+                          onBlur={(e) => {
+                            const formated = handleTimeForm(e.target.value);
+                            setHours({
+                              timeStart: hours.timeStart,
+                              timeEnd: formated,
+                            });
+                          }}
+                        ></input>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {to === Tickler && (
+                  <div className="date-selector">
+                    <div className="miniCalendar-section">
+                      <input
+                        type="date"
+                        value={daySelected.format("YYYY-MM-DD")}
+                        onChange={(e) =>
+                          setDate(dayjs(e.target.value).valueOf())
+                        }
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className="colors-input">
+                  {labelsClasses.map((lblClass, i) => (
+                    <span
+                      key={i}
+                      onClick={() => setSelectedLabel(lblClass)}
+                      className={`${lblClass} color ${
+                        selectedLabel === lblClass &&
+                        "material-symbols-outlined"
+                      }`}
+                    >
+                      {selectedLabel === lblClass && "check"}
+                    </span>
+                  ))}
+                </div>
+
+                <footer>
+                  <button onClick={handleSubmit} type="button">
+                    save
+                  </button>
+                </footer>
+              </div>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 };

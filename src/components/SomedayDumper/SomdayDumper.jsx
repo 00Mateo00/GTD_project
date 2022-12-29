@@ -235,7 +235,9 @@ export const SomdayDumper = () => {
       }}
       className="wrapper"
     >
-      <div className="grid-container">{todos}</div>
+      <div className="scroll-wrapper">
+        <div className="grid-container">{todos}</div>
+      </div>
       {onShowModal && (
         <MenuModal
           selected={selectedDumperTODO}
