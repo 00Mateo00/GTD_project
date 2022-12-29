@@ -7,29 +7,49 @@ import "./menuModal.scss";
 
 const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
 
-export const MenuModal = ({
-  selected,
-  setSelected,
-  dispatchCall,
-  hourClicked = "0",
-}) => {
+export const MenuModal = ({ selected, setSelected, dispatchCall }) => {
   const {
+    hourClicked,
+    ModalParams,
     daySelected,
     onShowModal,
     savedCalendarEvents,
     setOnShowModal,
-    dispatchCallInboxEvent,
     dispatchCallCalendarEvent,
     dispatchCallTicklerFileEvent,
     dispatchCallActionableTODO,
     dispatchCallDumperTODO,
   } = useContext(GlobalContext);
 
+  const { Inbox, Calendar, Tickler, Actionables, Ideas } = ModalParams.to;
+  const { type, from, to } = onShowModal;
+
+  function HandleDate() {
+    console.log(dayjs(daySelected.valueOf()).format("YYYY-MM-DD"));
+    if (selected) {
+      console.log("selected");
+      return selected.day;
+    }
+
+    if (daySelected) {
+      //this is always gonna be
+      console.log("Dayselected");
+      return daySelected.valueOf();
+    }
+
+    if (to === Inbox) {
+      console.log("Inbox");
+      return false;
+    }
+    console.log("none");
+    return dayjs();
+  }
+
   const [title, setTitle] = useState(selected ? selected.title : "");
   const [description, setDescription] = useState(
     selected ? selected.description : ""
   );
-  const [date, setDate] = useState(selected ? selected.day : dayjs());
+  const [date, setDate] = useState(HandleDate());
 
   const [selectedLabel, setSelectedLabel] = useState(
     selected
@@ -99,25 +119,29 @@ export const MenuModal = ({
       description,
       label: selectedLabel,
       id: selected ? selected.id : Date.now(),
-      origin: onShowModal,
+      origin: onShowModal.to,
       checked: 0,
-      day: daySelected.valueOf(),
+      day: date,
       time: hours,
       subtasks: subTasks,
     };
 
-    switch (onShowModal) {
-      case "/Inbox":
-        dispatchCallInboxEvent({
-          type:
-            selected && window.location.pathname === onShowModal
-              ? "update"
-              : "push",
+    switch (to) {
+      case Inbox:
+        if (!EVENT.day) {
+          setError("you must choose a day");
+          return;
+        }
+        if (from === to) {
+          EVENT.day = false;
+        }
+        dispatchCallActionableTODO({
+          type: type,
           payload: EVENT,
         });
         break;
-      case "/Calendar":
-        EVENT.day = daySelected.valueOf();
+      case Calendar:
+        EVENT.day = date.valueOf();
         EVENT.time = hours;
         if (!hours.timeStart || !hours.timeEnd) {
           tempError =
@@ -161,64 +185,44 @@ export const MenuModal = ({
           tempError = "there is another appointment at this time";
           setError(tempError);
         } else {
-          if (window.location.pathname === "/Inbox" || window.location.pathname === "/Calendar/DayView")
-            tempError = window.location.pathname;
           dispatchCallCalendarEvent({
-            type:
-              selected &&
-              (window.location.pathname === onShowModal ||
-                window.location.pathname === tempError)
-                ? "update"
-                : "push",
+            type: type,
             payload: EVENT,
           });
         }
 
         break;
-      case "/Tickler-File":
-        EVENT.day = daySelected.valueOf();
-        if (window.location.pathname === "/Inbox")
-          tempError = window.location.pathname;
+      case Tickler:
+        EVENT.day = date.valueOf();
         dispatchCallTicklerFileEvent({
-          type:
-            selected &&
-            (window.location.pathname === onShowModal ||
-              window.location.pathname === tempError)
-              ? "update"
-              : "push",
+          type: type,
           payload: EVENT,
         });
         break;
-      case "/Actionable-List":
+      case Actionables:
         EVENT.subtasks = subTasks.filter((e) => Boolean(e.action));
+        EVENT.day = false;
         if (EVENT.subtasks.length < 1) {
           tempError = "there should be at least 1 action";
           setError(tempError);
         } else {
           dispatchCallActionableTODO({
-            type:
-              selected && window.location.pathname === onShowModal
-                ? "update"
-                : "push",
+            type: type,
             payload: EVENT,
           });
         }
         break;
-      case "/Ideas-Dumper":
+      case Ideas:
         dispatchCallDumperTODO({
-          type:
-            selected && window.location.pathname === onShowModal
-              ? "update"
-              : "push",
+          type: type,
           payload: EVENT,
         });
         break;
       default:
         break;
     }
-
     if (!tempError) {
-      if (window.location.pathname != onShowModal) {
+      if (from != to && to != Inbox) {
         selected &&
           dispatchCall({
             type: "delete",
@@ -226,19 +230,239 @@ export const MenuModal = ({
           });
       }
       clear();
-    } else if (tempError === "/Inbox" || tempError === "/Calendar/DayView") {
-      clear();
     }
   }
 
-  return (
+  const ticklerCardDisplay = () => (
     <div
-      onClick={() => {
-        setOnShowModal(false);
-        setSelected(false);
+      className={
+        "card" +
+        ` ${selectedLabel ? selectedLabel : selected.label}` +
+        " card_modal"
+      }
+      onClick={(prop) => {
+        prop.stopPropagation();
       }}
-      className="menuModal_wrapper"
     >
+      <header className="card__header">
+        <button className="actionable-card__button">
+          <span className="material-symbols-outlined">menu</span>
+        </button>
+        <div>
+          {selected && (
+            <button
+              type="button"
+              onClick={() => {
+                dispatchCall({
+                  type: "delete",
+                  payload: selected,
+                });
+                clear();
+              }}
+            >
+              <span className="material-symbols-outlined">delete</span>
+            </button>
+          )}
+
+          <button type="button" onClick={clear}>
+            <span className="material-symbols-outlined">close</span>
+          </button>
+        </div>
+      </header>
+
+      <div className="card__title">
+        <input
+          type="text"
+          name="title"
+          required
+          placeholder="Add Title"
+          value={title}
+          className="title-input"
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </div>
+      <div className="card__description actionables__description">
+        <input
+          type="text"
+          placeholder="Add a description"
+          className="description-input"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </div>
+      {error && <p className="error">{error}</p>}
+      <div className="actions-wrapper">
+        <h3>Actions:</h3>
+        <div className="actions">
+          {subTasks
+            .sort((a, b) => a.id - b.id)
+            .map((e, i) => {
+              return (
+                <div key={i} className="input-wrapper">
+                  <input
+                    type="text"
+                    required={i === 0 ? true : false}
+                    className="action"
+                    value={subTasks[i].action}
+                    onChange={(e) =>
+                      setSubTasks([
+                        ...subTasks.map((el, indx) =>
+                          indx === i
+                            ? {
+                                action: e.target.value,
+                                checked: 0,
+                                id: el.id,
+                              }
+                            : el
+                        ),
+                      ])
+                    }
+                    onBlur={() => setError(false)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      subTasks.length > 1
+                        ? setSubTasks([
+                            ...subTasks.filter((el, indx) => indx !== i),
+                          ])
+                        : setError("there should be at least 1 action");
+                    }}
+                  >
+                    <span className="material-symbols-outlined">delete</span>
+                  </button>
+                </div>
+              );
+            })}
+          <div className="add-action-wrapper">
+            <button
+              type="button"
+              onClick={() => {
+                setSubTasks([
+                  ...subTasks,
+                  { action: "", checked: 0, id: dayjs().valueOf() },
+                ]);
+              }}
+              className="add-action"
+            >
+              <span className="material-symbols-outlined">add</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="colors-input">
+        {labelsClasses.map((lblClass, i) => (
+          <span
+            key={i}
+            onClick={() => setSelectedLabel(lblClass)}
+            className={`${lblClass} color ${
+              selectedLabel === lblClass && "material-symbols-outlined"
+            }`}
+          >
+            {selectedLabel === lblClass && "check"}
+          </span>
+        ))}
+      </div>
+
+      <footer>
+        <button onClick={handleSubmit} type="button">
+          save
+        </button>
+      </footer>
+    </div>
+  );
+
+  const ideasCardDisplay = () => (
+    <div
+      className={
+        "card" +
+        ` ${selectedLabel ? selectedLabel : selected.label}` +
+        " card_modal"
+      }
+      onClick={(prop) => {
+        prop.stopPropagation();
+      }}
+    >
+      <header className="card__header">
+        <button className="card__menu">
+          <span className="material-symbols-outlined">menu</span>
+        </button>
+        <div>
+          {selected && (
+            <button
+              type="button"
+              onClick={() => {
+                dispatchCall({
+                  type: "delete",
+                  payload: selected,
+                });
+                clear();
+              }}
+            >
+              <span className="material-symbols-outlined">delete</span>
+            </button>
+          )}
+
+          <button type="button" onClick={clear}>
+            <span className="material-symbols-outlined">close</span>
+          </button>
+        </div>
+      </header>
+      <div className="card__title">
+        <input
+          type="text"
+          name="title"
+          required
+          placeholder="Add Title"
+          value={title}
+          className="title-input"
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </div>
+      <div className="card__description">
+        <textarea
+          type="text"
+          placeholder="Add a description"
+          className="description-input"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </div>
+      {error && <p className="error">{error}</p>}
+      <div className="colors-input">
+        {labelsClasses.map((lblClass, i) => (
+          <span
+            key={i}
+            onClick={() => setSelectedLabel(lblClass)}
+            className={`${lblClass} color ${
+              selectedLabel === lblClass && "material-symbols-outlined"
+            }`}
+          >
+            {selectedLabel === lblClass && "check"}
+          </span>
+        ))}
+      </div>
+      <footer>
+        <button onClick={handleSubmit} type="button">
+          save
+        </button>
+      </footer>
+    </div>
+  );
+
+  function to_name(to, from) {
+    console.log({ to }, { from });
+
+    if (to === Actionables) {
+      console.log("actionables");
+      return ticklerCardDisplay();
+    }
+    if (to === Ideas) {
+      console.log("ideas");
+      return ideasCardDisplay()
+    }
+
+    return (
       <div onClick={(e) => e.stopPropagation()} className="menuModal">
         <form>
           <header className="menuModal__header">
@@ -283,14 +507,42 @@ export const MenuModal = ({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               ></input>
+              {error && <p className="error">{error}</p>}
 
-              {onShowModal === "/Calendar" && (
+              {to === Inbox && from !== to && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setError(false);
+                      setDate(dayjs(dayjs().format("YYYY-MM-DD")).valueOf());
+                    }}
+                  >
+                    today
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setError(false);
+                      setDate(
+                        dayjs(dayjs().format("YYYY-MM-DD"))
+                          .add(1, "day")
+                          .valueOf()
+                      );
+                    }}
+                  >
+                    tomorrow
+                  </button>
+                </>
+              )}
+
+              {to === Calendar && (
                 <>
                   <div className="date-selector">
                     <input
                       type="date"
-                      value={daySelected.format("YYYY-MM-DD")}
-                      onChange={(e) => setDate(dayjs(e.target.value).valueOf())}
+                      value={dayjs(date.valueOf()).format("YYYY-MM-DD")}
+                      onChange={(e) => setDate(dayjs(e.target.value))}
                     />
                     <div className="time" onClick={() => setError(false)}>
                       <input
@@ -329,12 +581,11 @@ export const MenuModal = ({
                         }}
                       ></input>
                     </div>
-                    {error && <p className="error">{error}</p>}
                   </div>
                 </>
               )}
 
-              {onShowModal === "/Tickler-File" && (
+              {to === Tickler && (
                 <div className="date-selector">
                   <div className="miniCalendar-section">
                     <input
@@ -342,76 +593,6 @@ export const MenuModal = ({
                       value={daySelected.format("YYYY-MM-DD")}
                       onChange={(e) => setDate(dayjs(e.target.value).valueOf())}
                     />
-                  </div>
-                </div>
-              )}
-
-              {(onShowModal === "/Actionable-List" ||
-                (selected && selected.origin === "/Inbox")) && (
-                <div className="actions-wrapper">
-                  <h3>Actions:</h3>
-                  <div className="actions">
-                    <p>{error}</p>
-                    {subTasks
-                      .sort((a, b) => a.id - b.id)
-                      .map((e, i) => {
-                        return (
-                          <div key={i} className="input-wrapper">
-                            <input
-                              type="text"
-                              required={i === 0 ? true : false}
-                              className="action"
-                              value={subTasks[i].action}
-                              onChange={(e) =>
-                                setSubTasks([
-                                  ...subTasks.map((el, indx) =>
-                                    indx === i
-                                      ? {
-                                          action: e.target.value,
-                                          checked: 0,
-                                          id: el.id,
-                                        }
-                                      : el
-                                  ),
-                                ])
-                              }
-                              onBlur={() => setError(false)}
-                            />
-                            <button
-                              type="button"
-                              onClick={() => {
-                                subTasks.length > 1
-                                  ? setSubTasks([
-                                      ...subTasks.filter(
-                                        (el, indx) => indx !== i
-                                      ),
-                                    ])
-                                  : setError(
-                                      "there should be at least 1 action"
-                                    );
-                              }}
-                            >
-                              <span className="material-symbols-outlined">
-                                delete
-                              </span>
-                            </button>
-                          </div>
-                        );
-                      })}
-                    <div className="add-action-wrapper">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSubTasks([
-                            ...subTasks,
-                            { action: "", checked: 0, id: dayjs().valueOf() },
-                          ]);
-                        }}
-                        className="add-action"
-                      >
-                        <span className="material-symbols-outlined">add</span>
-                      </button>
-                    </div>
                   </div>
                 </div>
               )}
@@ -439,6 +620,186 @@ export const MenuModal = ({
           </div>
         </form>
       </div>
+    );
+
+    /*     {(from===Actionables && to === Inbox) && cardDisplay()
+    ||
+    to !== Actionables && to !== Ideas && (
+      <div onClick={(e) => e.stopPropagation()} className="menuModal">
+        <form>
+          <header className="menuModal__header">
+            <span className="material-symbols-outlined">drag_handle</span>
+            <div>
+              {selected && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    dispatchCall({
+                      type: "delete",
+                      payload: selected,
+                    });
+                    clear();
+                  }}
+                >
+                  <span className="material-symbols-outlined">delete</span>
+                </button>
+              )}
+
+              <button type="button" onClick={clear}>
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+          </header>
+
+          <div className="menuModal__body">
+            <div className="body-wrapper">
+              <input
+                type="text"
+                name="title"
+                required
+                placeholder="Add Title"
+                value={title}
+                className="title-input"
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Add a description"
+                className="description-input"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></input>
+              {error && <p className="error">{error}</p>}
+
+              {to === Inbox && from !== to && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setError(false);
+                      setDate(dayjs(dayjs().format("YYYY-MM-DD")).valueOf());
+                    }}
+                  >
+                    today
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setError(false);
+                      setDate(
+                        dayjs(dayjs().format("YYYY-MM-DD"))
+                          .add(1, "day")
+                          .valueOf()
+                      );
+                    }}
+                  >
+                    tomorrow
+                  </button>
+                </>
+              )}
+
+              {to === Calendar && (
+                <>
+                  <div className="date-selector">
+                    <input
+                      type="date"
+                      value={dayjs(date.valueOf()).format("YYYY-MM-DD")}
+                      onChange={(e) => setDate(dayjs(e.target.value))}
+                    />
+                    <div className="time" onClick={() => setError(false)}>
+                      <input
+                        type="text"
+                        value={hours.timeStart}
+                        onChange={(e) =>
+                          setHours({
+                            timeStart: e.target.value,
+                            timeEnd: hours.timeEnd,
+                          })
+                        }
+                        onBlur={(e) => {
+                          const formated = handleTimeForm(e.target.value);
+                          setHours({
+                            timeStart: formated,
+                            timeEnd: hours.timeEnd,
+                          });
+                        }}
+                      ></input>
+                      -
+                      <input
+                        type="text"
+                        value={hours.timeEnd}
+                        onChange={(e) =>
+                          setHours({
+                            timeStart: hours.timeStart,
+                            timeEnd: e.target.value,
+                          })
+                        }
+                        onBlur={(e) => {
+                          const formated = handleTimeForm(e.target.value);
+                          setHours({
+                            timeStart: hours.timeStart,
+                            timeEnd: formated,
+                          });
+                        }}
+                      ></input>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {to === Tickler && (
+                <div className="date-selector">
+                  <div className="miniCalendar-section">
+                    <input
+                      type="date"
+                      value={daySelected.format("YYYY-MM-DD")}
+                      onChange={(e) =>
+                        setDate(dayjs(e.target.value).valueOf())
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="colors-input">
+                {labelsClasses.map((lblClass, i) => (
+                  <span
+                    key={i}
+                    onClick={() => setSelectedLabel(lblClass)}
+                    className={`${lblClass} color ${
+                      selectedLabel === lblClass &&
+                      "material-symbols-outlined"
+                    }`}
+                  >
+                    {selectedLabel === lblClass && "check"}
+                  </span>
+                ))}
+              </div>
+
+              <footer>
+                <button onClick={handleSubmit} type="button">
+                  save
+                </button>
+              </footer>
+            </div>
+          </div>
+        </form>
+      </div>
+    )} */
+  }
+
+  to_name(to, from);
+
+  return (
+    <div
+      onClick={(prop) => {
+        prop.stopPropagation();
+        setOnShowModal(false);
+        clear();
+      }}
+      className="menuModal_wrapper"
+    >
+      {to_name(to, from)}
     </div>
   );
 };

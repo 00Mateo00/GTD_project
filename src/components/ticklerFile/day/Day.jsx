@@ -6,6 +6,7 @@ import GlobalContext from "../../../context/GlobalContext";
 export const Day = ({ day }) => {
   const [dayEvents, setDayEvents] = useState([]);
   const {
+    ModalParams,
     setDaySelected,
     setOnShowModal,
     setShowDayView,
@@ -14,6 +15,8 @@ export const Day = ({ day }) => {
     dispatchCallTicklerFileEvent,
     handleChecked,
   } = useContext(GlobalContext);
+
+  const { type, to } = ModalParams;
 
   useEffect(() => {
     const events = filteredTicklerFileEvents
@@ -35,37 +38,44 @@ export const Day = ({ day }) => {
     setOnShowModal("/Tickler-File");
   }
 
-  const events = dayEvents
-    .map(
-      (e, i) =>
-        i < 3 && (
-          <div
-            key={i}
-            onClick={() => {
-              setSelectedTicklerFileEvent(e);
+  const events = dayEvents.map(
+    (e, i) =>
+      i < 3 && (
+        <div
+          key={i}
+          onClick={(prop) => {
+            prop.stopPropagation()
+            setDaySelected(day);
+            setSelectedTicklerFileEvent(e);
+            setOnShowModal({type:type.update, from:to.Tickler, to:to.Tickler});
+
+          }}
+          className={`${e.label} day-event`}
+        >
+          <span>{e.title}</span>
+          <button
+            onClick={(event) => {
+              event.stopPropagation();
+              handleChecked(e, dispatchCallTicklerFileEvent);
             }}
-            className={`${e.label} day-event`}
+            className="tickler-event__check"
           >
-            <span>{e.title}</span>
-            <button
-              onClick={(event) => {
-                event.stopPropagation();
-                handleChecked(e, dispatchCallTicklerFileEvent);
-              }}
-              className="tickler-event__check"
-            >
-              <span className="material-symbols-outlined">
-                {e.checked === 0
-                  ? "check_box_outline_blank"
-                  : "select_check_box"}
-              </span>
-            </button>
-          </div>
-        )
-    );
+            <span className="material-symbols-outlined">
+              {e.checked === 0 ? "check_box_outline_blank" : "select_check_box"}
+            </span>
+          </button>
+        </div>
+      )
+  );
 
   return (
-    <div onClick={() => handleClick(day)} className="tickler-day-wrapper">
+    <div
+      onClick={() => {
+        setDaySelected(day);
+        setOnShowModal({type:type.push, from:to.Tickler, to:to.Tickler});
+      }}
+      className="tickler-day-wrapper"
+    >
       <header className="day-wrapper__header">
         <p
           onClick={(e) => {

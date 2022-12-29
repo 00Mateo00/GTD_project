@@ -1,57 +1,49 @@
 import React, { useContext } from "react";
-import { Routes } from "react-router-dom";
 import GlobalContext from "../../context/GlobalContext";
 import "./labels.scss";
 
 export const Labels = ({ labels, updateLabel, setState }) => {
   const {
-    inboxLabels,
     calendarLabels,
     ticklerFileLabels,
     actionableLabels,
     dumperLabels,
-    updateInboxLabel,
     updateCalendarLabel,
     updateTicklerFileLabel,
     updateActionableLabels,
     updateDumperLabels,
 
-    setInboxState,
     setCalendarState,
     setTicklerFileState,
     setActionableState,
     setDumperState,
   } = useContext(GlobalContext);
   switch (window.location.pathname) {
-    case "/Inbox":
-      labels = inboxLabels;
-      updateLabel = updateInboxLabel;
-      setState = setInboxState;
-      break;
-
+   
     case "/Calendar":
       labels = calendarLabels;
       updateLabel = updateCalendarLabel;
       setState = setCalendarState;
       break;
 
-    case "/Tickler-File":
+    case "/Tickler":
       labels = ticklerFileLabels;
       updateLabel = updateTicklerFileLabel;
       setState = setTicklerFileState;
       break;
 
-    case "/Actionable-List":
+    case "/Actionables":
       labels = actionableLabels;
       updateLabel = updateActionableLabels;
       setState = setActionableState;
 
       break;
 
-    case "/Ideas-Dumper":
+    case "/Ideas":
       labels = dumperLabels;
       updateLabel = updateDumperLabels;
       setState = setDumperState;
+      break;
 
     default:
         labels = [];
@@ -60,10 +52,19 @@ export const Labels = ({ labels, updateLabel, setState }) => {
       break;
   }
 
+
   return (
     <div className="label-wrapper">
-      <p>Label</p>
       <div className="list-wrapper">
+        {window.location.pathname !== "/Calendar" && (
+          <>
+            <div className="state-filter">
+              <button onClick={() => setState(false)}>All</button>
+              <button onClick={() => setState(1)}>Done</button>
+              <button onClick={() => setState(0)}>Due</button>
+            </div>
+          </>
+        )}
         {labels.map(({ label: lbl, checked }, idx) => (
           <label key={idx}>
             <input
@@ -74,16 +75,6 @@ export const Labels = ({ labels, updateLabel, setState }) => {
             <span className={`checkMark text-${lbl}`}></span> {lbl}
           </label>
         ))}
-        {window.location.pathname !== "/Calendar" && (
-          <>
-            <div className="state-filter">
-              <button onClick={() => setState(false)}>All</button>
-              <button onClick={() => setState(1)}>Done</button>
-              <button onClick={() => setState(0)}>Due</button>
-              <button onClick={() => setState(2)}>Missed</button>
-            </div>
-          </>
-        )}
       </div>
     </div>
   );

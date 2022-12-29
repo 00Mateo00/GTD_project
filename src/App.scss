@@ -1,5 +1,6 @@
 @import './utils/utils.scss';
 
+
 $card-hight: 25rem;
 
 
@@ -51,12 +52,17 @@ $card-hight: 25rem;
 //card styles
 .wrapper{
     position: relative;
-    padding: 1rem;
     width: 100vw;
     height: $bodyHeight;
     background-color: $secondary-color;
-    overflow-y: auto;
-    @include barStyles();
+    overflow: hidden;
+    
+    .scroll-wrapper{
+        padding: 1rem;
+        height: 100%;
+        overflow-y: auto;
+        @include barStyles();
+    }
 
 }
 
@@ -104,7 +110,8 @@ $card-hight: 25rem;
 
     .card__header{
         height: 1.5rem;
-
+        display: flex;
+        justify-content: space-between;
         span{
             cursor: pointer;
         }
@@ -127,6 +134,11 @@ $card-hight: 25rem;
             word-wrap: normal;
             word-break: break-all;
             overflow: hidden;
+        }
+
+        div{
+            height: 100%;
+            overflow: auto;
         }
     }
 
@@ -192,9 +204,10 @@ $card-hight: 25rem;
         align-items: flex-start;
         flex-direction: column;
 
-        button{
+        .action-wrapper{
             .done{
                 text-decoration: line-through;
+                opacity: 0.9;
             }
         }
     }
@@ -308,10 +321,47 @@ p{
 //phones
 @media (max-width: 425px) {
     .grid-container{
-        grid-template-columns: repeat(2, 1fr);
+        display: flex;
+        flex-direction: column;
         .card{
+            width: 100%;
+            overflow: hidden;
             p{
                 font-size: small;
+            }
+
+            .card__title{
+                margin-bottom: 0.5rem;
+            }
+
+            .card__description{
+                overflow: hidden;
+                height: 1.5rem;
+                div{
+                    height: 100%;
+                    overflow: hidden;
+                }
+            }
+        }
+        .dumper_card{
+            height: 7rem;
+            width: 100%;
+            overflow: hidden;
+            p{
+                font-size: small;
+            }
+
+            .card__title{
+                margin-bottom: 0.5rem;
+            }
+
+            .card__description{
+                overflow: hidden;
+                height: 1.5rem;
+                div{
+                    height: 100%;
+                    overflow: hidden;
+                }
             }
         }
     }
@@ -328,6 +378,17 @@ p{
             }
         }
     }
+    .wrapper{
+        .menuModal_wrapper{
+            .card_modal{
+                border-radius: 0;
+                border: 0;
+                height: 100%;
+                width: 100%;
+            }
+        }
+    }
+    
 }
 
 

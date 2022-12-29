@@ -15,16 +15,6 @@ export const TicklerFileHeader = () => {
     setTicklerFileState
   } = useContext(GlobalContext);
 
-  function handleReset() {
-    setMonthIndex(
-      monthIndex === dayjs().month()
-        ? monthIndex + Math.random()
-        : dayjs().month()
-    );
-
-    showDayView && setDaySelected(dayjs());
-  }
-
   function handlePrev() {
     showDayView
       ? setDaySelected(dayjs(daySelected).subtract(1, "day"))

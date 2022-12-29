@@ -5,6 +5,7 @@ import "./eventsView.scss";
 
 export const EventsView = () => {
   const {
+    ModalParams,
     setDaySelected,
     daySelected,
     setShowDayView,
@@ -16,6 +17,8 @@ export const EventsView = () => {
   } = useContext(GlobalContext);
 
   const [dayEvents, setDayEvents] = useState([]);
+  const { type, to } = ModalParams;
+
 
   useEffect(() => {
     const events = filteredTicklerFileEvents
@@ -70,9 +73,11 @@ export const EventsView = () => {
             return (
               <div
                 key={i}
-                onClick={() => {
+                onClick={(prop) => {
+                  prop.stopPropagation();
                   setSelectedTicklerFileEvent(e);
-                  setOnShowModal("/Tickler-File");
+                  setOnShowModal({type:type.update, from:to.Tickler, to:to.Tickler});
+;
                 }}
                 className={`${e.label} card`}
               >
@@ -101,9 +106,10 @@ export const EventsView = () => {
             );
           })}
           <div className="addButton-wrapper">
-            <button onClick={() => setOnShowModal("/Tickler-File")}>
+            <button onClick={() => setOnShowModal({type:type.push, from:to.Tickler, to:to.Tickler})}>
               <span className="material-symbols-outlined">add</span>
             </button>
+            
           </div>
         </div>
       </div>

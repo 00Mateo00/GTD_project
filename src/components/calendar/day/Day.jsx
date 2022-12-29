@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 export const Day = ({ day }) => {
   const [dayEvents, setDayEvents] = useState([]);
   const {
+    ModalParams,
     setDaySelected,
     setOnShowModal,
     setShowDayView,
@@ -14,6 +15,8 @@ export const Day = ({ day }) => {
     setSelectedCalendarEvent,
   } = useContext(GlobalContext);
 
+  const {type,to} = ModalParams;
+  
   useEffect(() => {
     const events = filteredCalendarEvents.filter(
       (e) => dayjs(e.day).format("DD-MM-YY") === day.format("DD-MM-YY")
@@ -35,18 +38,15 @@ export const Day = ({ day }) => {
       : "";
   }
 
-  function handleClick(day) {
-    setDaySelected(day);
-    setOnShowModal("/Calendar");
-  }
-
   const events = dayEvents.map(
     (e, i) =>
       i < 3 && (
         <div
           key={i}
-          onClick={() => {
+          onClick={(el) => {
+            el.stopPropagation()
             setSelectedCalendarEvent(e);
+            setOnShowModal({type: type.update, from:to.Calendar, to:to.Calendar});
           }}
           className={`${e.label} day-event`}
         >
@@ -57,7 +57,8 @@ export const Day = ({ day }) => {
 
   return (
     <div onClick={() => {
-      handleClick(day)
+      setDaySelected(day);
+      setOnShowModal({type: type.push, from:to.Calendar, to:to.Calendar});
     }} className="day-wrapper">
       <header className="day-wrapper__header">
         <p
@@ -86,7 +87,8 @@ export const Day = ({ day }) => {
                   setShowDayView(true);
                 }}
               >
-                ...
+               <Link to="DayView">...</Link>
+                
               </div>
             </>
           )}

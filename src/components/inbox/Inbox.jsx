@@ -10,7 +10,80 @@ import { DayView } from "../calendar/dayView/DayView";
 import { useRef } from "react";
 
 export const Inbox = () => {
-  const [dayEvents, setDayEvents] = useState([]);
+  const {
+    ModalParams,
+    onShowModal,
+    setOnShowModal,
+    handleChecked,
+    showMenu,
+    setShowMenu,
+
+    selectedCalendarEvent,
+    setSelectedCalendarEvent,
+    dispatchCallCalendarEvent,
+
+    filteredTicklerFileEvents,
+    selectedTicklerFileEvent,
+    setSelectedTicklerFileEvent,
+    dispatchCallTicklerFileEvent,
+
+    filteredActionableTODOS,
+    selectedActionableTODO,
+    setSelectedActionableTODO,
+    dispatchCallActionableTODO,
+  } = useContext(GlobalContext);
+
+  const { type, to } = ModalParams;
+  
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const actionRef = useRef(null);
+  const [title, setTitle] = useState(false);
+  const [description, setDescription] = useState(false);
+  const [subTasks, setSubTasks] = useState(false);
+  const [onEdit, setOnEdit] = useState(false);
+  const [onEditAction, setOnEditAction] = useState(false);
+  
+  useEffect(() => {
+    if (title && titleRef.current) titleRef.current.focus();
+    if (description && descriptionRef.current) descriptionRef.current.focus();
+    if (subTasks && actionRef) actionRef.current.focus();
+  }, [title, description, subTasks, titleRef, descriptionRef, actionRef,onEditAction]);
+
+  function clear() {
+    setOnEdit(false);
+    setTitle(false);
+    setDescription(false);
+    setOnEditAction(false);
+    setSubTasks(false);
+  }
+
+  function handleSubmit(e) {
+    const EVENT = {
+      title: title ? title : e.title,
+      description: description ? description : e.description,
+      label: e.label,
+      id: e.id,
+      origin: e.origin,
+      checked: e.checked,
+      day: e.day,
+      time: e.time,
+      subtasks: subTasks? subTasks : e.subtasks,
+    };
+
+    dispatchCallActionableTODO({
+      type: type.update,
+      payload: EVENT,
+    });
+
+    clear();
+  }
+
+  const [ticklerEventsForToday, setTicklerEventsForToday] = useState([]);
+  const [actionablesEventsForToday, setActionablesEventsForToday] = useState(
+    []
+  );
+  
   const [eventType, setEventType] = useState(false);
 
   const ref = useRef(null);
@@ -29,29 +102,6 @@ export const Inbox = () => {
     });
   }
 
-  const {
-    onShowModal,
-    setOnShowModal,
-    handleChecked,
-    showMenu,
-    setShowMenu,
-
-    filteredInboxEvents,
-    selectedInboxEvent,
-    setSelectedInboxEvent,
-    dispatchCallInboxEvent,
-
-    selectedCalendarEvent,
-    setSelectedCalendarEvent,
-    dispatchCallCalendarEvent,
-
-    filteredTicklerFileEvents,
-    selectedTicklerFileEvent,
-    setSelectedTicklerFileEvent,
-    dispatchCallTicklerFileEvent,
-    dispatchCallActionableTODO,
-  } = useContext(GlobalContext);
-
   useEffect(() => {
     const events = filteredTicklerFileEvents
       .filter(
@@ -59,15 +109,25 @@ export const Inbox = () => {
       )
       .sort((a, b) => b.id - a.id)
       .sort((a, b) => a.checked - b.checked);
-    setDayEvents(events);
+    setTicklerEventsForToday(events);
   }, [filteredTicklerFileEvents]);
 
-  const TicklerEvents = dayEvents.map((e, i) => (
+  useEffect(() => {
+    const events = filteredActionableTODOS
+      .filter(
+        (e) => dayjs(e.day).format("DD-MM-YY") === dayjs().format("DD-MM-YY")
+      )
+      .sort((a, b) => b.id - a.id)
+      .sort((a, b) => a.checked - b.checked);
+    setActionablesEventsForToday(events);
+  }, [filteredActionableTODOS]);
+
+  const TicklerEvents = ticklerEventsForToday.map((e, i) => (
     <div
       key={i}
       onClick={() => {
         setSelectedTicklerFileEvent(e);
-        setOnShowModal("/Tickler-File");
+        setOnShowModal({ type: type.update, from: to.Tickler, to: to.Tickler });
       }}
       className={`${e.label} day-event`}
     >
@@ -86,127 +146,224 @@ export const Inbox = () => {
     </div>
   ));
 
-  const InobxTodos = filteredInboxEvents
-    .sort((a, b) => b.id - a.id)
-    .sort((a, b) => a.checked - b.checked)
-    .map((e, i) => (
+  const cardDisplay = (e, i) => (
+    <>
       <div
-        onClick={() => {
-          setSelectedInboxEvent(e);
-          setOnShowModal("/Inbox");
-        }}
-        className={`card` + ` ${e.label}`}
-        key={i}
+        className="card__header"
       >
-        {showMenu !== i && (
-          <>
-            <div onClick={() => {}} className="card__header">
-              <button
-                onClick={(prop) => {
-                  prop.stopPropagation();
-                  setSelectedInboxEvent(e);
-                  setShowMenu(i);
-                }}
-                className="card__menu"
-              >
-                <span className="material-symbols-outlined">menu</span>
-              </button>
-              <button
-                onClick={(event) => {
-                  event.stopPropagation();
-                  handleChecked(e, dispatchCallInboxEvent);
-                }}
-                className="TODO-card__check"
-              >
-                <span className="material-symbols-outlined">
-                  {e.checked === 0
-                    ? "check_box_outline_blank"
-                    : "select_check_box"}
-                </span>
-              </button>
-            </div>
-            <div className="card__title">
-              <div>{e.title}</div>
-            </div>
-            <div className="card__description actionables__description">
-              <p>{e.description}</p>
-            </div>
-            {e.subtasks && (
-              <div className="actions-wrapper">
-                <h4>ACTIONS:</h4>
-                <div className="actions">
-                  {e.subtasks.sort((a, b) => a.id -  b.id).sort((a, b) => a.checked - b.checked).map((el, i) => (
-                    <button
-                      onClick={(prop) => {
-                        prop.stopPropagation();
-                        handleChecked(e, dispatchCallInboxEvent, i);
-                      }}
-                      key={i}
-                    >
-                      <p className={`${el.checked === 1 ? "done" : "due"}`}>
-                        - {el.action}
-                      </p>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </>
-        )}
-
-        {showMenu === i && (
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowMenu(false);
+        <button className="actionable-card__button">
+          <span
+            onClick={(prop) => {
+              prop.stopPropagation();
+              setSelectedActionableTODO(e);
+              setShowMenu(i);
             }}
-            className="menu-wrapper"
+            className="material-symbols-outlined"
           >
-            <div className="menu">
-              <header className="header-wrapper">
-                <button onClick={() => setShowMenu(false)}>
-                  <span className="material-symbols-outlined">arrow_back</span>
-                </button>
-              </header>
-              <ul className="menu-body">
-                <li onClick={() => setOnShowModal("/Calendar")}>CALENDAR</li>
-                <li onClick={() => setOnShowModal("/Tickler-File")}>
-                  TICKLER FILE
-                </li>
-                <li onClick={() => setOnShowModal("/Actionable-List")}>
-                  ACTIONABLE
-                </li>
-                <li onClick={() => setOnShowModal("/Ideas-Dumper")}>
-                  IDEAS DUMPER
-                </li>
-              </ul>
+            menu
+          </span>
+        </button>
+        {onEdit === i ? (
+          <>
+            <div
+              className="editOptions-wrapper"
+              onClick={(prop) => prop.stopPropagation()}
+            >
+              <span
+                className="Option_save material-symbols-outlined"
+                onClick={() => handleSubmit(e)}
+              >
+                done
+              </span>
+              <span
+                className="Option_close material-symbols-outlined"
+                onClick={clear}
+              >
+                close
+              </span>
             </div>
+          </>
+        ) : (
+          <button
+            onClick={(event) => {
+              event.stopPropagation();
+              handleChecked(e, dispatchCallActionableTODO);
+            }}
+            className="TODO-card__check"
+          >
+            <span className="material-symbols-outlined">
+              {e.checked === 0 ? "check_box_outline_blank" : "select_check_box"}
+            </span>
+          </button>
+        )}
+      </div>
+      <div className="card__title">
+        {title && onEdit === i ? (
+          <input
+            ref={titleRef}
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            onClick={(prop) => prop.stopPropagation()}
+          ></input>
+        ) : (
+          <div
+            onClick={(prop) => {
+              clear();
+              prop.stopPropagation();
+              setOnEdit(i);
+              setTitle(e.title);
+            }}
+          >
+            {e.title}
           </div>
         )}
       </div>
-    ));
+      <div className="card__description actionables__description">
+        {description && onEdit === i ? (
+          <input
+            ref={descriptionRef}
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            onClick={(prop) => prop.stopPropagation()}
+          ></input>
+        ) : (
+          <div
+            onClick={(prop) => {
+              clear();
+              prop.stopPropagation();
+              setOnEdit(i);
+              setDescription(e.description);
+            }}
+          >
+            {e.description}
+          </div>
+        )}
+      </div>
+      <div className="actions-wrapper">
+        <h4>ACTIONS:</h4>
+        <div
+          className="actions"
+          onClick={(prop) => {
+            setSubTasks(false)
+            prop.stopPropagation();
+            setSubTasks(e.subtasks);
+            setOnEdit(i);
+          }}
+        >
+          {e.subtasks
+            .sort((a, b) => a.id - b.id)
+            .sort((a, b) => a.checked - b.checked)
+            .map((el, j) => (
+              <div className="action-wrapper" key={j}>
+                <button
+                  onClick={(prop) => {
+                    prop.stopPropagation();
+                    handleChecked(e, dispatchCallActionableTODO, j);
+                  }}
+                >
+                  <span
+                    className={
+                      "actionsCheck material-symbols-outlined" +
+                      ` ${el.checked === 1 ? "checked" : "unchecked"}`
+                    }
+                  >
+                    {el.checked === 1 ? "check_box" : "check_box_outline_blank"}
+                  </span>
+                </button>
+                <div>
+                  {onEditAction === j && onEdit === i ? (
+                    <input
+                      ref={actionRef}
+                      type="text"
+                      value={subTasks[j].action}
+                      onChange={(event) =>
+                        setSubTasks(
+                          subTasks.map((el, indx) =>
+                            indx === j
+                              ? {
+                                  action: event.target.value,
+                                  checked: el.checked,
+                                  id: el.id,
+                                }
+                              : el
+                          )
+                        )
+                      }
+                      onClick={(prop) => prop.stopPropagation()}
+                    />
+                  ) : (
+                    <div
+                      className={`${el.checked === 1 ? "done" : "due"}`}
+                      onClick={() => {
+                        setOnEditAction(j);
+                      }}
+                    >
+                      {el.action}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
+    </>
+  );
+
+
+  const ActionableEvents = actionablesEventsForToday.map((e, i) => (
+    <div
+      onClick={() => {
+        setSelectedActionableTODO(e);
+        setOnShowModal({
+          type: type.update,
+          from: to.Actionables,
+          to: to.Inbox,
+        });
+      }}
+      className={"card" + ` ${e.label}`}
+      key={i}
+    >
+      {showMenu !== i &&  cardDisplay(e, i)}
+
+      {showMenu === i && (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowMenu(false);
+          }}
+          className="menu-wrapper"
+        >
+          <div className="menu">
+            <header className="header-wrapper">
+              <button onClick={() => setShowMenu(false)}>
+                <span className="material-symbols-outlined">arrow_back</span>
+              </button>
+            </header>
+            <ul className="menu-body">
+              <li
+                onClick={() =>
+                  setOnShowModal({
+                    type: type.update,
+                    from: to.Inbox,
+                    to: to.Inbox,
+                  })
+                }
+              >
+                Acionables
+              </li>
+            </ul>
+          </div>
+        </div>
+      )}
+    </div>
+  ));
+
+
 
   return (
     <div className="inbox-wrapper">
-      {onShowModal && (
-        <MenuModal
-          selected={
-            (eventType === "Inbox" && selectedInboxEvent) ||
-            (eventType === "Tickler" && selectedTicklerFileEvent) ||
-            (eventType === "Calendar" && selectedCalendarEvent)
-          }
-          setSelected={
-            (eventType === "Inbox" && setSelectedInboxEvent) ||
-            (eventType === "Tickler" && setSelectedTicklerFileEvent) ||
-            (eventType === "Calendar" && setSelectedCalendarEvent)
-          }
-          dispatchCall={
-            (eventType === "Inbox" && dispatchCallInboxEvent) ||
-            (eventType === "Tickler" && dispatchCallTicklerFileEvent) ||
-            (eventType === "Calendar" && dispatchCallCalendarEvent)
-          }
-        />
-      )}
       <div
         className="inbox-Tickler"
         ref={ref}
@@ -221,12 +378,32 @@ export const Inbox = () => {
         >
           <DayView />
         </div>
-        <div className="grid-container" onClick={() => setEventType("Inbox")}>
-          {InobxTodos}
+        <div
+          className="grid-container"
+          onClick={() => setEventType("Actionables")}
+        >
+          {ActionableEvents}
         </div>
       </div>
+      {onShowModal && (
+        <MenuModal
+          selected={
+            (eventType === "Actionables" && selectedActionableTODO) ||
+            (eventType === "Tickler" && selectedTicklerFileEvent) ||
+            (eventType === "Calendar" && selectedCalendarEvent)
+          }
+          setSelected={
+            (eventType === "Actionables" && setSelectedActionableTODO) ||
+            (eventType === "Tickler" && setSelectedTicklerFileEvent) ||
+            (eventType === "Calendar" && setSelectedCalendarEvent)
+          }
+          dispatchCall={
+            (eventType === "Actionables" && dispatchCallActionableTODO) ||
+            (eventType === "Tickler" && dispatchCallTicklerFileEvent) ||
+            (eventType === "Calendar" && dispatchCallCalendarEvent)
+          }
+        />
+      )}
     </div>
   );
 };
-
-

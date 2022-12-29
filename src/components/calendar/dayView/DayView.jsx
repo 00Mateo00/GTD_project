@@ -6,6 +6,9 @@ import { MenuModal } from "../../modals/MenuModal";
 
 export const DayView = () => {
   const {
+    hourClicked,
+    setHourClicked,
+    ModalParams,
     onShowModal,
     selectedCalendarEvent,
     setSelectedCalendarEvent,
@@ -14,6 +17,9 @@ export const DayView = () => {
     setOnShowModal,
     filteredCalendarEvents,
   } = useContext(GlobalContext);
+
+  const {type,to} = ModalParams;
+
 
   let intervalID = null;
 
@@ -53,7 +59,6 @@ export const DayView = () => {
 
   const [hoursPointer, setHoursPointer] = useState(dayjs().hour() * 60);
   const [minutesPointer, setMinutesPointer] = useState(dayjs().minute());
-  const [hourClicked, setHourClicked] = useState(0);
 
   useEffect(() => {
     const events = filteredCalendarEvents.filter(
@@ -79,6 +84,33 @@ export const DayView = () => {
     );
   }
 
+  const EVENTS = dayEvents.map((e, i) => {
+    const styles = {
+      gridRowStart: position(e.time.timeStart),
+      gridRowEnd: position(e.time.timeEnd),
+    };
+    return (
+      <div
+        style={styles}
+        key={i}
+        onClick={() => {
+          setSelectedCalendarEvent(e);
+          setOnShowModal({type: type.update, from:to.Calendar, to:to.Calendar});
+        }}
+        className={`${e.label} day-event`}
+      >
+        <div className="info">
+          <div>
+            <h3>{e.title}</h3>
+          </div>
+          <div>
+            <p>{e.description}</p>
+          </div>
+        </div>
+      </div>
+    );
+  })
+
   return (
     <>
       {onShowModal && (
@@ -86,7 +118,6 @@ export const DayView = () => {
           selected={selectedCalendarEvent}
           setSelected={setSelectedCalendarEvent}
           dispatchCall={dispatchCallCalendarEvent}
-          hourClicked={hourClicked}
         />
       )}
       <div className="times-wrapper">
@@ -100,7 +131,7 @@ export const DayView = () => {
             <div
               onClick={() => {
                 setHourClicked(i);
-                setOnShowModal("/Calendar");
+                setOnShowModal({type: type.push, from:to.Calendar, to:to.Calendar});
               }}
               className={`hour-block number-${i}`}
               key={i}
@@ -110,32 +141,7 @@ export const DayView = () => {
             <div className="line line-pointer" style={styles} ref={ref}></div>
           </div>
           <div className="events-wrapper on-top-displays">
-            {dayEvents.map((e, i) => {
-              const styles = {
-                gridRowStart: position(e.time.timeStart),
-                gridRowEnd: position(e.time.timeEnd),
-              };
-              return (
-                <div
-                  style={styles}
-                  key={i}
-                  onClick={() => {
-                    setSelectedCalendarEvent(e);
-                    setOnShowModal("/Calendar");
-                  }}
-                  className={`${e.label} day-event`}
-                >
-                  <div className="info">
-                    <div>
-                      <h3>{e.title}</h3>
-                    </div>
-                    <div>
-                      <p>{e.description}</p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {EVENTS}
           </div>
         </div>
       </div>

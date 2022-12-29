@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext, useState, useEffect } from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useRoutes } from "react-router-dom";
 import GlobalContext from "../../context/GlobalContext";
 import "./calendar.scss";
 import "./header.scss";
@@ -11,19 +11,30 @@ import { InboxHeader } from "./InboxHeader";
 
 export const Header = () => {
   const {
+    ModalParams,
+    handleReset,
     resetAll,
     showMenu,
     setShowMenu,
-    handleReset,
     setOnShowModal,
-    setTicklerFileState,
     showDayView,
     setShowDayView,
-    calendarLabels,
-    ticklerFileLabels,
-    actionableLabels,
-    dumperLabels,
   } = useContext(GlobalContext);
+  const { push } = ModalParams.type;
+
+  function UrlToModal(path) {
+    const ListName = path.replace("DayView", "").replaceAll("/", "");
+    const to =
+      ModalParams.to.hasOwnProperty(ListName) && ModalParams.to[ListName];
+    setOnShowModal({ type: push, from: to, to: to });
+  }
+
+  const todayButton = (<button
+    onClick={handleReset}
+    className="header__button shadow-md hover:shadow-2xl"
+  >
+    Today
+  </button>)
 
   return (
     <header
@@ -53,13 +64,13 @@ export const Header = () => {
               <Link to="/Calendar">Calendar</Link>
             </li>
             <li onClick={resetAll}>
-              <Link to="/Tickler-File">Tickler file</Link>
+              <Link to="/Tickler">Tickler file</Link>
             </li>
             <li onClick={resetAll}>
-              <Link to="/Actionable-List">Actionable list</Link>
+              <Link to="/Actionables">Actionable list</Link>
             </li>
             <li onClick={resetAll}>
-              <Link to="/Ideas-Dumper">Ideas dumper</Link>
+              <Link to="/Ideas">Ideas dumper</Link>
             </li>
           </ul>
           <div>
@@ -76,7 +87,7 @@ export const Header = () => {
           <div className="buttons">
             <Routes>
               <Route
-                path="/Calendar"
+                path="/Calendar/DayView"
                 element={
                   showDayView && (
                     <button
@@ -84,22 +95,27 @@ export const Header = () => {
                       className={"go-back"}
                       alt="go back"
                     >
-                      <span className="material-symbols-outlined">
-                        arrow_back
-                      </span>
+                      <Link to="/Calendar">
+                        <span className="material-symbols-outlined">
+                          arrow_back
+                        </span>
+                      </Link>
                     </button>
                   )
                 }
               />
+
+              <Route
+                path="/Calendar"
+                element={todayButton}
+              />
+              <Route
+                path="/Tickler"
+                element={todayButton}
+              />
             </Routes>
             <button
-              onClick={handleReset}
-              className="header__button shadow-md hover:shadow-2xl"
-            >
-              Today
-            </button>
-            <button
-              onClick={() => setOnShowModal(window.location.pathname)}
+              onClick={() => UrlToModal(window.location.pathname)}
               alt="create_event"
               className="CreateEventButton-button"
             >
