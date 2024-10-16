@@ -1,0 +1,214 @@
+/* .login-page {
+	min-width: 375px;
+	margin: 0;
+	font-family: suse;
+
+	h2 {
+		font-size: 3rem;
+		margin: 0 0 2vh 0;
+	}
+
+	main {
+		display: flex;
+		flex-direction: column;
+		font-family: sans-serif;
+	}
+
+	section {
+		flex: 1;
+		border-radius: 0.3rem;
+		margin: 2vh 4vw;
+
+		button {
+			height: 6vh;
+			width: 100%;
+			font-weight: bold;
+			border: none;
+			color: #ffffff;
+			border-radius: 0.3rem;
+			background-color: #5011ff;
+			font-size: 1.8rem;
+
+			&:hover {
+				background-color: rgb(66, 30, 165);
+				color: #fff;
+			}
+		}
+		.form-group {
+			margin: 2.5rem 0;
+		}
+
+		.form-container {
+			label {
+				font-weight: bold;
+				font-size: 1.8rem;
+			}
+			input:focus {
+				background-color: #5111ff17;
+				outline: 0.1rem solid #4705ff54;
+			}
+			input {
+				min-width: 95%;
+				border-radius: 0.3rem;
+				padding: 0.8rem 0.5rem;
+				border: 0.1rem solid #868686;
+				box-shadow: 0.1rem 0.1rem #9b9a9a70;
+				font-size: 1.5rem;
+			}
+		}
+	}
+}
+
+@media (min-width: 1024px) {
+	.login-page {
+		max-width: 1920px;
+		margin: 0;
+		font-family: suse;
+
+		main {
+			justify-content: space-around;
+			flex-wrap: wrap;
+			gap: 2rem;
+			height: 100vh;
+		}
+
+		section {
+			display: flex;
+			justify-content: space-around;
+			align-items: safe;
+			flex-direction: column;
+			max-width: 45%;
+
+			.form-container {
+				label {
+					font-weight: bold;
+					font-size: 1.8rem;
+				}
+
+				input {
+					min-width: 95%;
+					border-radius: 0.3rem;
+					padding: 0.8rem 0.5rem;
+					border: 0.1rem solid #868686;
+					box-shadow: 0.1rem 0.1rem #9b9a9a70;
+					font-size: 1.5rem;
+				}
+			}
+		}
+	}
+}
+ */
+body.login-page {
+  --bg-dark: #1a1a1a;
+  --bg-light: #2a2a2a;
+  --text-light: #ffffff;
+  --text-dark: #cccccc;
+  --electric-violet: #9900ff;
+  --electric-violet-light: #b14aff;
+
+  font-family: Arial, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+
+  main {
+    width: 100%;
+    display: flex;
+    gap: 5rem;
+    row-gap: 2rem;
+    padding: 2rem;
+    align-items: start;
+    justify-content: center;
+    section {
+      background-color: var(--bg-light);
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(153, 0, 255, 0.3);
+      width: 20rem;
+      padding: 2.5rem;
+      height: max-content;
+
+      .form-container {
+        width: 100%;
+
+        h2 {
+          font-size: 1.5rem;
+          margin-bottom: 1rem;
+          color: var(--electric-violet);
+        }
+
+        form {
+          display: flex;
+          flex-direction: column;
+
+          .form-group {
+            margin-bottom: 1rem;
+
+            label {
+              display: block;
+              margin-bottom: 0.5rem;
+              color: var(--text-dark);
+            }
+
+            input {
+              width: 100%;
+              padding: 0.5rem;
+              background-color: var(--bg-dark);
+              border: 1px solid var(--electric-violet);
+              border-radius: 4px;
+              color: var(--text-light);
+
+              &:focus {
+                outline: none;
+                box-shadow: 0 0 5px var(--electric-violet);
+              }
+            }
+          }
+
+          button {
+            padding: 0.5rem 1rem;
+            background-color: var(--electric-violet);
+            color: var(--text-light);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+              background-color: var(--electric-violet-light);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  body.login-page {
+    main {
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .login-page {
+      padding: 1rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  input,
+  button {
+    font-size: 14px;
+  }
+}

@@ -1,148 +1,193 @@
-@import '../../utils/utils.scss';
+@import "../../utils/utils.scss";
 
 $transition: left 0.25s ease-in-out;
 
-.header{
-    display: grid;
-    grid-template-columns: 1fr 3fr 6fr;
+.header {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 10fr;
+  align-items: center;
+  height: $headerHeight;
+  background-color: $base-color;
+  box-shadow: $box-shadow;
+
+  .menu-wrapper {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding-left: 0.5rem;
+
+    .menu-button {
+      span {
+        font-size: 2.5rem;
+        color: $menu-button-color;
+      }
+    }
+
+    .list-wrapper-menu {
+      overflow: auto;
+      position: absolute;
+      display: grid;
+      grid-template-rows: repeat(2, 1fr);
+      z-index: 100;
+      top: calc(100%);
+      left: -17rem;
+      width: 17rem;
+      height: calc(100vh - $headerHeight);
+      background: #eee;
+      padding: 0.5rem;
+      transition: $transition;
+
+      ul {
+        display: grid;
+        height: 20rem;
+        grid-template-rows: repeat(5, 1fr);
+        li {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          float: left;
+          margin: 0.5rem 0;
+          padding: 0;
+          a {
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid transparent;
+            border-radius: 20px;
+            width: 100%;
+            padding: 5px 0px 5px 20px;
+            transition: all 0.3s ease-in-out;
+
+            &:hover {
+              background-color: #dadada; /* Cambio suave en el fondo */
+              color: #9b59b6; /* Texto azul suave */
+              border-left: 4px solid #724ae2; /* Borde de acento en hover */
+            }
+            &:active {
+              //todo: do variable
+              background-color: #7a42e0; /* Fondo más oscuro para ítem activo */
+              color: #ffffff; /* Texto azul para el ítem activo */
+              border-left: 4px solid #724ae2; /* Borde naranja para ítem activo */
+            }
+          }
+        }
+      }
+    }
+
+    .onShow {
+      left: 0;
+      transition: $transition;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    .header__button {
+      margin: 0 0.5rem;
+      width: 5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0.5rem;
+      border-width: 1px;
+      border-radius: 100px;
+      padding: 0.5rem;
+    }
+
+    .CreateEventButton-button {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-width: 1px;
+      border-radius: 100%;
+      position: relative;
+      overflow: hidden;
+
+      .add {
+        height: fit-content;
+        width: fit-content;
+        text-align: center;
+      }
+    }
+
+    button {
+      margin-left: 1rem;
+      background-color: $add-button-color;
+      box-shadow: $box-shadow;
+    }
+
+    .go-back {
+      background-color: transparent;
+      box-shadow: none;
+      color: rgb(0, 0, 0);
+    }
+  }
+
+  .navigation-arrows {
+    display: flex;
+    justify-content: center;
     align-items: center;
-    height: $headerHeight;
-    background-color: $primary-color;
-    box-shadow: $box-shadow;
+    text-transform: capitalize;
 
-    .menu-wrapper{
-        position: relative;
-        list-style:none;
-        margin:0;
-        padding-left: 0.5rem;
+    .navigation-arrows__container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-        .menu-button{
-            span{
-                font-size: 2.5rem;
-                color: whitesmoke;
-            }
-        }
-
-        .list-wrapper-menu{
-            position:absolute;
-            display: grid;
-            grid-template-rows: repeat(2,1fr);
-            z-index: 100;
-            top:calc(50% + $headerHeight/2);
-            left:-15rem;
-            width: 15rem;
-            height: calc(100vh - $headerHeight);
-            background:#eee;
-            padding: 0.5rem;
-            transition: $transition;
-
-            ul{
-                display: grid;
-                height: 20rem;
-                grid-template-rows: repeat(5, 1fr);
-                li{
-                    display: flex;
-                    justify-content: flex-start;
-                    position:relative;
-                    float:left;
-                    margin: 0.5rem 0;
-                    padding:0;
-                    a{
-                        display:block;
-                        text-transform:uppercase;
-                        letter-spacing:1px;
-                        border-bottom: 1px solid transparent;
-    
-                        &:hover{
-                            border-bottom-color: black;
-                        }
-                    }
-                }
-            }
-        }
-
-        .onShow{
-            left: 0;
-            transition: $transition;
-        }
-
-    }
-    
-    .buttons{
-        display: flex;
-        .header__button{
-            margin: 0 0.5rem;
-            width: 5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0.5rem;
-            border-width: 1px;
-            border-radius: 100px;
-            padding: 0.5rem;
-        }
-
-        .CreateEventButton-button{
-            width: fit-content;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.5rem;
-            border-width: 1px;
-            border-radius: 100%;
-            padding: 0.5rem;
-        
-            .add{
-                height: fit-content;
-                width: fit-content;
-                text-align: center;
-            }
-        }
-
-        button{
-            background-color: whitesmoke;
-            box-shadow: $box-shadow;
-        }
-
-        .go-back{
-            background-color: transparent;
-            box-shadow: none;
-            color: $secondary-light;
-        }
-    }
-
-    .navigation-arrows{
+      button {
         display: flex;
         justify-content: center;
         align-items: center;
-
-        .navigation-arrows__container{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            
-            button{
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                .arrow{
-                    cursor: pointer;
-                    color: $secondary-light;
-                }
-            }
+        .arrow {
+          cursor: pointer;
+          color: $secondary-light;
         }
+      }
     }
+  }
 
-    .inbox-date{
-        color: $secondary-light;
-    }
-
+  .inbox-date {
+    color: black;
+    font-size: 1.25rem;
+  }
 }
 
-.InboxHeader{
+.InboxHeader {
+  grid-template-columns: 1fr 1fr 10fr;
+  .inbox-date {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 440px) {
+  .header {
     grid-template-columns: 1fr 9fr;
-    .inbox-date{
-        display: flex;
-        justify-content: center;
+
+    .navigation-arrows {
+      justify-content: flex-start;
     }
+    .buttons {
+      position: absolute;
+      right: 30px;
+      bottom: 30px;
+      z-index: 12;
+
+      .header__button {
+        height: 2.5rem;
+      }
+      .CreateEventButton-button {
+        width: 50px;
+        height: 50px;
+        border-radius: 20%;
+      }
+    }
+  }
+
+  .InboxHeader {
+    grid-template-columns: 1fr 11fr;
+  }
 }

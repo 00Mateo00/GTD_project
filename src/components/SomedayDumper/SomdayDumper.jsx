@@ -9,18 +9,8 @@ import { MenuModal } from "../modals/MenuModal";
 import "./somdayDumper.scss";
 
 export const SomdayDumper = () => {
-  const {
-    ModalParams,
-    filteredDumperTODOS,
-    selectedDumperTODO,
-    setSelectedDumperTODO,
-    dispatchCallDumperTODO,
-    onShowModal,
-    setOnShowModal,
-    showMenu,
-    setShowMenu,
-    handleChecked,
-  } = useContext(GlobalContext);
+  const { ModalParams, filteredDumperTODOS, selectedDumperTODO, setSelectedDumperTODO, dispatchCallDumperTODO, onShowModal, setOnShowModal, showMenu, setShowMenu, handleChecked } =
+    useContext(GlobalContext);
 
   const titleRef = useRef(null);
   const descriptionRef = useRef(null);
@@ -29,7 +19,7 @@ export const SomdayDumper = () => {
   const [onEdit, setOnEdit] = useState(false);
 
   useEffect(() => {
-    if (title && titleRef.current) titleRef.current.focus()
+    if (title && titleRef.current) titleRef.current.focus();
     if (description && descriptionRef.current) descriptionRef.current.focus();
   }, [title, description, titleRef, descriptionRef]);
 
@@ -49,6 +39,7 @@ export const SomdayDumper = () => {
     dispatchCallDumperTODO({
       type: type.update,
       payload: EVENT,
+      name: to.Dumper,
     });
     clear();
   }
@@ -74,20 +65,11 @@ export const SomdayDumper = () => {
         </button>
         {onEdit === i ? (
           <>
-            <div
-              className="editOptions-wrapper"
-              onClick={(prop) => prop.stopPropagation()}
-            >
-              <span
-                className="Option_save material-symbols-outlined"
-                onClick={() => handleSubmit(e)}
-              >
+            <div className="editOptions-wrapper" onClick={(prop) => prop.stopPropagation()}>
+              <span className="Option_save material-symbols-outlined" onClick={() => handleSubmit(e)}>
                 done
               </span>
-              <span
-                className="Option_close material-symbols-outlined"
-                onClick={clear}
-              >
+              <span className="Option_close material-symbols-outlined" onClick={clear}>
                 close
               </span>
             </div>
@@ -100,25 +82,17 @@ export const SomdayDumper = () => {
             }}
             className="TODO-card__check"
           >
-            <span className="material-symbols-outlined">
-              {e.checked === 0 ? "check_box_outline_blank" : "select_check_box"}
-            </span>
+            <span className="material-symbols-outlined">{e.checked === 0 ? "check_box_outline_blank" : "select_check_box"}</span>
           </button>
         )}
       </div>
       <div className="card__title">
         {title && onEdit === i ? (
-          <input
-            ref={titleRef}
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            onClick={(prop) => prop.stopPropagation()}
-          ></input>
+          <input ref={titleRef} type="text" value={title} onChange={(e) => setTitle(e.target.value)} onClick={(prop) => prop.stopPropagation()}></input>
         ) : (
           <div
             onClick={(prop) => {
-              clear()
+              clear();
               prop.stopPropagation();
               setOnEdit(i);
               setTitle(e.title);
@@ -130,17 +104,11 @@ export const SomdayDumper = () => {
       </div>
       <div className="card__description">
         {description && onEdit === i ? (
-          <textarea
-            ref={descriptionRef}
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            onClick={(prop) => prop.stopPropagation()}
-          ></textarea>
+          <textarea ref={descriptionRef} type="text" value={description} onChange={(e) => setDescription(e.target.value)} onClick={(prop) => prop.stopPropagation()}></textarea>
         ) : (
           <div
             onClick={(prop) => {
-              clear()
+              clear();
               prop.stopPropagation();
               setOnEdit(i);
               setDescription(e.description);
@@ -172,34 +140,34 @@ export const SomdayDumper = () => {
             onClick={() =>
               setOnShowModal({
                 type: type.push,
-                from: to.Ideas,
+                from: to.Dumper,
                 to: to.Actionables,
               })
             }
           >
-            ACTIONABLES
+            PASO A PASO
           </li>
           <li
             onClick={() =>
               setOnShowModal({
                 type: type.push,
-                from: to.Ideas,
+                from: to.Dumper,
                 to: to.Calendar,
               })
             }
           >
-            CALENDAR
+            CALENDARIO
           </li>
           <li
             onClick={() =>
               setOnShowModal({
                 type: type.push,
-                from: to.Ideas,
+                from: to.Dumper,
                 to: to.Tickler,
               })
             }
           >
-            TICKLER FILE
+            RECORDATORIO
           </li>
         </ul>
       </div>
@@ -216,9 +184,9 @@ export const SomdayDumper = () => {
         onClick={(prop) => {
           prop.stopPropagation();
           setSelectedDumperTODO(e);
-          setOnShowModal({ type: type.update, from: to.Ideas, to: to.Ideas });
+          setOnShowModal({ type: type.update, from: to.Dumper, to: to.Dumper });
         }}
-        className={`card` +" dumper_card" + ` ${e.label}`}
+        className={`card` + " dumper_card" + ` ${e.label}`}
         key={i}
       >
         {showMenu !== i && cardDisplay(e, i)}
@@ -238,13 +206,7 @@ export const SomdayDumper = () => {
       <div className="scroll-wrapper">
         <div className="grid-container">{todos}</div>
       </div>
-      {onShowModal && (
-        <MenuModal
-          selected={selectedDumperTODO}
-          setSelected={setSelectedDumperTODO}
-          dispatchCall={dispatchCallDumperTODO}
-        />
-      )}
+      {onShowModal && <MenuModal selected={selectedDumperTODO} setSelected={setSelectedDumperTODO} dispatchCall={dispatchCallDumperTODO} />}
     </div>
   );
 };

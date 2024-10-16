@@ -19,8 +19,13 @@ export const Labels = ({ labels, updateLabel, setState }) => {
     setDumperState,
   } = useContext(GlobalContext);
   switch (window.location.pathname) {
-   
     case "/Calendar":
+      labels = calendarLabels;
+      updateLabel = updateCalendarLabel;
+      setState = setCalendarState;
+      break;
+
+    case "/Calendar/DayView":
       labels = calendarLabels;
       updateLabel = updateCalendarLabel;
       setState = setCalendarState;
@@ -39,39 +44,56 @@ export const Labels = ({ labels, updateLabel, setState }) => {
 
       break;
 
-    case "/Ideas":
+    case "/Dumper":
       labels = dumperLabels;
       updateLabel = updateDumperLabels;
       setState = setDumperState;
       break;
 
+    case "/Inbox":
+      const unfilteredLabels = [...calendarLabels, ...ticklerFileLabels, ...actionableLabels];
+      const mergedMap = new Map();
+
+      unfilteredLabels.forEach((lbl) => {
+        mergedMap.set(lbl.label, lbl);
+      });
+
+      labels = [...mergedMap.values()];
+      console.log(labels);
+
+      updateLabel = (payload) => {
+        updateCalendarLabel(payload);
+        updateTicklerFileLabel(payload);
+        updateActionableLabels(payload);
+      };
+      setState = (state) => {
+        setTicklerFileState(state);
+        setActionableState(state);
+      };
+      break;
+
     default:
-        labels = [];
-        updateLabel = ()=>{};
-        setState = ()=>{};
+      labels = [];
+      updateLabel = () => {};
+      setState = () => {};
       break;
   }
-
 
   return (
     <div className="label-wrapper">
       <div className="list-wrapper">
-        {window.location.pathname !== "/Calendar" && (
+        {window.location.pathname !== "/Calendar" && window.location.pathname !== "/Calendar/DayView" && (
           <>
             <div className="state-filter">
-              <button onClick={() => setState(false)}>All</button>
-              <button onClick={() => setState(1)}>Done</button>
-              <button onClick={() => setState(0)}>Due</button>
+              <button onClick={() => setState(false)}>Todos</button>
+              <button onClick={() => setState(1)}>listos</button>
+              <button onClick={() => setState(0)}>Pendientes</button>
             </div>
           </>
         )}
         {labels.map(({ label: lbl, checked }, idx) => (
           <label key={idx}>
-            <input
-              type="checkbox"
-              checked={checked}
-              onChange={() => updateLabel({ label: lbl, checked: !checked })}
-            />
+            <input type="checkbox" checked={checked} onChange={() => updateLabel({ label: lbl, checked: !checked })} />
             <span className={`checkMark text-${lbl}`}></span> {lbl}
           </label>
         ))}

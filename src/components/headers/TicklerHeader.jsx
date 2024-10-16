@@ -1,10 +1,7 @@
-import React, { useContext } from "react";
-import GlobalContext from "../../context/GlobalContext";
+import { useContext } from "react";
+import { GlobalContext } from "./GlobalContext";
 import dayjs from "dayjs";
-import { useEffect } from "react";
-import { Labels } from "./Labels";
-
-export const TicklerFileHeader = () => {
+export const TicklerHeader = () => {
   const { monthIndex, setMonthIndex } = useContext(GlobalContext);
 
   const currentYear = dayjs(new Date(dayjs().year(), monthIndex)).year();
@@ -24,6 +21,7 @@ export const TicklerFileHeader = () => {
             <span className="arrow material-symbols-outlined">chevron_left</span>
           </button>
           <h2>{currentYear}</h2>
+
           <button onClick={handleNext}>
             <span className="arrow material-symbols-outlined">chevron_right</span>
           </button>

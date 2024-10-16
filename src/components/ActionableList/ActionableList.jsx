@@ -36,7 +36,7 @@ export const ActionableList = () => {
     if (title && titleRef.current) titleRef.current.focus();
     if (description && descriptionRef.current) descriptionRef.current.focus();
     if (subTasks && actionRef) actionRef.current.focus();
-  }, [title, description, subTasks, titleRef, descriptionRef, actionRef,onEditAction]);
+  }, [title, description, subTasks, titleRef, descriptionRef, actionRef, onEditAction]);
 
   function clear() {
     setOnEdit(false);
@@ -65,18 +65,19 @@ export const ActionableList = () => {
       checked: e.checked,
       day: e.day,
       time: e.time,
-      subtasks: subTasks? subTasks : e.subtasks,
+      subtasks: subTasks ? subTasks : e.subtasks,
     };
 
     dispatchCallActionableTODO({
       type: type.update,
       payload: EVENT,
+      name: to.Actionables,
     });
 
     clear();
   }
 
-  //sorts the array into 2 groups, order them and joins them into 1 array then returns it
+  // Sorts the array into 2 groups, order them and joins them into 1 array then returns it
   function sortCards(array) {
     const temp = array.filter((e) => e.day !== today); // scheduled for today won't pass
 
@@ -95,9 +96,7 @@ export const ActionableList = () => {
 
   const cardDisplay = (e, i) => (
     <>
-      <div
-        className="card__header"
-      >
+      <div className="card__header">
         <button className="actionable-card__button">
           <span
             onClick={(prop) => {
@@ -112,20 +111,11 @@ export const ActionableList = () => {
         </button>
         {onEdit === i ? (
           <>
-            <div
-              className="editOptions-wrapper"
-              onClick={(prop) => prop.stopPropagation()}
-            >
-              <span
-                className="Option_save material-symbols-outlined"
-                onClick={() => handleSubmit(e)}
-              >
+            <div className="editOptions-wrapper" onClick={(prop) => prop.stopPropagation()}>
+              <span className="Option_save material-symbols-outlined" onClick={() => handleSubmit(e)}>
                 done
               </span>
-              <span
-                className="Option_close material-symbols-outlined"
-                onClick={clear}
-              >
+              <span className="Option_close material-symbols-outlined" onClick={clear}>
                 close
               </span>
             </div>
@@ -138,21 +128,13 @@ export const ActionableList = () => {
             }}
             className="TODO-card__check"
           >
-            <span className="material-symbols-outlined">
-              {e.checked === 0 ? "check_box_outline_blank" : "select_check_box"}
-            </span>
+            <span className="material-symbols-outlined">{e.checked === 0 ? "check_box_outline_blank" : "select_check_box"}</span>
           </button>
         )}
       </div>
       <div className="card__title">
         {title && onEdit === i ? (
-          <input
-            ref={titleRef}
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            onClick={(prop) => prop.stopPropagation()}
-          ></input>
+          <input ref={titleRef} type="text" value={title} onChange={(e) => setTitle(e.target.value)} onClick={(prop) => prop.stopPropagation()}></input>
         ) : (
           <div
             onClick={(prop) => {
@@ -168,13 +150,7 @@ export const ActionableList = () => {
       </div>
       <div className="card__description actionables__description">
         {description && onEdit === i ? (
-          <input
-            ref={descriptionRef}
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            onClick={(prop) => prop.stopPropagation()}
-          ></input>
+          <input ref={descriptionRef} type="text" value={description} onChange={(e) => setDescription(e.target.value)} onClick={(prop) => prop.stopPropagation()}></input>
         ) : (
           <div
             onClick={(prop) => {
@@ -189,31 +165,28 @@ export const ActionableList = () => {
         )}
       </div>
       <div className="actions-wrapper">
-        <h4>ACTIONS:</h4>
-        <div
-          className="actions"
-        >
+        <h3>PASOS:</h3>
+        <div className="actions">
           {e.subtasks
             .sort((a, b) => a.id - b.id)
             .sort((a, b) => a.checked - b.checked)
             .map((el, j) => (
-              <div className="action-wrapper" key={j} onClick={(prop)=>{
-                prop.stopPropagation()
-                setSubTasks(e.subtasks);
-                setOnEdit(i);
-              }}>
+              <div
+                className="action-wrapper"
+                key={j}
+                onClick={(prop) => {
+                  prop.stopPropagation();
+                  setSubTasks(e.subtasks);
+                  setOnEdit(i);
+                }}
+              >
                 <button
                   onClick={(prop) => {
                     prop.stopPropagation();
                     handleChecked(e, dispatchCallActionableTODO, j);
                   }}
                 >
-                  <span
-                    className={
-                      "actionsCheck material-symbols-outlined" +
-                      ` ${el.checked === 1 ? "checked" : "unchecked"}`
-                    }
-                  >
+                  <span className={"actionsCheck material-symbols-outlined" + ` ${el.checked === 1 ? "checked" : "unchecked"}`}>
                     {el.checked === 1 ? "check_box" : "check_box_outline_blank"}
                   </span>
                 </button>
@@ -280,18 +253,18 @@ export const ActionableList = () => {
               })
             }
           >
-            INBOX
+            INICIO
           </li>
           <li
             onClick={() =>
               setOnShowModal({
                 type: type.push,
                 from: to.Actionables,
-                to: to.Ideas,
+                to: to.Dumper,
               })
             }
           >
-            DUMPER
+            NOTAS RÁPIDAS
           </li>
         </ul>
       </div>
@@ -315,11 +288,7 @@ export const ActionableList = () => {
         className={"card" + ` ${e.label}` + ` ${whichDate(e)}`}
         key={i}
       >
-        {whichDate(e) === "scheduled" && (
-          <span className="scheduled__span material-symbols-outlined">
-            schedule
-          </span>
-        )}
+        {whichDate(e) === "scheduled" && <span className="scheduled__span material-symbols-outlined">schedule</span>}
         {showMenu !== i && cardDisplay(e, i)}
 
         {showMenu === i && cardMenuDisplay}
@@ -337,13 +306,7 @@ export const ActionableList = () => {
       <div className="scroll-wrapper">
         <div className="grid-container">{AllActionables}</div>
       </div>
-      {onShowModal && (
-        <MenuModal
-          selected={selectedActionableTODO}
-          setSelected={setSelectedActionableTODO}
-          dispatchCall={dispatchCallActionableTODO}
-        />
-      )}
+      {onShowModal && <MenuModal selected={selectedActionableTODO} setSelected={setSelectedActionableTODO} dispatchCall={dispatchCallActionableTODO} />}
     </div>
   );
 };

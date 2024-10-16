@@ -1,100 +1,114 @@
-@import '../../utils/utils.scss';
+@import "../../utils/utils.scss";
 
-.inbox-wrapper{
-    padding: 1rem 1rem 0 .5rem;
-    width: 100vw;
-    height: $bodyHeight;
-    background-color: $secondary-color;
-    
-    .inbox-Tickler{
-        display: grid;
-        grid-auto-flow: column;
-        justify-content: left;
-        align-items: center;
-        gap: 1rem;
-        overflow-x: auto;
-        width: 100%;
-        height: 2.7rem;
-        .day-event{
-            width: 25rem;
-            border: 1px solid black
-        }
+.inbox-wrapper {
+  padding: 1rem 1rem 0 0.5rem;
+  width: 100vw;
+  height: $bodyHeight;
+  background: $secondary-color;
 
-
-        @include barStyles()
+  .inbox-Tickler {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: left;
+    align-items: center;
+    gap: 1rem;
+    overflow-x: auto;
+    width: 100%;
+    height: 2.7rem;
+    .day-event {
+      width: 25rem;
+      border: 1px solid black;
     }
+    @include barStyles();
+  }
 
-    .grid-inbox{
-        padding-top: 1rem;
-        display: grid;
-        gap: 1.5rem;
-        grid-template-columns: 1fr 1.5fr;
-        grid-auto-columns:auto;
-        height:calc($bodyHeight - 4rem);
-            
-        
-        .calendar-dayView{
-            overflow-y: auto;
-            .times-wrapper{
-                border-radius: 0.5rem;
-                border: 1px solid black;
-                padding-top: 0;
-                position: relative;
-                @include barStyles();
-            }
+  .grid-inbox {
+    padding-top: 1rem;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr 1.5fr;
+    grid-auto-columns: auto;
+    height: calc($bodyHeight - 4rem);
 
-        }
-
+    .calendar-dayView {
+      overflow-y: hidden;
+      height: 100%;
+      .times-wrapper {
+        height: 100%;
+        border-radius: 1rem;
+        border: 1px solid $primary-color;
+        padding-top: 0;
+        position: relative;
+        @include barStyles();
+      }
     }
+  }
 }
 
 //media
 
-
 //tablet-laptopSm
-@media (max-width:1024px) {
-    .inbox-wrapper{
-        .grid-inbox{
-            .grid-container{
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
+@media (max-width: 1024px) {
+  .inbox-wrapper {
+    .grid-inbox {
+      .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
-    
+  }
 }
 
 //phone
-@media (max-width:425px) {
-    .inbox-wrapper{
-        padding: 1rem 0.5rem 0 0.5rem;
-        .inbox-Tickler{
-            .day-event{
-                width: 10rem;
-            }
-        }
-        .grid-inbox{
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            padding-top: 0.25rem;
-
-            .grid-container{
-                justify-content: flex-start;
-                display: flex;
-                
-                .card{
-                    height: 25rem;
-                    .actionables__description{
-                        display: none;
-                    }
-                    .actions-wrapper{
-                        h4{
-                            display: none;
-                        }
-                    }
-                }
-            }
-        }
+@media (max-width: 440px) {
+  .inbox-wrapper {
+    padding: 1rem 0.5rem 0 0.5rem;
+    .inbox-Tickler {
+      .day-event {
+        width: 10rem;
+      }
     }
-    
-}
+    .grid-inbox {
+      grid-template-rows: 1fr 2fr;
+      grid-template-columns: 1fr;
+      padding-top: 6px;
+      padding-left: 0px;
+      gap: 0px;
 
+      .calendar-dayView {
+        padding: 0px;
+        margin: 0px;
+        width: fit-content;
+        overflow-y: scroll;
+        scrollbar-width: none;
+
+        border-radius: 5px;
+
+        .times-wrapper {
+          border-width: 0px;
+
+          .aside-hours-wrapper {
+            margin-left: 6px;
+            font-size: 10px;
+          }
+        }
+      }
+
+      .grid-container {
+        justify-content: flex-start;
+        display: flex;
+
+        .card {
+          height: 25rem;
+          .actionables__description {
+            display: none;
+          }
+          .actions-wrapper {
+            h4 {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}

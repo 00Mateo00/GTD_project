@@ -12,26 +12,15 @@ export const TicklerFile = () => {
   const [monthSelected, setMonthSelected] = useState(false);
   const [thisMonth, setThisMonth] = useState(false);
 
-  const {
-    monthIndex,
-    setMonthIndex,
-    onShowModal,
-    showDayView,
-    selectedTicklerFileEvent,
-    setSelectedTicklerFileEvent,
-    dispatchCallTicklerFileEvent,
-  } = useContext(GlobalContext);
+  const { monthIndex, setMonthIndex, onShowModal, showDayView, selectedTicklerFileEvent, setSelectedTicklerFileEvent, dispatchCallTicklerFileEvent } = useContext(GlobalContext);
 
   useEffect(() => {
     setCurrentMonth(utils.getTicklerMonth(monthIndex));
-    setThisMonth(
-      dayjs().format("YYYY") === dayjs().month(monthIndex).format("YYYY")
-    );
+    setThisMonth(dayjs().format("YYYY") === dayjs().month(monthIndex).format("YYYY"));
   }, [monthIndex]);
 
   function handleMonthIndex(i) {
-    const year =
-      dayjs().format("YYYY") - dayjs().month(monthIndex).format("YYYY");
+    const year = dayjs().format("YYYY") - dayjs().month(monthIndex).format("YYYY");
     setMonthIndex(i - 12 * year);
   }
 
@@ -48,12 +37,11 @@ export const TicklerFile = () => {
                 className={
                   `month month-${i}` +
                   `${thisMonth && dayjs().month() === i ? " thisMonth" : ""}` +
-                  `${monthSelected === i ? " monthSelected" : ""}`
+                  `${monthSelected === i ? " monthSelected" : ""}` +
+                  `${monthSelected === false && dayjs().month() === i ? " monthSelected" : ""}`
                 }
               >
-                <button onClick={() => handleMonthIndex(i)}>
-                  {dayjs().month(i).format("MMMM")}
-                </button>
+                <button onClick={() => handleMonthIndex(i)}>{dayjs().month(i).format("MMMM")}</button>
               </div>
             ))}
         </div>
@@ -64,13 +52,7 @@ export const TicklerFile = () => {
         </div>
       </div>
       {showDayView && <EventsView />}
-      {onShowModal && (
-        <MenuModal
-          selected={selectedTicklerFileEvent}
-          setSelected={setSelectedTicklerFileEvent}
-          dispatchCall={dispatchCallTicklerFileEvent}
-        />
-      )}
+      {onShowModal && <MenuModal selected={selectedTicklerFileEvent} setSelected={setSelectedTicklerFileEvent} dispatchCall={dispatchCallTicklerFileEvent} />}
     </div>
   );
 };

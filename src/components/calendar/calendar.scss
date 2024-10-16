@@ -1,33 +1,89 @@
-@import '../../utils/utils.scss';
+@import "../../utils/utils.scss";
 
-.calendar-body__wrapper{
-    position: relative; 
-    height: $bodyHeight;   
-    
-    .calendar-body{     
-        height: 100%;
-        .calendar__div{
-            height: 100%;
-            
-            .days-month-wrapper{
-                width: 100%;
-                height: calc(100%);
-                background: $background;
-                .days-names-wrapper{
-                    display: grid;
-                    grid-template-columns: repeat(7,1fr);
-                    height: fit-content;
-                    .days-names{
-                        text-align: center;
-                    }
-                }
-                .month-wrapper{
-                    height: calc(100% - 24px);
-                    border-left: $calendar-lines;
-                    border-top: $calendar-lines;
-                }
-            }
-        }   
+.calendar-body__wrapper {
+  position: relative;
+  height: $bodyHeight;
+
+  .calendar-body {
+    height: 100%;
+    .calendar__div {
+      height: 100%;
+
+      .days-month-wrapper {
+        color: white;
+        padding: 0 1.5rem 0;
+        width: 100%;
+        height: calc(100%);
+        background: $background;
+        .days-names-wrapper {
+          display: grid;
+          grid-template-columns: repeat(7, 1fr);
+          height: fit-content;
+          .days-names {
+            text-align: center;
+          }
+        }
+        .month-wrapper {
+          height: calc(100% - 24px);
+          border-left: $calendar-lines;
+          border-top: $calendar-lines;
+        }
+      }
     }
+  }
 }
 
+.dayViewFrame {
+  display: none;
+}
+
+@media (max-width: 440px) {
+  main {
+    height: $bodyHeight;
+
+    .dayViewFrame {
+      display: block;
+      height: 50%;
+      overflow-y: scroll;
+      margin-top: 15px;
+      padding: 0px 8px 0px 8px;
+
+      .times-wrapper {
+        height: fit-content;
+        position: relative;
+      }
+    }
+  }
+
+  .calendar-body__wrapper {
+    height: calc(50vh - $headerHeight);
+
+    .calendar-body {
+      height: 100%;
+
+      .calendar__div {
+        height: 100%;
+
+        .days-month-wrapper {
+          height: 100%;
+
+          .days-names-wrapper {
+            display: gird;
+            grid-template-columns: repeat(7, 1fr);
+            height: fit-content;
+          }
+
+          .month-wrapper {
+            height: calc(100% - 13.5px);
+            display: flex;
+            flex-direction: column;
+
+            .month-table-wrapper {
+              height: 50px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -16,8 +16,6 @@ function reducer(state, { type, payload }) {
   }
 }
 
-
-
 function initEvents(name) {
   const storageEvents = localStorage.getItem(name);
   const parsedEvents = storageEvents ? JSON.parse(storageEvents) : [];
@@ -25,38 +23,30 @@ function initEvents(name) {
 }
 
 export default function ContextWrapper(props) {
-
   function handleReset() {
-    setMonthIndex(
-      monthIndex === dayjs().month()
-        ? monthIndex + Math.random()
-        : dayjs().month()
-    );
+    setMonthIndex(monthIndex === dayjs().month() ? monthIndex + Math.random() : dayjs().month());
 
-    showDayView && setDaySelected(dayjs())
+    showDayView && setDaySelected(dayjs());
   }
 
-  const ModalParams={
+  const ModalParams = {
     type: { update: "update", push: "push" },
     to: {
       Actionables: "Actionables",
       Calendar: "Calendar",
       Tickler: "Tickler",
-      Ideas: "Ideas",
-      Inbox:"Inbox",
-    }
-  }
+      Dumper: "Dumper",
+      Inbox: "Inbox",
+    },
+  };
 
   const [hourClicked, setHourClicked] = useState(0);
 
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
-  const [daySelected, setDaySelected] = useState(
-    dayjs(dayjs().format("YYYY-MM-DD"))
-  );
+  const [daySelected, setDaySelected] = useState(dayjs(dayjs().format("YYYY-MM-DD")));
   const [showDayView, setShowDayView] = useState(false);
   const [selectedCalendarEvent, setSelectedCalendarEvent] = useState(null);
-  const [selectedTicklerFileEvent, setSelectedTicklerFileEvent] =
-    useState(null);
+  const [selectedTicklerFileEvent, setSelectedTicklerFileEvent] = useState(null);
   const [selectedDumperTODO, setSelectedDumperTODO] = useState(null);
   const [selectedActionableTODO, setSelectedActionableTODO] = useState(null);
   const [calendarLabels, setCalendarLabels] = useState([]);
@@ -82,31 +72,13 @@ export default function ContextWrapper(props) {
     setShowMenu(false);
   }
 
-  const [savedCalendarEvents, dispatchCallCalendarEvent] = useReducer(
-    reducer,
-    [],
-    () => initEvents("savedCalendarEvents")
-  );
+  const [savedCalendarEvents, dispatchCallCalendarEvent] = useReducer(reducer, [], () => initEvents("savedCalendarEvents"));
 
-  const [savedTicklerFileEvents, dispatchCallTicklerFileEvent] = useReducer(
-    reducer,
-    [],
-    () => initEvents("savedTicklerFileEvents")
-  );
+  const [savedTicklerFileEvents, dispatchCallTicklerFileEvent] = useReducer(reducer, [], () => initEvents("savedTicklerFileEvents"));
 
-  const [savedDumperTODOS, dispatchCallDumperTODO] = useReducer(
-    reducer,
-    [],
-    () => initEvents("savedDumperTODOS")
-  );
+  const [savedDumperTODOS, dispatchCallDumperTODO] = useReducer(reducer, [], () => initEvents("savedDumperTODOS"));
 
-  const [savedActionableTODOS, dispatchCallActionableTODO] = useReducer(
-    reducer,
-    [],
-    () => initEvents("savedActionableTODOS")
-  );
-
-
+  const [savedActionableTODOS, dispatchCallActionableTODO] = useReducer(reducer, [], () => initEvents("savedActionableTODOS"));
 
   const filteredCalendarEvents = useMemo(() => {
     return savedCalendarEvents.filter(
@@ -122,8 +94,7 @@ export default function ContextWrapper(props) {
   const filteredTicklerFileEvents = useMemo(() => {
     return savedTicklerFileEvents.filter(
       (e) =>
-        e.checked ===
-          (ticklerFileState === false ? e.checked : ticklerFileState) &&
+        e.checked === (ticklerFileState === false ? e.checked : ticklerFileState) &&
         ticklerFileLabels
           .filter((lbl) => lbl.checked)
           .map((lbl) => lbl.label)
@@ -145,8 +116,7 @@ export default function ContextWrapper(props) {
   const filteredActionableTODOS = useMemo(() => {
     return savedActionableTODOS.filter(
       (e) =>
-        e.checked ===
-          (actionableState === false ? e.checked : actionableState) &&
+        e.checked === (actionableState === false ? e.checked : actionableState) &&
         actionableLabels
           .filter((lbl) => lbl.checked)
           .map((lbl) => lbl.label)
@@ -154,19 +124,12 @@ export default function ContextWrapper(props) {
     );
   });
 
-
   useEffect(() => {
-    localStorage.setItem(
-      "savedCalendarEvents",
-      JSON.stringify(savedCalendarEvents)
-    );
+    localStorage.setItem("savedCalendarEvents", JSON.stringify(savedCalendarEvents));
   }, [savedCalendarEvents]);
 
   useEffect(() => {
-    localStorage.setItem(
-      "savedTicklerFileEvents",
-      JSON.stringify(savedTicklerFileEvents)
-    );
+    localStorage.setItem("savedTicklerFileEvents", JSON.stringify(savedTicklerFileEvents));
   }, [savedTicklerFileEvents]);
 
   useEffect(() => {
@@ -174,38 +137,30 @@ export default function ContextWrapper(props) {
   }, [savedDumperTODOS]);
 
   useEffect(() => {
-    localStorage.setItem(
-      "savedActionableTODOS",
-      JSON.stringify(savedActionableTODOS)
-    );
+    localStorage.setItem("savedActionableTODOS", JSON.stringify(savedActionableTODOS));
   }, [savedActionableTODOS]);
-
 
   useEffect(() => {
     setCalendarLabels((prevLabels) => {
-      return [...new Set(savedCalendarEvents.map((i) => i.label))].map(
-        (label) => {
-          const currentLabel = prevLabels.find((i) => i.label === label);
-          return {
-            label,
-            checked: currentLabel ? currentLabel.checked : true,
-          };
-        }
-      );
+      return [...new Set(savedCalendarEvents.map((i) => i.label))].map((label) => {
+        const currentLabel = prevLabels.find((i) => i.label === label);
+        return {
+          label,
+          checked: currentLabel ? currentLabel.checked : true,
+        };
+      });
     });
   }, [savedCalendarEvents]);
 
   useEffect(() => {
     setTicklerFileLabels((prevLabels) => {
-      return [...new Set(savedTicklerFileEvents.map((i) => i.label))].map(
-        (label) => {
-          const currentLabel = prevLabels.find((i) => i.label === label);
-          return {
-            label,
-            checked: currentLabel ? currentLabel.checked : true,
-          };
-        }
-      );
+      return [...new Set(savedTicklerFileEvents.map((i) => i.label))].map((label) => {
+        const currentLabel = prevLabels.find((i) => i.label === label);
+        return {
+          label,
+          checked: currentLabel ? currentLabel.checked : true,
+        };
+      });
     });
   }, [savedTicklerFileEvents]);
 
@@ -223,42 +178,30 @@ export default function ContextWrapper(props) {
 
   useEffect(() => {
     setActionableLabels((prevLabels) => {
-      return [...new Set(savedActionableTODOS.map((i) => i.label))].map(
-        (label) => {
-          const currentLabel = prevLabels.find((i) => i.label === label);
-          return {
-            label,
-            checked: currentLabel ? currentLabel.checked : true,
-          };
-        }
-      );
+      return [...new Set(savedActionableTODOS.map((i) => i.label))].map((label) => {
+        const currentLabel = prevLabels.find((i) => i.label === label);
+        return {
+          label,
+          checked: currentLabel ? currentLabel.checked : true,
+        };
+      });
     });
   }, [savedActionableTODOS]);
 
-
-
   function updateCalendarLabel(label) {
-    setCalendarLabels(
-      calendarLabels.map((lbl) => (lbl.label === label.label ? label : lbl))
-    );
+    setCalendarLabels(calendarLabels.map((lbl) => (lbl.label === label.label ? label : lbl)));
   }
 
   function updateTicklerFileLabel(label) {
-    setTicklerFileLabels(
-      ticklerFileLabels.map((lbl) => (lbl.label === label.label ? label : lbl))
-    );
+    setTicklerFileLabels(ticklerFileLabels.map((lbl) => (lbl.label === label.label ? label : lbl)));
   }
 
   function updateDumperLabels(label) {
-    setDumperLabels(
-      dumperLabels.map((lbl) => (lbl.label === label.label ? label : lbl))
-    );
+    setDumperLabels(dumperLabels.map((lbl) => (lbl.label === label.label ? label : lbl)));
   }
 
   function updateActionableLabels(label) {
-    setActionableLabels(
-      actionableLabels.map((lbl) => (lbl.label === label.label ? label : lbl))
-    );
+    setActionableLabels(actionableLabels.map((lbl) => (lbl.label === label.label ? label : lbl)));
   }
 
   function handleChecked(e, fun, i) {
@@ -276,7 +219,6 @@ export default function ContextWrapper(props) {
   return (
     <GlobalContext.Provider
       value={{
-
         hourClicked,
         setHourClicked,
         ModalParams,

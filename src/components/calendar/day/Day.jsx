@@ -6,21 +6,12 @@ import { Link } from "react-router-dom";
 
 export const Day = ({ day }) => {
   const [dayEvents, setDayEvents] = useState([]);
-  const {
-    ModalParams,
-    setDaySelected,
-    setOnShowModal,
-    setShowDayView,
-    filteredCalendarEvents,
-    setSelectedCalendarEvent,
-  } = useContext(GlobalContext);
+  const { ModalParams, setDaySelected, setOnShowModal, setShowDayView, filteredCalendarEvents, setSelectedCalendarEvent } = useContext(GlobalContext);
 
-  const {type,to} = ModalParams;
-  
+  const { type, to } = ModalParams;
+
   useEffect(() => {
-    const events = filteredCalendarEvents.filter(
-      (e) => dayjs(e.day).format("DD-MM-YY") === day.format("DD-MM-YY")
-    );
+    const events = filteredCalendarEvents.filter((e) => dayjs(e.day).format("DD-MM-YY") === day.format("DD-MM-YY"));
 
     events.sort((a, b) => {
       const first = parseInt(a.time.timeStart.replace(":", ""));
@@ -31,11 +22,18 @@ export const Day = ({ day }) => {
     setDayEvents(events);
   }, [filteredCalendarEvents, day]);
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 426);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 426);
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   function getCurrentDayClassName() {
     // returns a class name if the {day} of this components matches the current date
-    return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
-      ? "current-day"
-      : "";
+    return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY") ? "current-day" : "";
   }
 
   const events = dayEvents.map(
@@ -44,55 +42,59 @@ export const Day = ({ day }) => {
         <div
           key={i}
           onClick={(el) => {
-            el.stopPropagation()
+            el.stopPropagation();
             setSelectedCalendarEvent(e);
-            setOnShowModal({type: type.update, from:to.Calendar, to:to.Calendar});
+            setOnShowModal({ type: type.update, from: to.Calendar, to: to.Calendar });
           }}
           className={`${e.label} day-event`}
         >
-        <h3>{e.title}</h3>
+          <h3>{e.title}</h3>
         </div>
       )
   );
 
   return (
-    <div onClick={() => {
-      setDaySelected(day);
-      setOnShowModal({type: type.push, from:to.Calendar, to:to.Calendar});
-    }} className="day-wrapper">
+    <div
+      onClick={() => {
+        setDaySelected(day);
+        setOnShowModal({ type: type.push, from: to.Calendar, to: to.Calendar });
+      }}
+      className="day-wrapper"
+    >
       <header className="day-wrapper__header">
         <p
           onClick={(e) => {
             e.stopPropagation();
+            if (isMobile) return;
             setDaySelected(day);
             setShowDayView(true);
           }}
           className={`days-numbers ${getCurrentDayClassName()}`}
         >
-        <Link to="DayView">{day.format("DD")}</Link>
-          
+          <Link to={isMobile ? "" : "DayView"}>{day.format("DD")}</Link>
         </p>
       </header>
-      <div className="dayEvents-wrapper">
+      {!isMobile && (
+        <div className="dayEvents-wrapper">
           {events.length < 4 ? (
             events
           ) : (
             <>
               {events}
               <div
-              className="more"
+                className="more"
                 onClick={(e) => {
                   e.stopPropagation();
                   setDaySelected(day);
                   setShowDayView(true);
                 }}
               >
-               <Link to="DayView">...</Link>
-                
+                <Link to="DayView">...</Link>
               </div>
             </>
           )}
         </div>
+      )}
     </div>
   );
 };

@@ -1,401 +1,365 @@
-@import './utils/utils.scss';
-
+@import "./utils/utils.scss";
 
 $card-hight: 25rem;
 
-
-
-.indigo{
-    background-color: $Indigo-500;
+.indigo {
+  background-color: $Indigo-500;
 }
-.gray{
-    background-color: $Gray-500;
+.gray {
+  background-color: $Gray-500;
 }
-.green{
-    background-color: $Emerald-500;
+.green {
+  background-color: $Emerald-500;
 }
-.blue{
-    background-color: $Blue-500;
+.blue {
+  background-color: $Blue-500;
 }
-.red{
-    background-color: $Red-500;
+.red {
+  background-color: $Red-500;
 }
-.purple{
-    background-color: $Purple-500;
+.purple {
+  background-color: $Purple-500;
 }
-
 
 //-------  general styles ------- //
 //scrol bars
 
 ::-webkit-scrollbar {
-    width: 0.5rem;
-    height: 0.5rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  margin: 0;
+
+  &-track {
+    background: rgba($color: #000000, $alpha: 0);
+    border-radius: 100vw;
     padding: 0;
     margin: 0;
+  }
 
-    &-track {
-        background: rgba($color: #000000, $alpha: 0);
-        border-radius: 100vw;
-        padding: 0;
-        margin: 0;
-    }
-
-    &-thumb{
-        border-radius: 100vw;
-        width: 10px;
-        padding: 0;
-        margin: 0;
-    }
+  &-thumb {
+    border-radius: 100vw;
+    width: 10px;
+    padding: 0;
+    margin: 0;
+  }
 }
 
 //card styles
-.wrapper{
-    position: relative;
-    width: 100vw;
-    height: $bodyHeight;
-    background-color: $secondary-color;
-    overflow: hidden;
-    
-    .scroll-wrapper{
-        padding: 1rem;
-        height: 100%;
-        overflow-y: auto;
-        @include barStyles();
-    }
+.wrapper {
+  position: relative;
+  width: 100vw;
+  height: $bodyHeight;
+  background: $secondary-color;
+  overflow: hidden;
 
-}
-
-.grid-container{
-    display: grid;
-    justify-content: space-around;
-    grid-template-columns: repeat(auto-fit, 15rem);
-    grid-template-rows: auto;
-    grid-auto-flow: row;
-    gap: 1rem;
+  .scroll-wrapper {
+    padding: 1rem;
+    height: 100%;
     overflow-y: auto;
-    overflow-wrap: normal;
     @include barStyles();
-
-    .add-button{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        
-        .button-wrapper{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding-top: 1rem;
-            .button{
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                background-color: azure;
-                width: 35px;
-                height: 35px;
-                border-radius: 100%;
-            }
-        }
-    }
+  }
 }
 
-.card{
-    position: relative;
-    border: 1px solid black;
-    border-radius: 0.5rem;
-    height: $card-hight;
+.grid-container {
+  display: grid;
+  justify-content: space-around;
+  grid-template-columns: repeat(auto-fit, 15rem);
+  grid-template-rows: min-content;
+  grid-auto-flow: row;
+  gap: 1rem;
+  overflow-y: auto;
+  overflow-wrap: normal;
+  @include barStyles();
+}
+
+.card {
+  position: relative;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  height: $card-hight;
+  width: 100%;
+  padding: 0.5rem;
+
+  .card__header {
+    height: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    span {
+      cursor: pointer;
+    }
+  }
+
+  .card__title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid black;
+  }
+
+  .card__description {
+    height: calc($card-hight - 6rem);
+    word-wrap: break-word;
+
+    &.actionables__description {
+      height: 24px;
+      word-wrap: normal;
+      word-break: break-all;
+      overflow: hidden;
+    }
+
+    div {
+      height: 100%;
+      overflow: auto;
+    }
+  }
+
+  .menu-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
     padding: 0.5rem;
 
-    .card__header{
+    .menu {
+      width: 100%;
+      height: 100%;
+      background-color: $menu;
+      padding-top: 0.5rem;
+      padding-left: 0.5rem;
+
+      .header-wrapper {
+        width: 100%;
         height: 1.5rem;
-        display: flex;
-        justify-content: space-between;
-        span{
-            cursor: pointer;
+
+        button {
+          height: 100%;
         }
-    }
+      }
 
-    .card__title{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 1rem;
-        border-bottom: 1px solid black;
-    }
-
-    .card__description{
-        height: calc($card-hight - 6rem);
-        word-wrap: break-word;
-
-        &.actionables__description{
-            height: 24px;
-            word-wrap: normal;
-            word-break: break-all;
-            overflow: hidden;
-        }
-
-        div{
-            height: 100%;
-            overflow: auto;
-        }
-    }
-
-    .menu-wrapper{
-        position: absolute;
-        top: 0;
-        left: 0;
+      .menu-body {
         width: 100%;
-        height: 100%;
-        padding: 0.5rem;
-
-        .menu{
-            width: 100%;
-            height: 100%;
-            background-color: whitesmoke;
-            padding-top: 0.5rem;
-            padding-left: 0.5rem;
-
-            .header-wrapper{
-                width: 100%;
-                height: 1.5rem;
-                
-                button{
-                    height: 100%;
-                }
-            }
-
-            .menu-body{
-                width: 100%;
-                height: calc(60%);
-                display: flex;
-                flex-direction: column;
-                justify-content: space-around;
-                padding-left: 1.5rem;
-
-                li{
-                    width: max-content;
-                    cursor: pointer;
-                    border-bottom: 1px solid transparent;
-
-                    &:hover{
-                        border-bottom-color: black;
-                    }
-                }
-            }
-        }
-
-        
-    }
-
-}
-
-.actions-wrapper{
-    height: calc($card-hight - 7rem);
-    overflow-y: scroll;
-    &::-webkit-scrollbar {
-        display: none;
-    }
-    .actions{
-        width: 100%;
-        padding-left: 0.5rem;
+        height: calc(60%);
         display: flex;
-        align-items: flex-start;
         flex-direction: column;
+        justify-content: space-around;
+        padding-left: 1.5rem;
 
-        .action-wrapper{
-            .done{
-                text-decoration: line-through;
-                opacity: 0.9;
-            }
+        li {
+          width: max-content;
+          cursor: pointer;
+          border-bottom: 1px solid transparent;
+
+          &:hover {
+            border-bottom-color: $underline;
+          }
         }
+      }
     }
+  }
 }
 
+.actions-wrapper {
+  height: calc($card-hight - 7rem);
+  overflow-y: scroll;
+  .actions-title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 1rem;
+    button {
+      @include aibutton();
+    }
+  }
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  .actions {
+    width: 100%;
+    padding-left: 0.5rem;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+
+    .action-wrapper {
+      .done {
+        text-decoration: line-through;
+        opacity: 0.9;
+      }
+    }
+  }
+}
 
 //events styles
 
-.day-wrapper{
+.day-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: hidden;
+  border-right: $calendar-lines;
+  border-bottom: $calendar-lines;
+  header {
+    width: 100%;
     display: flex;
+    align-items: center;
     flex-direction: column;
-    align-items: center;
-    overflow-y: hidden;
-    border-right: $calendar-lines;
-    border-bottom: $calendar-lines;
-    header{
-        width: 100%;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        
-        .days-names{
-            margin-top: 0.25rem;
-            font-size: 0.875rem;
-            line-height: 1.25rem;
-        }
 
-
-        .days-numbers{
-            width: 1.5rem;
-            height: 1.5rem;  
-            margin-top: 0.25rem;
-            margin-bottom: 0.25rem;
-            padding: 0.25rem;
-            line-height: 1.25rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            
-            cursor: pointer;
-            &:hover{
-                background-color: rgba(0, 0, 0, 0.205);
-                border-radius: 100%;
-            }
-        }
-
-        
-
-        .current-day{
-            background-color: blueviolet;
-            border-radius: 100%;
-            &:hover{
-             background-color: rgb(110 34 180);
-            }
-        }
+    .days-names {
+      margin-top: 0.25rem;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
     }
 
-    .dayEvents-wrapper{
-        width: 100%;
-        padding-right: 0.25rem;
-        height: 5rem;
+    .days-numbers {
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-top: 0.25rem;
+      margin-bottom: 0.25rem;
+      padding: 0.25rem;
+      line-height: 1.25rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-        .more{
-            width: fit-content;
-            cursor: pointer;
-        }
+      cursor: pointer;
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.205);
+        border-radius: 100%;
+      }
     }
+
+    .current-day {
+      background-color: $selection-accent;
+      border-radius: 100%;
+      &:hover {
+        background-color: $selection-accent;
+      }
+    }
+  }
+
+  .dayEvents-wrapper {
+    width: 100%;
+    padding-right: 0.25rem;
+    height: 5rem;
+
+    .more {
+      width: fit-content;
+      cursor: pointer;
+    }
+  }
 }
 
+.day-event {
+  cursor: pointer;
+  padding: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  border-color: $secondary-color;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
-.day-event{
-    cursor: pointer;
-    padding: 0.25rem;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    border-radius: 0.25rem;
-    border-width: 1px;
-    border-color: $secondary-color;
+  button {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    
-    button{
-        display: flex;
-        justify-content: center;
-    }
+    justify-content: center;
+  }
 }
 
-
-h3{
-    font-weight: 600;
+h3 {
+  font-weight: 600;
 }
 
-p{
-    font-size: 1rem;
+p {
+  font-size: 1rem;
 }
-
 
 //* media Queries
 
 //tablet-SmLaptop
-@media (max-width: 1024px){
-    .grid-container{
-        grid-template-columns: repeat(auto-fit, 10rem)
-    }
+@media (max-width: 1024px) {
+  .grid-container {
+    grid-template-columns: repeat(auto-fit, 10rem);
+  }
 }
 
 //phones
-@media (max-width: 425px) {
-    .grid-container{
-        display: flex;
-        flex-direction: column;
-        .card{
-            width: 100%;
-            overflow: hidden;
-            p{
-                font-size: small;
-            }
+@media (max-width: 440px) {
+  .grid-container {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    .card {
+      width: 100%;
+      max-height: 25rem;
+      p {
+        font-size: small;
+      }
 
-            .card__title{
-                margin-bottom: 0.5rem;
-            }
+      .card__title {
+        margin-bottom: 0.5rem;
+      }
 
-            .card__description{
-                overflow: hidden;
-                height: 1.5rem;
-                div{
-                    height: 100%;
-                    overflow: hidden;
-                }
-            }
+      .card__description {
+        overflow: hidden;
+        div {
+          height: fit-content;
+          overflow: hidden;
         }
-        .dumper_card{
-            height: 7rem;
-            width: 100%;
-            overflow: hidden;
-            p{
-                font-size: small;
-            }
+      }
+    }
+    .dumper_card {
+      width: 100%;
+      p {
+        font-size: small;
+      }
 
-            .card__title{
-                margin-bottom: 0.5rem;
-            }
+      .card__title {
+        margin-bottom: 0.5rem;
+      }
 
-            .card__description{
-                overflow: hidden;
-                height: 1.5rem;
-                div{
-                    height: 100%;
-                    overflow: hidden;
-                }
-            }
+      .card__description {
+        overflow: hidden;
+        div {
+          height: 100%;
+          overflow: hidden;
         }
+      }
     }
+  }
 
-    p,h3{
-        font-size: xx-small;
-    }
+  p,
+  h3 {
+    font-size: xx-small;
+  }
 
-    .day-wrapper{
-        header{
-            .days-numbers{
-                width: 1rem;
-                height: 1rem;  
-            }
-        }
+  .day-wrapper {
+    header {
+      .days-numbers {
+        width: 1rem;
+        height: 1rem;
+      }
     }
-    .wrapper{
-        .menuModal_wrapper{
-            .card_modal{
-                border-radius: 0;
-                border: 0;
-                height: 100%;
-                width: 100%;
-            }
-        }
+  }
+  .wrapper {
+    .menuModal_wrapper {
+      .card_modal {
+        border-radius: 0;
+        border: 0;
+        height: 100%;
+        width: 100%;
+      }
     }
-    
+  }
 }
 
-
-
-
-
-
-
-
-
+input {
+  outline: none;
+}
