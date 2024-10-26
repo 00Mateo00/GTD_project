@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Route, Router, Routes, Navigate, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import "./App.scss";
 import { Inbox } from "./components/inbox/Inbox";
 import { Calendar } from "./components/calendar/Calendar";

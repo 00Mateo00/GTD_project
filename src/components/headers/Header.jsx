@@ -15,10 +15,10 @@ export const Header = () => {
   const { push } = ModalParams.type;
 
   function UrlToModal(path) {
-    console.log(path);
-
     const ListName = path.replace("DayView", "").replaceAll("/", "");
     const to = ModalParams.to.hasOwnProperty(ListName) && ModalParams.to[ListName];
+
+    console.log(to);
 
     if (to === "Inbox") {
       setOnShowModal({ type: push, from: "Dumper", to: "Dumper" });

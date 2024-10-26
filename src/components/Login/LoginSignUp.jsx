@@ -35,37 +35,16 @@ export const LoginSignUp = ({ setUserId }) => {
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:8080/auth/process/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(registerData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        localStorage.setItem("user_id", data.id);
-        setValidations({ userId: data.id, data: data });
-      })
-      .catch((error) => console.error("Error:", error));
+    const id = 1;
+    localStorage.setItem("user_id", id);
+    setValidations({ userId: id, data: "" });
   };
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-
-    fetch("http://localhost:8080/session/process/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(loginData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        localStorage.setItem("user_id", data.id);
-        setValidations({ userId: data.id, data: data });
-      })
-      .catch((error) => console.error("Error:", error));
+    const id = 1;
+    localStorage.setItem("user_id", id);
+    setValidations({ userId: id, data: "" });
   };
 
   useEffect(() => {
@@ -81,6 +60,10 @@ export const LoginSignUp = ({ setUserId }) => {
 
   return (
     <body className="login-page">
+      <d style={{ display: "flex", position: "absolute", top: "0", left: "0", width: "100%", height: "min-content", justifyContent: "center" }}>
+        This is just a demo, any email and password will work
+      </d>
+
       <main>
         <section>
           <div className="form-container">
